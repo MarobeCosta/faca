@@ -1,0 +1,2481 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faça como eu fiz · StartLab Alura · BMB · 6º ao 9º ano</title>
+<!--
+  v03.10 · BARRA UNIFICADA + BANCO DE NOMES + CARGOS (sobre v03.02)
+  Origem: CM-FACA-001 CLD-069 · 21/05/2026
+  Escola: E.E. Dr. Benedito Martins Barbosa - BMB
+
+  NOVO PADRÃO DE VERSIONAMENTO V.XX.YY:
+  - YY +1 (unidade) = mudança pequena (cosmético · texto · 1 emoji)
+  - YY +10 (dezena) = mudança média (novo card · função · bug fix)
+  - XX +1 = mudança grande (refatoração estrutural)
+
+  CHANGELOG v03.02 → v03.10 (10 mudanças · MÉDIA):
+  · 🐛 BUG · botão Continuar não travava com gênero indefinido
+  · 🧠 Banco de 200+ nomes brasileiros + normalização de acentos
+  · 🛡️ Proteção da escolha manual de gênero (não sobrescreve silenciosamente)
+  · 🆕 Cards IC (Bolsista IC 9º + Voluntário IC 8º) · só modo admin
+  · 🆕 Cascata Comissão de Formatura (7 funções tradicionais)
+  · 🔄 "Não ocupo cargo formal" reposicionado como ÚLTIMO card
+  · 🎨 Emoji Gremista 🎓 → 🗳️ (distinto de Comissão de Formatura)
+  · 📝 Eixo Aprendizagem D · reescrito sem "trocar" (ambíguo)
+  · 💬 Texto "(usado só para flexão)" só visível quando cards aparecem
+  · 🆕 BARRA SUPERIOR UNIFICADA (replicada do NAV.05 v04.21):
+    - Esquerda: 🚀 título colorido letra por letra + 2 pombinhas + subtítulo dinâmico
+    - Direita: 🕐 relógio de Brasília
+    - Sem cronômetro de prova · sem badge de saídas (atividade não é avaliativa)
+    - body padding-top adaptativo
+    - frase-temática antiga vira fallback (display:none)
+
+  PENDÊNCIAS REGISTRADAS (não bloqueiam uso)·
+  · Bolsista/Voluntário IC sem lista oficial (modo admin já preparado)
+  · Lista oficial cargos Grêmio (provisória aplicada)
+  · Lista oficial clubes BMB (provisória aplicada)
+  · Lista equipes Tec/Rob (Líder de Equipe sem cascata)
+  · Export .docx (placeholder · CM-FACA-002 implementa)
+  · Cenário dinâmico por TEMA (atual fixo · Paz Digital)
+  · Modo Admin completo com relatório "Outros" (parcial)
+-->
+<style>
+:root {
+  --azul-paz: #2E5C8A;
+  --azul-claro: #E8F1FB;
+  --verde-vida: #4A8C3F;
+  --verde-claro: #E8F5E5;
+  --laranja-energia: #E07B2C;
+  --laranja-claro: #FBEEDE;
+  --roxo-conviva: #6B4B9C;
+  --roxo-claro: #EDE6F5;
+  --lilas-base-1: #B8A0D8;
+  --lilas-base-2: #C8B8E0;
+  --lilas-base-3: #D4C5E8;
+  --vermelho-alerta: #B83D3D;
+  --cinza-texto: #2D2D2D;
+  --cinza-medio: #6E6E6E;
+  --cinza-suave: #F4F4F4;
+  --branco: #FFFFFF;
+  --amarelo-destaque: #FFF3CD;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes flutuarSuave { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(12px); } }
+@keyframes flutuarSuaveInv { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-12px); } }
+@keyframes giroLento { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes revelarCena { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes folhaCair {
+  0% { transform: translateY(-20px) rotate(0); opacity: 0; }
+  10% { opacity: 0.8; }
+  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+}
+@keyframes voarHorizontal {
+  0% { transform: translateX(-100px); opacity: 0; }
+  10% { opacity: 0.95; }
+  90% { opacity: 0.95; }
+  100% { transform: translateX(calc(100vw + 100px)); opacity: 0; }
+}
+@keyframes borboletaVoa {
+  0% { transform: translate(-50px, 0) rotate(-5deg); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translate(50vw, -30px) rotate(5deg); }
+  90% { opacity: 1; }
+  100% { transform: translate(calc(100vw + 50px), 20px) rotate(-5deg); opacity: 0; }
+}
+@keyframes vagalumePisca {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(107, 75, 156, 0.3); }
+  50% { box-shadow: 0 4px 30px rgba(107, 75, 156, 0.6); }
+}
+@keyframes flutuarSuaveInv { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-12px); } }
+@keyframes giroLento { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes revelarCena { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes folhaCair {
+  0% { transform: translateY(-20px) rotate(0); opacity: 0; }
+  10% { opacity: 0.8; }
+  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+}
+@keyframes voarHorizontalReverso {
+  0% { transform: translateX(0) scaleX(-1); opacity: 0; }
+  10% { opacity: 0.85; }
+  90% { opacity: 0.85; }
+  100% { transform: translateX(calc(-100vw - 100px)) scaleX(-1); opacity: 0; }
+}
+@keyframes bolhasFlutuam {
+  0% { transform: translateY(20px) scale(1); opacity: 0; }
+  20% { opacity: 0.8; }
+  100% { transform: translateY(-200px) scale(1.3); opacity: 0; }
+}
+@keyframes ondasConcentricas {
+  0% { transform: scale(0.5); opacity: 0.8; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+body {
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--cinza-texto);
+  background: linear-gradient(135deg, var(--lilas-base-1) 0%, var(--lilas-base-2) 30%, var(--lilas-base-3) 70%, var(--lilas-base-1) 100%);
+  min-height: 100vh;
+  padding: 0;
+  position: relative;
+  overflow-x: hidden;
+  transition: background 1.5s ease;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CENA DE FUNDO · replicada do NAV.05 v04.10 (Paz Digital)
+   6 SVGs principais · animações coordenadas
+   ──────────────────────────────────────────────────────────────── */
+.cena-fundo {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.85;
+}
+
+.elemento { position: absolute; pointer-events: none; }
+
+.robo-paz {
+  bottom: 100px;
+  right: 30px;
+  width: 220px;
+  height: 220px;
+  animation: revelarCena 1.5s ease-out, flutuarSuaveInv 5s ease-in-out infinite 1.5s;
+}
+
+.pomba {
+  top: 220px;
+  left: 0;
+  width: 140px;
+  height: 100px;
+  animation: voarHorizontal 18s linear infinite 1.5s;
+}
+
+.pomba-2 {
+  top: 55%;
+  right: 0;
+  width: 110px;
+  height: 75px;
+  animation: voarHorizontalReverso 24s linear infinite 4s;
+}
+
+.arvore {
+  bottom: 180px;
+  left: 20px;
+  width: 290px;
+  height: 420px;
+  animation: revelarCena 1.5s ease-out 0.2s backwards;
+}
+
+.sol-circuito {
+  top: 40px;
+  right: 60px;
+  width: 160px;
+  height: 160px;
+  animation: revelarCena 1.5s ease-out 0.6s backwards;
+}
+.sol-circuito .raios {
+  animation: giroLento 60s linear infinite;
+  transform-origin: 80px 80px;
+}
+
+.mini-robo {
+  bottom: 30px;
+  left: 120px;
+  width: 140px;
+  height: 155px;
+  animation: revelarCena 1.5s ease-out 1s backwards, flutuarSuave 4s ease-in-out infinite 2.5s;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FOLHAS CAINDO · ambiente lúdico (NAV.05)
+   ──────────────────────────────────────────────────────────────── */
+.folhas-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.85;
+}
+.folha {
+  position: absolute;
+  top: -30px;
+  width: 24px;
+  height: 24px;
+  animation: folhaCair linear infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   DETALHES DE FUNDO · borboletas · vagalumes · bolhas · ondas
+   (densidade igual ao NAV)
+   ──────────────────────────────────────────────────────────────── */
+.detalhe-borboleta {
+  position: fixed;
+  pointer-events: none;
+  z-index: 2;
+  font-size: 26px;
+  animation: borboletaVoa 18s linear infinite;
+}
+
+.detalhe-vagalume {
+  position: fixed;
+  pointer-events: none;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #FFE066 0%, #FFD56B 30%, transparent 70%);
+  border-radius: 50%;
+  animation: vagalumePisca 3s ease-in-out infinite;
+  box-shadow: 0 0 16px #FFD56B, 0 0 32px rgba(255,213,107,0.5);
+  z-index: 2;
+}
+
+.detalhe-bolha {
+  position: fixed;
+  pointer-events: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #FFFFFF, var(--lilas-base-2));
+  animation: bolhasFlutuam 6s ease-out infinite;
+  z-index: 2;
+  bottom: 0;
+  opacity: 0.6;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CRONÔMETROS · DESATIVADOS NESTA VERSÃO (atividade não é prova)
+   Marcos vai replicar correção do NAV em paralelo · placeholder mantido
+   ──────────────────────────────────────────────────────────────── */
+/* #painelCronos { ... } */
+/* #cronoQuestao { ... } */
+
+/* ════════════════════════════════════════════════════════════════
+   BARRA SUPERIOR UNIFICADA · v03.10 (replicada do NAV.05 v04.21)
+   Esquerda: título colorido + pombinhas + subtítulo dinâmico
+   Direita: relógio de Brasília
+   ──────────────────────────────────────────────────────────────── */
+#barraSuperior {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: rgba(20, 14, 36, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  color: #FFF;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+.barra-esq {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+.barra-titulo {
+  font-size: 21px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  letter-spacing: 0.3px;
+}
+.barra-titulo span {
+  display: inline-block;
+  animation: letraPulsa 4s ease-in-out infinite;
+}
+.barra-titulo span:nth-child(1)  { color: #FFD56B; animation-delay: 0s; }
+.barra-titulo span:nth-child(2)  { color: #FF9F6B; animation-delay: 0.1s; }
+.barra-titulo span:nth-child(3)  { color: #FF7B7B; animation-delay: 0.2s; }
+.barra-titulo span:nth-child(4)  { color: #C0E08E; animation-delay: 0.3s; }
+.barra-titulo span:nth-child(5)  { color: #7BCFE0; animation-delay: 0.4s; }
+.barra-titulo span:nth-child(6)  { color: #B8A0D8; animation-delay: 0.5s; }
+.barra-titulo span:nth-child(7)  { color: #FFD56B; animation-delay: 0.6s; }
+.barra-titulo span:nth-child(8)  { color: #FF9F6B; animation-delay: 0.7s; }
+.barra-titulo span:nth-child(9)  { color: #FF7B7B; animation-delay: 0.8s; }
+.barra-titulo span:nth-child(10) { color: #C0E08E; animation-delay: 0.9s; }
+.barra-titulo span:nth-child(11) { color: #7BCFE0; animation-delay: 1s; }
+.barra-titulo span:nth-child(12) { color: #B8A0D8; animation-delay: 1.1s; }
+.barra-titulo span:nth-child(13) { color: #FFD56B; animation-delay: 1.2s; }
+
+@keyframes letraPulsa {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.95; }
+  50% { transform: translateY(-2px) scale(1.05); opacity: 1; }
+}
+
+.barra-pombinhas {
+  display: inline-flex;
+  gap: 4px;
+  font-size: 18px;
+}
+.barra-pombinhas span {
+  animation: flutuarSuave 3s ease-in-out infinite;
+}
+.barra-pombinhas span:nth-child(2) { animation-delay: 1.5s; }
+
+.barra-subtitulo {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  margin-left: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.barra-dir {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.barra-relogio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.barra-relogio .relogio-label {
+  font-size: 10px;
+  opacity: 0.75;
+  font-weight: 600;
+}
+
+body {
+  padding-top: 56px;
+}
+
+@media (max-width: 700px) {
+  #barraSuperior { height: 48px; padding: 0 10px; }
+  .barra-titulo { font-size: 16px; }
+  .barra-subtitulo { display: none; }
+  .barra-pombinhas { font-size: 14px; }
+  .barra-relogio { padding: 4px 8px; font-size: 12px; }
+  body { padding-top: 48px; }
+}
+
+/* Frase-temática antiga vira fallback histórico · oculta */
+.frase-tematica { display: none !important; }
+
+/* ════════════════════════════════════════════════════════════════
+   CARD ADMIN · destaque para cards visíveis só no modo admin
+   ──────────────────────────────────────────────────────────────── */
+.card-opcao.card-admin {
+  border: 2px dashed var(--roxo-conviva);
+  opacity: 0.85;
+}
+.card-opcao.card-admin::after {
+  content: "🔒";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 10px;
+}
+.card-opcao { position: relative; }
+
+/* ════════════════════════════════════════════════════════════════
+   APP · container principal
+   ──────────────────────────────────────────────────────────────── */
+.app {
+  max-width: 880px;
+  margin: 60px auto 40px;
+  padding: 32px 24px;
+  background: var(--branco);
+  border-radius: 24px;
+  box-shadow: 0 12px 48px rgba(107, 75, 156, 0.2);
+  animation: fadeIn 0.6s ease-out;
+  position: relative;
+  z-index: 10;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TELAS · sistema de navegação
+   ──────────────────────────────────────────────────────────────── */
+.tela { display: none; }
+.tela.ativa { display: block; animation: fadeIn 0.5s ease-out; }
+
+/* ════════════════════════════════════════════════════════════════
+   TELA 1 · BOAS-VINDAS
+   ──────────────────────────────────────────────────────────────── */
+.bv-titulo {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--roxo-conviva);
+  text-align: center;
+  margin-bottom: 8px;
+}
+.bv-subtitulo {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cinza-medio);
+  text-align: center;
+  margin-bottom: 24px;
+}
+.bv-faixa-tema {
+  background: linear-gradient(135deg, var(--roxo-conviva) 0%, var(--azul-paz) 100%);
+  color: var(--branco);
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  padding: 12px 24px;
+  border-radius: 999px;
+  margin: 0 auto 32px;
+  max-width: 600px;
+}
+.bv-secao {
+  background: var(--roxo-claro);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+.bv-secao-titulo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--roxo-conviva);
+  margin-bottom: 8px;
+}
+.bv-secao-texto {
+  font-size: 15px;
+  color: var(--cinza-texto);
+}
+.bv-secao-texto ol, .bv-secao-texto ul {
+  margin-left: 20px;
+  margin-top: 6px;
+}
+.bv-secao-texto li {
+  margin-bottom: 4px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BOTÕES · sistema padrão
+   ──────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-block;
+  padding: 14px 28px;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--roxo-conviva) 0%, var(--azul-paz) 100%);
+  color: var(--branco);
+  box-shadow: 0 4px 16px rgba(107, 75, 156, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(107, 75, 156, 0.5);
+}
+.btn-secondary {
+  background: var(--branco);
+  color: var(--roxo-conviva);
+  border: 2px solid var(--roxo-conviva);
+}
+.btn-secondary:hover {
+  background: var(--roxo-claro);
+}
+.btn-success {
+  background: linear-gradient(135deg, var(--verde-vida) 0%, #3A7032 100%);
+  color: var(--branco);
+}
+.btn-grupo {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FORM · campos e seletores
+   ──────────────────────────────────────────────────────────────── */
+.campo {
+  margin-bottom: 20px;
+}
+.campo label {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cinza-texto);
+  margin-bottom: 8px;
+}
+.campo input[type="text"],
+.campo input[type="url"],
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--cinza-texto);
+  background: var(--cinza-suave);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: var(--roxo-conviva);
+  background: var(--branco);
+}
+.campo textarea {
+  min-height: 160px;
+  resize: vertical;
+  font-family: inherit;
+}
+.campo .hint {
+  font-size: 13px;
+  color: var(--cinza-medio);
+  margin-top: 4px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CARDS · sistema de seleção em grade (igual NAV)
+   ──────────────────────────────────────────────────────────────── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.card-opcao {
+  background: var(--cinza-suave);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cinza-texto);
+}
+.card-opcao:hover {
+  background: var(--roxo-claro);
+  transform: translateY(-2px);
+}
+.card-opcao.selecionado {
+  background: var(--roxo-claro);
+  border-color: var(--roxo-conviva);
+  color: var(--roxo-conviva);
+  box-shadow: 0 4px 12px rgba(107, 75, 156, 0.25);
+}
+.card-opcao .emoji {
+  display: block;
+  font-size: 32px;
+  margin-bottom: 4px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ÁREAS DE PROFISSÃO · grid 11 áreas
+   ──────────────────────────────────────────────────────────────── */
+.areas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.area-card {
+  background: var(--cinza-suave);
+  border: 2px solid transparent;
+  border-radius: 14px;
+  padding: 14px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.area-card:hover {
+  background: var(--roxo-claro);
+}
+.area-card.selecionado {
+  background: var(--roxo-claro);
+  border-color: var(--roxo-conviva);
+}
+.area-card .area-emoji {
+  font-size: 28px;
+  display: block;
+}
+.area-card .area-nome {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cinza-texto);
+  margin-top: 4px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TEMAS TRANSVERSAIS · lista vertical
+   ──────────────────────────────────────────────────────────────── */
+.temas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tema-item {
+  background: var(--cinza-suave);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tema-item:hover {
+  background: var(--roxo-claro);
+}
+.tema-item.selecionado {
+  background: var(--roxo-claro);
+  border-color: var(--roxo-conviva);
+}
+.tema-item.recomendado::before {
+  content: "🎯";
+  font-size: 20px;
+}
+.tema-item .tema-letra {
+  font-weight: 800;
+  color: var(--roxo-conviva);
+  margin-right: 6px;
+}
+.tema-item .tema-emoji {
+  font-size: 20px;
+  margin-right: 8px;
+}
+.tema-item .tema-nome {
+  font-weight: 700;
+  color: var(--cinza-texto);
+}
+.tema-item .tema-meta {
+  font-size: 12px;
+  color: var(--cinza-medio);
+  display: block;
+  margin-top: 2px;
+  margin-left: 32px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PERFIL PEI · 3 eixos
+   ──────────────────────────────────────────────────────────────── */
+.eixo-bloco {
+  background: var(--cinza-suave);
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+.eixo-bloco.aprendizagem { border-left: 4px solid var(--verde-vida); }
+.eixo-bloco.convivencia { border-left: 4px solid var(--azul-paz); }
+.eixo-bloco.frequencia { border-left: 4px solid var(--laranja-energia); }
+.eixo-titulo {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cinza-texto);
+  margin-bottom: 8px;
+}
+.eixo-opcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.eixo-opcao {
+  padding: 10px 14px;
+  background: var(--branco);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+.eixo-opcao:hover {
+  background: var(--roxo-claro);
+}
+.eixo-opcao.selecionado {
+  background: var(--roxo-claro);
+  border-color: var(--roxo-conviva);
+  font-weight: 600;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TELA 7 · RESULTADO · 2 abas
+   ──────────────────────────────────────────────────────────────── */
+.abas {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid var(--cinza-suave);
+  margin-bottom: 24px;
+}
+.aba {
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cinza-medio);
+  transition: all 0.2s ease;
+}
+.aba.ativa {
+  background: var(--roxo-claro);
+  color: var(--roxo-conviva);
+  border-bottom: 3px solid var(--roxo-conviva);
+}
+.aba-conteudo { display: none; }
+.aba-conteudo.ativa { display: block; }
+
+.prompt-box {
+  background: var(--cinza-suave);
+  border: 2px dashed var(--roxo-conviva);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  white-space: pre-wrap;
+  color: var(--cinza-texto);
+}
+
+.texto-card {
+  background: var(--branco);
+  border: 2px solid var(--roxo-claro);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(107, 75, 156, 0.1);
+}
+.texto-card.texto-1 { border-left: 6px solid var(--azul-paz); }
+.texto-card.texto-2 { border-left: 6px solid var(--verde-vida); }
+.texto-card.texto-3 { border-left: 6px solid var(--laranja-energia); }
+.texto-card-titulo {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.texto-card.texto-1 .texto-card-titulo { color: var(--azul-paz); }
+.texto-card.texto-2 .texto-card-titulo { color: var(--verde-vida); }
+.texto-card.texto-3 .texto-card-titulo { color: var(--laranja-energia); }
+.texto-card-corpo {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--cinza-texto);
+  white-space: pre-wrap;
+}
+
+/* CABEÇALHO COMPARTILHADO · aparece no topo do resultado */
+.cabecalho-compartilhado {
+  background: linear-gradient(135deg, var(--roxo-conviva) 0%, var(--azul-paz) 100%);
+  color: var(--branco);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+.cabecalho-compartilhado .linha {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.cabecalho-compartilhado .linha .label {
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* RODAPÉ FIM · aparece após os 3 textos */
+.rodape-fim {
+  text-align: center;
+  background: var(--cinza-texto);
+  color: var(--branco);
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 24px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ANIMAÇÃO TEMÁTICA POR PROFISSÃO · tela final
+   ──────────────────────────────────────────────────────────────── */
+.anim-tematica {
+  position: fixed;
+  pointer-events: none;
+  font-size: 32px;
+  z-index: 5;
+  opacity: 0.6;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PROGRESSO · indicador entre telas
+   ──────────────────────────────────────────────────────────────── */
+.progresso {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+.progresso-bola {
+  width: 10px;
+  height: 10px;
+  background: var(--lilas-base-3);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+.progresso-bola.ativa {
+  background: var(--roxo-conviva);
+  width: 24px;
+  border-radius: 6px;
+}
+.progresso-bola.completa {
+  background: var(--verde-vida);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   RESPONSIVO
+   ──────────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .app { margin: 20px 12px; padding: 20px 16px; }
+  .bv-titulo { font-size: 24px; }
+  .areas-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  .frase-tematica { font-size: 11px; max-width: 200px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Barra superior unificada (v03.10 · replicada do NAV.05 v04.21) -->
+<div id="barraSuperior">
+  <div class="barra-esq">
+    <div class="barra-titulo" id="barraTitulo">
+      <!-- preenchido via JS · letra por letra colorida -->
+    </div>
+    <div class="barra-pombinhas"><span>🕊️</span><span>🕊️</span></div>
+    <div class="barra-subtitulo" id="barraSubtitulo">StartLab · BMB</div>
+  </div>
+  <div class="barra-dir">
+    <div class="barra-relogio">
+      <span class="relogio-label">🕐 BSB</span>
+      <span id="barraRelogio">--:--</span>
+    </div>
+  </div>
+</div>
+
+<!-- Frase temática antiga · mantida como fallback histórico (display:none via CSS) -->
+<div class="frase-tematica" id="fraseTematica">
+  <div class="linha linha1" id="fraseLinha1">🚀 Faça como eu fiz</div>
+  <div class="linha linha2" id="fraseLinha2">StartLab Alura · BMB</div>
+</div>
+
+<!-- Ambiente lúdico · cenário replicado do NAV.05 v04.10 (Paz Digital) -->
+
+<!-- ════════════════════════════════════════════════════════
+     CENA DE FUNDO · 6 SVGs principais (z-index: 0)
+     ════════════════════════════════════════════════════════ -->
+<div class="cena-fundo" id="cenaFundo">
+
+  <!-- Sol-Circuito (top right) -->
+  <svg class="elemento sol-circuito" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="grad-sol">
+        <stop offset="0%" stop-color="#FFD56B" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#FFA500" stop-opacity="0.5"/>
+      </radialGradient>
+    </defs>
+    <g class="raios">
+      <line x1="80" y1="10" x2="80" y2="25" stroke="#FFB347" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <line x1="80" y1="135" x2="80" y2="150" stroke="#FFB347" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <line x1="10" y1="80" x2="25" y2="80" stroke="#FFB347" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <line x1="135" y1="80" x2="150" y2="80" stroke="#FFB347" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <line x1="30" y1="30" x2="42" y2="42" stroke="#FFB347" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <line x1="118" y1="118" x2="130" y2="130" stroke="#FFB347" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <line x1="130" y1="30" x2="118" y2="42" stroke="#FFB347" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <line x1="42" y1="118" x2="30" y2="130" stroke="#FFB347" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+    </g>
+    <circle cx="80" cy="80" r="40" fill="url(#grad-sol)"/>
+    <g stroke="#B86A1F" stroke-width="1.5" fill="none" opacity="0.7">
+      <path d="M62 80 L98 80 M80 62 L80 98"/>
+      <circle cx="62" cy="80" r="3" fill="#B86A1F"/>
+      <circle cx="98" cy="80" r="3" fill="#B86A1F"/>
+      <circle cx="80" cy="62" r="3" fill="#B86A1F"/>
+      <circle cx="80" cy="98" r="3" fill="#B86A1F"/>
+    </g>
+  </svg>
+
+  <!-- Pomba grande (voa horizontal · esquerda → direita) -->
+  <svg class="elemento pomba" viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <ellipse cx="70" cy="55" rx="22" ry="12" fill="#FFFFFF" opacity="0.95"/>
+      <circle cx="92" cy="48" r="10" fill="#FFFFFF" opacity="0.95"/>
+      <polygon points="100,48 110,46 100,52" fill="#E8A04C"/>
+      <circle cx="94" cy="46" r="1.5" fill="#2D2D2D"/>
+      <path d="M55 50 Q40 30 25 35 Q35 45 50 55 Z" fill="#F0F0F0" opacity="0.9"/>
+      <path d="M55 60 Q35 70 20 65 Q35 60 55 65 Z" fill="#FFFFFF" opacity="0.85"/>
+      <path d="M108 48 Q118 42 125 48" stroke="#4A8C3F" stroke-width="2" fill="none"/>
+      <ellipse cx="115" cy="45" rx="3" ry="1.5" fill="#4A8C3F" transform="rotate(-30 115 45)"/>
+      <ellipse cx="120" cy="46" rx="3" ry="1.5" fill="#4A8C3F" transform="rotate(-25 120 46)"/>
+    </g>
+  </svg>
+
+  <!-- Pomba pequena (voa horizontal reverso · direita → esquerda) -->
+  <svg class="elemento pomba-2" viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg">
+    <g opacity="0.85">
+      <ellipse cx="50" cy="40" rx="16" ry="9" fill="#FFFFFF"/>
+      <circle cx="66" cy="33" r="7" fill="#FFFFFF"/>
+      <polygon points="72,33 80,32 72,36" fill="#E8A04C"/>
+      <circle cx="68" cy="32" r="1.2" fill="#2D2D2D"/>
+      <path d="M38 36 Q26 22 15 25 Q23 35 36 42 Z" fill="#F0F0F0"/>
+      <path d="M38 43 Q25 50 14 47 Q25 43 40 46 Z" fill="#FFFFFF"/>
+    </g>
+  </svg>
+
+  <!-- Árvore com luzes (bottom left) -->
+  <svg class="elemento arvore" viewBox="0 0 260 360" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <rect x="118" y="240" width="24" height="120" fill="#6B4226" rx="3"/>
+      <line x1="130" y1="265" x2="130" y2="345" stroke="#FFD56B" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+      <circle cx="130" cy="130" r="80" fill="#4A8C3F" opacity="0.88"/>
+      <circle cx="80" cy="170" r="60" fill="#5BA84E" opacity="0.88"/>
+      <circle cx="180" cy="170" r="60" fill="#3D7332" opacity="0.88"/>
+      <circle cx="130" cy="210" r="50" fill="#4A8C3F" opacity="0.88"/>
+      <circle cx="105" cy="115" r="5" fill="#FFD56B">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="155" cy="140" r="5" fill="#FF7B7B">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="85" cy="160" r="4" fill="#7BCFE0">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="180" cy="190" r="4" fill="#FFD56B">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="135" cy="200" r="5" fill="#C0E08E">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.8s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="105" cy="200" r="3" fill="#FF7B7B">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="3.2s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </svg>
+
+  <!-- Robô-Paz grande (bottom right) -->
+  <svg class="elemento robo-paz" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <rect x="50" y="80" width="80" height="80" rx="14" fill="#9F86C0"/>
+      <rect x="55" y="85" width="70" height="70" rx="10" fill="#B8A0D8"/>
+      <rect x="60" y="35" width="60" height="50" rx="14" fill="#9F86C0"/>
+      <line x1="75" y1="35" x2="75" y2="20" stroke="#6B4B9C" stroke-width="3"/>
+      <ellipse cx="75" cy="15" rx="6" ry="3" fill="#4A8C3F" transform="rotate(-30 75 15)"/>
+      <line x1="105" y1="35" x2="105" y2="20" stroke="#6B4B9C" stroke-width="3"/>
+      <ellipse cx="105" cy="15" rx="6" ry="3" fill="#4A8C3F" transform="rotate(30 105 15)"/>
+      <circle cx="75" cy="55" r="8" fill="#FFFFFF"/>
+      <circle cx="105" cy="55" r="8" fill="#FFFFFF"/>
+      <circle cx="75" cy="56" r="4" fill="#2E5C8A"/>
+      <circle cx="105" cy="56" r="4" fill="#2E5C8A"/>
+      <circle cx="76" cy="55" r="1.5" fill="#FFFFFF"/>
+      <circle cx="106" cy="55" r="1.5" fill="#FFFFFF"/>
+      <path d="M75 70 Q90 78 105 70" stroke="#2E5C8A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M90 110 C 85 100, 70 100, 70 115 C 70 125, 90 140, 90 140 C 90 140, 110 125, 110 115 C 110 100, 95 100, 90 110 Z" fill="#E94B6B">
+        <animate attributeName="fill-opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+      </path>
+      <rect x="35" y="100" width="15" height="40" rx="6" fill="#9F86C0"/>
+      <rect x="130" y="100" width="15" height="40" rx="6" fill="#9F86C0"/>
+      <circle cx="42" cy="145" r="8" fill="#9F86C0"/>
+      <circle cx="138" cy="145" r="8" fill="#9F86C0"/>
+      <ellipse cx="138" cy="143" rx="6" ry="3" fill="#FFFFFF"/>
+      <rect x="65" y="160" width="20" height="15" rx="4" fill="#6B4B9C"/>
+      <rect x="95" y="160" width="20" height="15" rx="4" fill="#6B4B9C"/>
+      <circle cx="60" cy="95" r="3" fill="#4ADE80">
+        <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </svg>
+
+  <!-- Mini-Robô (bottom left) -->
+  <svg class="elemento mini-robo" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <rect x="30" y="50" width="40" height="40" rx="8" fill="#7BCFE0"/>
+      <rect x="33" y="53" width="34" height="34" rx="6" fill="#A5DCE8"/>
+      <circle cx="50" cy="35" r="20" fill="#7BCFE0"/>
+      <line x1="50" y1="15" x2="50" y2="5" stroke="#2E5C8A" stroke-width="2"/>
+      <circle cx="50" cy="5" r="3" fill="#FFD56B">
+        <animate attributeName="fill" values="#FFD56B;#FF7B7B;#FFD56B" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="42" cy="35" r="4" fill="#FFFFFF"/>
+      <circle cx="58" cy="35" r="4" fill="#FFFFFF"/>
+      <circle cx="43" cy="36" r="2" fill="#2E5C8A"/>
+      <circle cx="59" cy="36" r="2" fill="#2E5C8A"/>
+      <path d="M42 44 Q50 48 58 44" stroke="#2E5C8A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <circle cx="28" cy="75" r="3" fill="#FFB347"/>
+      <line x1="28" y1="77" x2="28" y2="85" stroke="#4A8C3F" stroke-width="1"/>
+      <circle cx="38" cy="95" r="6" fill="#2D2D2D"/>
+      <circle cx="62" cy="95" r="6" fill="#2D2D2D"/>
+      <circle cx="38" cy="95" r="2" fill="#7BCFE0"/>
+      <circle cx="62" cy="95" r="2" fill="#7BCFE0"/>
+    </g>
+  </svg>
+
+</div>
+
+<!-- Folhas caindo · geradas via JS -->
+<div class="folhas-container" id="folhasContainer"></div>
+
+<!-- 3 borboletas em alturas diferentes -->
+<div class="detalhe-borboleta" style="top: 18vh; animation-delay: 0s;">🦋</div>
+<div class="detalhe-borboleta" style="top: 42vh; animation-delay: 7s;">🦋</div>
+<div class="detalhe-borboleta" style="top: 65vh; animation-delay: 13s;">🦋</div>
+
+<!-- 6 vagalumes espalhados -->
+<div class="detalhe-vagalume" style="top: 15vh; left: 22vw; animation-delay: 0s;"></div>
+<div class="detalhe-vagalume" style="top: 38vh; left: 78vw; animation-delay: 0.5s;"></div>
+<div class="detalhe-vagalume" style="top: 60vh; left: 12vw; animation-delay: 1.2s;"></div>
+<div class="detalhe-vagalume" style="top: 25vh; left: 55vw; animation-delay: 1.8s;"></div>
+<div class="detalhe-vagalume" style="top: 75vh; left: 88vw; animation-delay: 2.3s;"></div>
+<div class="detalhe-vagalume" style="top: 50vh; left: 35vw; animation-delay: 2.8s;"></div>
+
+<!-- Bolhas flutuantes (subindo do chão) -->
+<div class="detalhe-bolha" style="left: 10vw; animation-delay: 0s;"></div>
+<div class="detalhe-bolha" style="left: 45vw; animation-delay: 1.8s;"></div>
+<div class="detalhe-bolha" style="left: 72vw; animation-delay: 3.2s;"></div>
+<div class="detalhe-bolha" style="left: 90vw; animation-delay: 4.8s;"></div>
+
+<!-- Container principal -->
+<div class="app">
+
+  <!-- Indicador de progresso (aparece nas telas 2-6) -->
+  <div class="progresso" id="progresso" style="display: none;">
+    <div class="progresso-bola" data-passo="2"></div>
+    <div class="progresso-bola" data-passo="3"></div>
+    <div class="progresso-bola" data-passo="4"></div>
+    <div class="progresso-bola" data-passo="5"></div>
+    <div class="progresso-bola" data-passo="6"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 1 · BOAS-VINDAS                                    -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela ativa" id="tela1">
+    <div class="bv-titulo">🚀 Faça como eu fiz</div>
+    <div class="bv-subtitulo">StartLab Alura · BMB · 6º ao 9º ano · 2026</div>
+    <div class="bv-faixa-tema">Sua atividade da semana · 3 textos personalizados</div>
+
+    <div class="bv-secao">
+      <div class="bv-secao-titulo">🎯 O que você vai fazer</div>
+      <div class="bv-secao-texto">
+        Você vai responder algumas perguntas sobre você, sua turma, a profissão que admira e o tema da semana. No final, vai receber 3 textos personalizados que respondem ao Card "Faça como eu fiz" do Alura.
+      </div>
+    </div>
+
+    <div class="bv-secao">
+      <div class="bv-secao-titulo">📋 Como funciona</div>
+      <div class="bv-secao-texto">
+        <ol>
+          <li>Você preenche os campos sobre sua identidade e seu Projeto de Vida</li>
+          <li>Você cola o conteúdo do Card "Faça como eu fiz" da sua aula</li>
+          <li>O sistema monta um PROMPT pronto para você usar</li>
+          <li>Você copia o prompt e cola no Claude.ai (gratuito)</li>
+          <li>Você recebe os 3 textos e cola a resposta de volta aqui</li>
+          <li>Você baixa o documento final para entregar</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="bv-secao">
+      <div class="bv-secao-titulo">📄 Os 3 textos</div>
+      <div class="bv-secao-texto">
+        <ul>
+          <li><strong>Texto 1:</strong> Como profissional admirado já formado</li>
+          <li><strong>Texto 2:</strong> Como estudante protagonista (você daqui de dentro da escola)</li>
+          <li><strong>Texto 3:</strong> Profissional e estudante atuando juntos</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="btn-grupo">
+      <button class="btn btn-primary" onclick="proximaTela(2)">▶ Começar</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 2 · IDENTIFICAÇÃO 1 · Nome + (Gênero se necessário) + Turma -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela2">
+    <div class="bv-titulo">👤 Identificação</div>
+    <div class="bv-subtitulo">Comece com seu nome e sua turma</div>
+
+    <div class="campo">
+      <label for="nomeCompleto">Seu nome completo</label>
+      <input type="text" id="nomeCompleto" placeholder="Ex: Maria Silva Santos" autocomplete="off">
+      <div id="avisoGenero" style="display:none; margin-top:8px; padding:8px 12px; background:var(--amarelo-destaque); border-radius:8px; font-size:13px; color:var(--cinza-texto);">
+        ⚠️ Nome não reconhecido · escolha abaixo
+      </div>
+    </div>
+
+    <!-- Campo gênero · oculto por padrão · aparece via JS se detecção falhar -->
+    <div class="campo" id="campoGenero" style="display:none;">
+      <label>Como você se identifica? <span style="font-weight:400; color:var(--cinza-medio); font-size:13px;">(usado só para flexão do texto · sem aparecer pronomes ela/ele)</span></label>
+      <div class="cards-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 380px;">
+        <div class="card-opcao" data-genero="F" onclick="selecionarGenero(this)"><span class="emoji">👧</span>Menina</div>
+        <div class="card-opcao" data-genero="M" onclick="selecionarGenero(this)"><span class="emoji">👦</span>Menino</div>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Ano e turma</label>
+      <div class="cards-grid" id="cardsTurma">
+        <div class="card-opcao" data-turma="6º A" data-ano="6" data-comp="TEC+ROB" onclick="selecionarTurma(this)"><span class="emoji">📘</span>6º ano A</div>
+        <div class="card-opcao" data-turma="6º B" data-ano="6" data-comp="TEC+ROB" onclick="selecionarTurma(this)"><span class="emoji">📘</span>6º ano B</div>
+        <div class="card-opcao" data-turma="7º A" data-ano="7" data-comp="TEC" onclick="selecionarTurma(this)"><span class="emoji">📗</span>7º ano A</div>
+        <div class="card-opcao" data-turma="7º B" data-ano="7" data-comp="TEC" onclick="selecionarTurma(this)"><span class="emoji">📗</span>7º ano B</div>
+        <div class="card-opcao" data-turma="8º A" data-ano="8" data-comp="TEC" onclick="selecionarTurma(this)"><span class="emoji">📙</span>8º ano A</div>
+        <div class="card-opcao" data-turma="8º B" data-ano="8" data-comp="TEC" onclick="selecionarTurma(this)"><span class="emoji">📙</span>8º ano B</div>
+        <div class="card-opcao" data-turma="9º A" data-ano="9" data-comp="TEC" onclick="selecionarTurma(this)"><span class="emoji">📕</span>9º ano A</div>
+        <div class="card-opcao" data-turma="9º B" data-ano="9" data-comp="TEC" onclick="selecionarTurma(this)"><span class="emoji">📕</span>9º ano B</div>
+        <div class="card-opcao" data-turma="9º C" data-ano="9" data-comp="TEC" onclick="selecionarTurma(this)"><span class="emoji">📕</span>9º ano C</div>
+        <div class="card-opcao" data-turma="9º D" data-ano="9" data-comp="TEC" onclick="selecionarTurma(this)"><span class="emoji">📕</span>9º ano D</div>
+      </div>
+    </div>
+
+    <div class="btn-grupo">
+      <button class="btn btn-secondary" onclick="proximaTela(1)">◀ Voltar</button>
+      <button class="btn btn-primary" onclick="proximaTela(3)">Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 3 · IDENTIFICAÇÃO 2 · Cargo(s) + Perfil PEI        -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela3">
+    <div class="bv-titulo">🏷️ Seu protagonismo</div>
+    <div class="bv-subtitulo">Cargo(s) na BMB em 2026 e seu perfil nos 3 eixos PEI</div>
+
+    <div class="campo">
+      <label>Cargo(s) protagonista (escolha até 2)</label>
+      <div class="cards-grid" id="cardsCargo">
+        <!-- preenchido dinamicamente pelo JS conforme o ano -->
+      </div>
+    </div>
+
+    <!-- Cascata Grêmio (aparece se selecionar Gremista) -->
+    <div class="campo" id="cascataGremio" style="display:none; background:var(--roxo-claro); padding:16px; border-radius:14px;">
+      <label>🗳️ Você é Gremista · qual é o seu cargo no grêmio?</label>
+      <div class="cards-grid" id="cardsGremio">
+        <div class="card-opcao" data-gremio="Presidente" onclick="selecionarGremio(this)"><span class="emoji">👑</span>Presidente</div>
+        <div class="card-opcao" data-gremio="Vice-presidente" onclick="selecionarGremio(this)"><span class="emoji">⭐</span>Vice-presidente</div>
+        <div class="card-opcao" data-gremio="Secretário(a)" onclick="selecionarGremio(this)"><span class="emoji">📝</span>Secretário(a)</div>
+        <div class="card-opcao" data-gremio="Tesoureiro(a)" onclick="selecionarGremio(this)"><span class="emoji">💰</span>Tesoureiro(a)</div>
+        <div class="card-opcao" data-gremio="Comunicação" onclick="selecionarGremio(this)"><span class="emoji">📢</span>Comunicação</div>
+        <div class="card-opcao" data-gremio="Cultura" onclick="selecionarGremio(this)"><span class="emoji">🎨</span>Cultura</div>
+        <div class="card-opcao" data-gremio="Esportes" onclick="selecionarGremio(this)"><span class="emoji">🏆</span>Esportes</div>
+        <div class="card-opcao" data-gremio="Outro" onclick="selecionarGremio(this)"><span class="emoji">✏️</span>Outro</div>
+      </div>
+      <input type="text" id="gremioOutro" placeholder="Digite seu cargo no grêmio" style="margin-top:10px; display:none;">
+    </div>
+
+    <!-- Cascata Comissão de Formatura (aparece se selecionar Comissão) -->
+    <div class="campo" id="cascataFormatura" style="display:none; background:var(--roxo-claro); padding:16px; border-radius:14px;">
+      <label>🎓 Você é da Comissão de Formatura · qual é a sua função?</label>
+      <div class="cards-grid" id="cardsFormatura">
+        <div class="card-opcao" data-funcao="Coordenador(a)" onclick="selecionarFormatura(this)"><span class="emoji">👑</span>Coordenador(a)</div>
+        <div class="card-opcao" data-funcao="Vice-coordenador(a)" onclick="selecionarFormatura(this)"><span class="emoji">🤝</span>Vice-coordenador(a)</div>
+        <div class="card-opcao" data-funcao="Tesoureiro(a)" onclick="selecionarFormatura(this)"><span class="emoji">💰</span>Tesoureiro(a)</div>
+        <div class="card-opcao" data-funcao="Secretário(a)" onclick="selecionarFormatura(this)"><span class="emoji">📝</span>Secretário(a)</div>
+        <div class="card-opcao" data-funcao="Eventos" onclick="selecionarFormatura(this)"><span class="emoji">🎉</span>Eventos</div>
+        <div class="card-opcao" data-funcao="Mídia / Memorial" onclick="selecionarFormatura(this)"><span class="emoji">📸</span>Mídia/Memorial</div>
+        <div class="card-opcao" data-funcao="Lembranças" onclick="selecionarFormatura(this)"><span class="emoji">🎁</span>Lembranças</div>
+        <div class="card-opcao" data-funcao="Outro" onclick="selecionarFormatura(this)"><span class="emoji">✏️</span>Outro</div>
+      </div>
+      <input type="text" id="formaturaOutro" placeholder="Digite sua função na comissão" style="margin-top:10px; display:none;">
+    </div>
+
+    <!-- EIXO APRENDIZAGEM · 4 opções com negritos -->
+    <div class="campo">
+      <label>📚 APRENDIZAGEM · Como você atua nesse eixo?</label>
+      <div class="eixo-bloco aprendizagem">
+        <div class="eixo-opcoes">
+          <div class="eixo-opcao" data-eixo="apr" data-valor="A" onclick="selecionarEixo(this)">A · Costumo <strong>AJUDAR</strong> colegas com dificuldade nos conteúdos</div>
+          <div class="eixo-opcao" data-eixo="apr" data-valor="B" onclick="selecionarEixo(this)">B · Costumo <strong>PEDIR</strong> ajuda para entender melhor</div>
+          <div class="eixo-opcao" data-eixo="apr" data-valor="C" onclick="selecionarEixo(this)">C · Tanto ajudo quanto peço · depende da matéria</div>
+          <div class="eixo-opcao" data-eixo="apr" data-valor="D" onclick="selecionarEixo(this)">D · Costumo <strong>resolver SOZINHO</strong> · sem pedir nem oferecer ajuda · prefiro estudar e pensar por conta própria</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EIXO CONVIVÊNCIA · 4 opções refatoradas com explicação MEDIAR -->
+    <div class="campo">
+      <label>🤝 CONVIVÊNCIA · Como você atua nesse eixo?</label>
+      <div style="background:var(--amarelo-destaque); padding:10px 14px; border-radius:10px; font-size:14px; margin-bottom:8px; color:var(--cinza-texto);">
+        <strong>MEDIAR</strong> significa estar no meio · ouvir os dois lados · ajudar a achar uma saída sem tomar partido · sem agredir com palavra ou ato.
+      </div>
+      <div class="eixo-bloco convivencia">
+        <div class="eixo-opcoes">
+          <div class="eixo-opcao" data-eixo="con" data-valor="A" onclick="selecionarEixo(this)">A · Costumo <strong>MEDIAR</strong> · ouço os dois lados e ajudo a turma a resolver pacificamente</div>
+          <div class="eixo-opcao" data-eixo="con" data-valor="B" onclick="selecionarEixo(this)">B · Já me envolvi em conflitos <strong>tomando partido</strong> (defendendo · respondendo na hora · às vezes verbal ou fisicamente) · estou aprendendo a parar antes</div>
+          <div class="eixo-opcao" data-eixo="con" data-valor="C" onclick="selecionarEixo(this)">C · <strong>Evito conflitos</strong> · observo de longe · não me envolvo nem para ajudar</div>
+          <div class="eixo-opcao" data-eixo="con" data-valor="D" onclick="selecionarEixo(this)">D · Às vezes acabo <strong>provocando ou alimentando</strong> conflitos (mesmo sem perceber) · estou aprendendo a reconhecer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EIXO FREQUÊNCIA · 3 opções -->
+    <div class="campo">
+      <label>📅 FREQUÊNCIA · Como você atua nesse eixo?</label>
+      <div class="eixo-bloco frequencia">
+        <div class="eixo-opcoes">
+          <div class="eixo-opcao" data-eixo="freq" data-valor="A" onclick="selecionarEixo(this)">A · <strong>Frequência ALTA</strong> · raramente falto</div>
+          <div class="eixo-opcao" data-eixo="freq" data-valor="B" onclick="selecionarEixo(this)">B · Falto às vezes · <strong>tento recuperar</strong></div>
+          <div class="eixo-opcao" data-eixo="freq" data-valor="C" onclick="selecionarEixo(this)">C · Tenho <strong>dificuldade</strong> de manter frequência regular</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-grupo">
+      <button class="btn btn-secondary" onclick="proximaTela(2)">◀ Voltar</button>
+      <button class="btn btn-primary" onclick="proximaTela(4)">Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 4 · PROFISSÃO ADMIRADA + Anos de experiência       -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela4">
+    <div class="bv-titulo">💼 Seu Projeto de Vida</div>
+    <div class="bv-subtitulo">Qual profissão você admira? Escolha a área primeiro, depois a profissão.</div>
+
+    <div class="campo">
+      <label>Área da profissão</label>
+      <div class="areas-grid" id="areasGrid">
+        <!-- 11 áreas preenchidas via JS -->
+      </div>
+    </div>
+
+    <div class="campo">
+      <label for="selectProfissao">Profissão dentro da área escolhida</label>
+      <select id="selectProfissao" disabled>
+        <option value="">Selecione uma área primeiro</option>
+      </select>
+      <div class="hint">Ou digite uma profissão que não esteja na lista no campo abaixo</div>
+      <input type="text" id="profissaoOutra" placeholder="(Opcional) Outra profissão não listada" style="margin-top: 10px;">
+    </div>
+
+    <div class="campo">
+      <label>Anos de experiência do profissional admirado</label>
+      <div class="cards-grid">
+        <div class="card-opcao" data-anos="5" onclick="selecionarAnos(this)">5 anos<br><small>(iniciante)</small></div>
+        <div class="card-opcao selecionado" data-anos="10" onclick="selecionarAnos(this)">🎯 10 anos<br><small>(intermediário)</small></div>
+        <div class="card-opcao" data-anos="15" onclick="selecionarAnos(this)">15 anos<br><small>(experiente)</small></div>
+        <div class="card-opcao" data-anos="20+" onclick="selecionarAnos(this)">20+ anos<br><small>(sênior)</small></div>
+      </div>
+    </div>
+
+    <div class="btn-grupo">
+      <button class="btn btn-secondary" onclick="proximaTela(3)">◀ Voltar</button>
+      <button class="btn btn-primary" onclick="proximaTela(5)">Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 5 · TEMA DA SEMANA                                 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela5">
+    <div class="bv-titulo">🎯 Tema da semana</div>
+    <div class="bv-subtitulo">Qual tema transversal ou data comemorativa está ativa esta semana?</div>
+
+    <div class="campo">
+      <div class="temas-lista" id="temasLista">
+        <!-- 16 temas via JS · A vem com classe "recomendado" -->
+      </div>
+    </div>
+
+    <div class="campo" id="temaOutroCampo" style="display: none;">
+      <label>Digite seu tema</label>
+      <input type="text" id="temaOutro" placeholder="Ex: Dia do Estudante">
+    </div>
+
+    <div class="btn-grupo">
+      <button class="btn btn-secondary" onclick="proximaTela(4)">◀ Voltar</button>
+      <button class="btn btn-primary" onclick="proximaTela(6)">Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 6 · CARD ALURA "Faça como eu fiz"                  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela6">
+    <div class="bv-titulo">📄 Card "Faça como eu fiz"</div>
+    <div class="bv-subtitulo">Identifique o bimestre, a unidade, a aula e o tipo de projeto</div>
+
+    <div class="campo">
+      <label>Bimestre</label>
+      <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr); max-width: 480px;">
+        <div class="card-opcao" data-bim="1B" onclick="selecionarBimestre(this)"><span class="emoji">1️⃣</span>1º Bim.</div>
+        <div class="card-opcao selecionado" data-bim="2B" onclick="selecionarBimestre(this)"><span class="emoji">2️⃣</span>🎯 2º Bim.</div>
+        <div class="card-opcao" data-bim="3B" onclick="selecionarBimestre(this)"><span class="emoji">3️⃣</span>3º Bim.</div>
+        <div class="card-opcao" data-bim="4B" onclick="selecionarBimestre(this)"><span class="emoji">4️⃣</span>4º Bim.</div>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label for="nomeUnidade">Nome da Unidade</label>
+      <input type="text" id="nomeUnidade" placeholder="Ex: Unidade 2 · Coleção de itens">
+    </div>
+
+    <div class="campo">
+      <label for="nomeAula">Nome da Aula</label>
+      <input type="text" id="nomeAula" placeholder="Ex: Aula 3 · Concurso de máquinas">
+    </div>
+
+    <div class="campo">
+      <label>Tipo de projeto · onde você está desenvolvendo?</label>
+      <div class="cards-grid">
+        <div class="card-opcao selecionado" data-projeto="StartLab" onclick="selecionarProjeto(this)"><span class="emoji">🚀</span>🎯 StartLab</div>
+        <div class="card-opcao" data-projeto="Canva" onclick="selecionarProjeto(this)"><span class="emoji">🎨</span>Canva</div>
+        <div class="card-opcao" data-projeto="Google Docs" onclick="selecionarProjeto(this)"><span class="emoji">📄</span>Google Docs</div>
+        <div class="card-opcao" data-projeto="PowerPoint" onclick="selecionarProjeto(this)"><span class="emoji">📊</span>PowerPoint</div>
+        <div class="card-opcao" data-projeto="Scratch" onclick="selecionarProjeto(this)"><span class="emoji">🐱</span>Scratch</div>
+        <div class="card-opcao" data-projeto="Outro" onclick="selecionarProjeto(this)"><span class="emoji">✏️</span>Outro</div>
+      </div>
+      <input type="text" id="projetoOutro" placeholder="Digite qual ferramenta" style="margin-top:10px; display:none;">
+    </div>
+
+    <div class="campo">
+      <label for="linkCard">Link do Card no Alura <span style="font-weight:400; color:var(--cinza-medio);">(opcional · só para registro)</span></label>
+      <input type="url" id="linkCard" placeholder="https://cursos.alura.com.br/...">
+    </div>
+
+    <div class="campo">
+      <label for="conteudoCard">Conteúdo completo do Card "Faça como eu fiz"</label>
+      <textarea id="conteudoCard" placeholder="Cole aqui TUDO que aparece no Card da Alura: enunciado, instruções, perguntas, exemplos..."></textarea>
+      <div class="hint">Quanto mais completo · melhor o resultado dos 3 textos</div>
+    </div>
+
+    <div class="btn-grupo">
+      <button class="btn btn-secondary" onclick="proximaTela(5)">◀ Voltar</button>
+      <button class="btn btn-primary" onclick="proximaTela(7)">Gerar resultado ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 7 · RESULTADO · 2 abas                             -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela7">
+    <div class="bv-titulo">📝 Seu resultado</div>
+
+    <div class="abas">
+      <button class="aba ativa" data-aba="prompt" onclick="trocarAba('prompt')">1. Gerar prompt</button>
+      <button class="aba" data-aba="resposta" onclick="trocarAba('resposta')">2. Colar resposta</button>
+    </div>
+
+    <!-- ABA 1: Prompt copiável -->
+    <div class="aba-conteudo ativa" id="abaPrompt">
+      <div class="bv-secao">
+        <div class="bv-secao-titulo">📋 Como continuar</div>
+        <div class="bv-secao-texto">
+          <ol>
+            <li>Clique em "Copiar prompt"</li>
+            <li>Abra o Claude.ai (gratuito · login só com email)</li>
+            <li>Cole o prompt e envie</li>
+            <li>Aguarde a resposta com os 3 textos</li>
+            <li>Copie a resposta INTEIRA</li>
+            <li>Volte aqui e vá para a aba "Colar resposta"</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="prompt-box" id="promptGerado">Preencha todas as telas anteriores para o prompt ser gerado.</div>
+
+      <div class="btn-grupo">
+        <button class="btn btn-primary" onclick="copiarPrompt()">📋 Copiar prompt</button>
+        <button class="btn btn-secondary" onclick="window.open('https://claude.ai', '_blank')">↗ Abrir Claude.ai</button>
+      </div>
+    </div>
+
+    <!-- ABA 2: Colar resposta -->
+    <div class="aba-conteudo" id="abaResposta">
+      <div class="bv-secao">
+        <div class="bv-secao-titulo">📥 Cole a resposta da IA aqui</div>
+        <div class="bv-secao-texto">
+          Cole INTEIRA a resposta que o Claude (ou GPT) gerou. O sistema vai separar e formatar os 3 textos automaticamente.
+        </div>
+      </div>
+
+      <div class="campo">
+        <textarea id="respostaIA" placeholder="Cole aqui a resposta completa da IA · incluindo o cabeçalho compartilhado e os 3 textos (📘 TEXTO 1, 📗 TEXTO 2, 📕 TEXTO 3)"></textarea>
+      </div>
+
+      <div class="btn-grupo">
+        <button class="btn btn-primary" onclick="processarResposta()">✨ Processar e formatar</button>
+      </div>
+
+      <!-- 3 textos processados aparecem aqui -->
+      <div id="textosProcessados" style="margin-top: 24px; display: none;">
+        <div id="cabecalhoFinal"></div>
+        <div class="texto-card texto-1">
+          <div class="texto-card-titulo">📘 TEXTO 1 · COMO PROFISSIONAL ADMIRADO</div>
+          <div class="texto-card-corpo" id="conteudoTexto1"></div>
+        </div>
+        <div class="texto-card texto-2">
+          <div class="texto-card-titulo">📗 TEXTO 2 · COMO ESTUDANTE PROTAGONISTA</div>
+          <div class="texto-card-corpo" id="conteudoTexto2"></div>
+        </div>
+        <div class="texto-card texto-3">
+          <div class="texto-card-titulo">📕 TEXTO 3 · INTEGRADO · ESTUDANTE + PROFISSIONAL JUNTOS</div>
+          <div class="texto-card-corpo" id="conteudoTexto3"></div>
+        </div>
+
+        <div class="rodape-fim">═══ FIM ═══</div>
+
+        <div class="btn-grupo">
+          <button class="btn btn-success" onclick="baixarDocx()">📥 Baixar como .docx</button>
+          <button class="btn btn-secondary" onclick="copiarTudo()">📋 Copiar tudo</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-grupo" style="margin-top: 20px;">
+      <button class="btn btn-secondary" onclick="proximaTela(6)">◀ Voltar</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Toggle modo Admin · canto inferior · controle docente -->
+<div id="toggleAdmin" style="position:fixed; bottom:14px; right:14px; z-index:50; background:rgba(20,14,36,0.85); color:#FFF; padding:6px 12px; border-radius:14px; font-size:11px; cursor:pointer; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); user-select:none;" onclick="toggleModoAdmin()">
+  <span id="toggleAdminLabel">👤 Aluno</span>
+</div>
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<script>
+// ════════════════════════════════════════════════════════
+// ESTADO GLOBAL · dados do estudante
+// ════════════════════════════════════════════════════════
+const estado = {
+  nome: '',
+  genero: '',
+  detectado: false,
+  modoAdmin: false,
+  turma: '',
+  ano: '',
+  componente: '',
+  cargos: [],
+  gremioCargo: '',
+  formaturaCargo: '',
+  perfil: { apr: null, con: null, freq: null },
+  area: '',
+  profissao: '',
+  anos: '10',
+  tema: '',
+  temaTCT: '',
+  temaODS: '',
+  bimestre: '2B',
+  nomeUnidade: '',
+  nomeAula: '',
+  tipoProjeto: 'StartLab',
+  linkCard: '',
+  conteudoCard: '',
+  respostaIA: '',
+  textosProcessados: { cabecalho: '', t1: '', t2: '', t3: '' }
+};
+
+// ════════════════════════════════════════════════════════
+// LOG "OUTROS" · coleta para análise admin
+// ════════════════════════════════════════════════════════
+function logOutros(campo, valor) {
+  try {
+    const log = JSON.parse(localStorage.getItem('faca_outros_log') || '[]');
+    log.push({ campo, valor, data: new Date().toISOString(), turma: estado.turma });
+    localStorage.setItem('faca_outros_log', JSON.stringify(log));
+  } catch(e) { console.warn('Log outros falhou:', e); }
+}
+
+// ════════════════════════════════════════════════════════
+// BANCO · 16 ÁREAS DE PROFISSÃO (alinhado CM-NAV CLD-012)
+// ════════════════════════════════════════════════════════
+const AREAS = [
+  { id: 'saude-mental',         emoji: '🧠', nome: 'Saúde Mental' },
+  { id: 'comportamento',        emoji: '💭', nome: 'Comportamento' },
+  { id: 'saude-corpo',          emoji: '💚', nome: 'Saúde do Corpo' },
+  { id: 'corpo-movimento',      emoji: '🏃', nome: 'Corpo em Movimento' },
+  { id: 'tecnologia',           emoji: '💻', nome: 'Tecnologia' },
+  { id: 'arte',                 emoji: '🎨', nome: 'Arte e Comunicação' },
+  { id: 'ciencias',             emoji: '🔬', nome: 'Ciências e Pesquisa' },
+  { id: 'engenharia',           emoji: '🏗️', nome: 'Engenharia e Construção' },
+  { id: 'direito',              emoji: '⚖️', nome: 'Direito e Justiça' },
+  { id: 'seguranca',            emoji: '🛡️', nome: 'Segurança Pública' },
+  { id: 'educacao',             emoji: '📚', nome: 'Educação' },
+  { id: 'transporte',           emoji: '🚛', nome: 'Transporte e Logística' },
+  { id: 'gastronomia',          emoji: '🍽️', nome: 'Gastronomia' },
+  { id: 'empreend-tradicional', emoji: '💼', nome: 'Empreendedorismo Tradicional' },
+  { id: 'empreend-digital',     emoji: '📱', nome: 'Empreendedorismo Digital' },
+  { id: 'outros-servicos',      emoji: '🤝', nome: 'Outros / Serviços' }
+];
+
+// ════════════════════════════════════════════════════════
+// BANCO · 135 PROFISSÕES (alinhado lista unificada CLD-060)
+// ════════════════════════════════════════════════════════
+const PROFISSOES = {
+  'saude-mental': [
+    '🧬 Neurocientista', '🧠 Psicopedagogo(a)', '🧠 Psicólogo(a)',
+    '👶 Psicólogo(a) infantil', '💊 Psiquiatra',
+    '💆 Terapeuta', '🛋️ Terapeuta ocupacional'
+  ],
+  'comportamento': [
+    '🤲 Assistente social', '👥 Conselheiro(a) tutelar',
+    '🌱 Educador(a) social', '✨ Coach (vida · carreira · performance)'
+  ],
+  'saude-corpo': [
+    '💉 Cirurgião(ã) Plástico(a)', '🦷 Dentista', '🩺 Enfermeiro(a)',
+    '💊 Farmacêutico(a)', '🤸 Fisioterapeuta', '🏃‍♂️ Fisioterapeuta esportiva',
+    '👄 Fonoaudiólogo(a)', '👨‍⚕️ Médico(a)', '🔪 Médico(a) cirurgião(ã)',
+    '🧠 Médico(a) neurologista', '👶 Médico(a) pediatra', '🥗 Nutricionista',
+    '👶 Pediatra', '📷 Radiologista', '🐾 Veterinário(a)', '🐬 Veterinário(a) Marinho(a)'
+  ],
+  'corpo-movimento': [
+    '🥇 Atleta paralímpico(a)', '🩰 Dançarino(a)', '🏋️ Educador(a) Físico(a)',
+    '🏀 Jogador(a) de Basquete', '⚽ Jogador(a) de Futebol', '🥅 Jogador(a) de Futsal',
+    '🏐 Jogador(a) de Vôlei', '🥊 Lutador(a)', '💪 Personal trainer',
+    '🏐 Profissional de Futevôlei', '🥋 Profissional de Jiu-jitsu', '⚽ Treinador(a) de Futebol'
+  ],
+  'tecnologia': [
+    '🔐 Analista de segurança digital', '📈 Cientista de dados',
+    '💻 Desenvolvedor(a) de software', '🎨 Designer UX',
+    '💻 Engenheiro(a) de Computação', '🔌 Engenheiro(a) de Hardware',
+    '⚙️ Engenheiro(a) de Software', '🎮 Game Designer',
+    '💻 Profissional de TI', '💻 Programador(a)',
+    '🎮 Programador(a) de Games', '🔊 Técnico(a) de som automotivo'
+  ],
+  'arte': [
+    '🎬 Animador(a)', '🎨 Artista Plástico(a)', '🖼️ Artista Visual',
+    '🎭 Ator/Atriz', '✏️ Cartunista', '🎼 Compositor(a)',
+    '🎨 Designer', '🖌️ Designer Gráfico(a)', '🎨 Diretor(a) de Arte',
+    '🎙️ Dublador(a)', '👗 Estilista', '🎸 Guitarrista',
+    '🖌️ Ilustrador(a)', '🎤 MC / Rapper', '👠 Modelo / Profissional de Moda',
+    '📝 Roteirista'
+  ],
+  'ciencias': [
+    '🌾 Agrônomo(a)', '🌌 Astrofísico(a)', '🔭 Astrônomo(a)',
+    '👨‍🚀 Astronauta', '🧬 Biólogo(a)', '🐠 Biólogo(a) Marinho(a)',
+    '⚛️ Físico(a)', '🪨 Geólogo(a)', '🦖 Paleontólogo(a)',
+    '⚗️ Químico(a)', '🚜 Técnico(a) Agropecuário(a)'
+  ],
+  'engenharia': [
+    '🏛️ Arquiteto(a)', '📐 Designer Industrial', '🌳 Engenheiro(a) Ambiental',
+    '🏗️ Engenheiro(a) Civil', '⚡ Engenheiro(a) Elétrico(a)',
+    '⚙️ Engenheiro(a) Mecânico(a)', '🏭 Engenheiro(a) de Produção', '🔨 Ferralheiro(a)'
+  ],
+  'direito': [
+    '⚖️ Advogado(a)', '⚖️ Advogado(a) Criminalista', '🛡️ Defensor(a) público(a)',
+    '⚖️ Juiz(a)', '⚖️ Juiz(a) Criminalista', '🤝 Mediador(a) jurídico(a)',
+    '🔍 Perito(a) Criminal', '⚖️ Promotor(a)'
+  ],
+  'seguranca': [
+    '🚒 Bombeiro(a)', '👮 Delegado(a)', '🔍 Detetive',
+    '👮 Guarda Municipal', '🔍 Investigador(a)', '🪖 Militar / Exército / Marinha',
+    '🔐 Perito(a) cibernético(a)', '👮 Policial (Civil/Militar)',
+    '🌳 Policial Ambiental', '🔐 Policial cibernético(a)'
+  ],
+  'educacao': [
+    '✨ Coach educacional', '🤝 Mediador(a) escolar', '🌟 Orientador(a) educacional',
+    '📚 Pedagogo(a)', '👨‍🏫 Professor(a)', '🎨 Professor(a) de Artes',
+    '🌍 Professor(a) de Geografia'
+  ],
+  'transporte': [
+    '🚛 Caminhoneiro(a)', '✈️ Piloto de Avião', '🚌 Motorista de Ônibus',
+    '📦 Profissional de Logística', '🔧 Mecânico(a) automotivo'
+  ],
+  'gastronomia': [
+    '👨‍🍳 Chef de Cozinha', '🧁 Confeiteiro(a)', '👨‍🍳 Cozinheiro(a)',
+    '📝 Crítico(a) gastronômico(a)', '🥖 Padeiro(a)', '🍷 Sommelier'
+  ],
+  'empreend-tradicional': [
+    '🌾 Agricultor(a)', '👔 Administrador(a)', '💪 Dono(a) de academia',
+    '💼 Empreendedor(a)', '🍴 Empreendedor(a) Alimentício(a)',
+    '🛹 Empreendedor(a) de Skate', '💼 Empresário(a)'
+  ],
+  'empreend-digital': [
+    '📱 Criador(a) de Conteúdo', '🤖 Empresário(a) de Robótica',
+    '📱 Influenciador(a) Digital', '📱 Marketing Digital',
+    '🛒 Mercado Digital / Vendas Online', '📹 Streamer / Youtuber'
+  ],
+  'outros-servicos': [
+    '🧹 Auxiliar de limpeza', '💈 Barbeiro(a)', '👁️ Designer de cílios',
+    '💅 Esteticista', '💅 Manicure', '🏪 Trabalhador(a) de Mercado'
+  ]
+};
+
+// ════════════════════════════════════════════════════════
+// BANCO · CARGOS DE PROTAGONISMO (v03.10 · reordenado)
+// "Não ocupo cargo formal" SEMPRE por ÚLTIMO
+// ════════════════════════════════════════════════════════
+const CARGOS_COMUNS = [
+  { id: 'acolhedor',    emoji: '🤝', nome: 'Acolhedor(a)' },
+  { id: 'lider',        emoji: '⭐', nome: 'Líder de Turma' },
+  { id: 'vice-lider',   emoji: '✨', nome: 'Vice-Líder de Turma' },
+  { id: 'lider-clube',  emoji: '🎯', nome: 'Líder de Clube' },
+  { id: 'mon-hardware', emoji: '🔧', nome: 'Monitor(a) de Hardware' },
+  { id: 'mon-software', emoji: '💻', nome: 'Monitor(a) de Software' },
+  { id: 'lider-equipe', emoji: '🤖', nome: 'Líder de Equipe (Tec/Rob)' }
+];
+
+const CARGOS_9ANO = [
+  { id: 'jap',       emoji: '🏛️', nome: 'JAP (Jovens em Ação)' },
+  { id: 'gremio',    emoji: '🗳️', nome: 'Gremista' },
+  { id: 'formatura', emoji: '🎓', nome: 'Comissão de Formatura' },
+  { id: 'vendas-5a', emoji: '🍬', nome: 'Vendas na 5ª feira' }
+];
+
+// Cards de IC · só aparecem em MODO ADMIN (ocultos para alunos até listas oficiais chegarem)
+const CARGOS_IC_9ANO = [
+  { id: 'bolsista-ic', emoji: '🔬', nome: 'Bolsista IC', admin: true }
+];
+const CARGOS_IC_8ANO = [
+  { id: 'voluntario-ic', emoji: '🌱', nome: 'Voluntário IC', admin: true }
+];
+
+// Cargo "Não ocupo" SEMPRE último
+const CARGO_SEM = { id: 'sem-cargo', emoji: '👤', nome: 'Não ocupo cargo formal' };
+
+// Cascata Comissão de Formatura · funções tradicionais
+const FUNCOES_FORMATURA = [
+  { id: 'coord',         emoji: '👑', nome: 'Coordenador(a)' },
+  { id: 'vice-coord',    emoji: '🤝', nome: 'Vice-coordenador(a)' },
+  { id: 'tes-formatura', emoji: '💰', nome: 'Tesoureiro(a)' },
+  { id: 'sec-formatura', emoji: '📝', nome: 'Secretário(a)' },
+  { id: 'eventos',       emoji: '🎉', nome: 'Eventos' },
+  { id: 'midia',         emoji: '📸', nome: 'Mídia / Memorial' },
+  { id: 'lembrancas',    emoji: '🎁', nome: 'Lembranças' },
+  { id: 'outro-form',    emoji: '✏️', nome: 'Outro' }
+];
+
+// ════════════════════════════════════════════════════════
+// BANCO · TEMAS TRANSVERSAIS
+// ════════════════════════════════════════════════════════
+const TEMAS = [
+  { letra: 'A', emoji: '🤝', nome: 'Paz e não violência', tct: 'Educação em Direitos Humanos', ods: 'ODS 16', recomendado: true },
+  { letra: 'B', emoji: '🚫', nome: 'Combate ao bullying', tct: 'Direitos da Criança e Adolescente (ECA)', ods: 'ODS 16' },
+  { letra: 'C', emoji: '🧠', nome: 'Saúde mental', tct: 'Saúde', ods: 'ODS 3' },
+  { letra: 'D', emoji: '🌳', nome: 'Meio ambiente', tct: 'Educação Ambiental', ods: 'ODS 13/15' },
+  { letra: 'E', emoji: '🥗', nome: 'Alimentação saudável', tct: 'Educação Alimentar e Nutricional', ods: 'ODS 2/3' },
+  { letra: 'F', emoji: '🔒', nome: 'Segurança digital', tct: 'Ciência e Tecnologia', ods: 'ODS 16' },
+  { letra: 'G', emoji: '♀️', nome: 'Direitos da mulher', tct: 'Educação em Direitos Humanos', ods: 'ODS 5' },
+  { letra: 'H', emoji: '✊🏿', nome: 'Consciência negra', tct: 'Diversidade Cultural', ods: 'ODS 10' },
+  { letra: 'I', emoji: '🪶', nome: 'Povos indígenas', tct: 'Diversidade Cultural', ods: 'ODS 10' },
+  { letra: 'J', emoji: '🌈', nome: 'Diversidade LGBTQIA+', tct: 'Educação em Direitos Humanos', ods: 'ODS 10' },
+  { letra: 'K', emoji: '♿', nome: 'Pessoa com deficiência', tct: 'Educação em Direitos Humanos', ods: 'ODS 10' },
+  { letra: 'L', emoji: '👴', nome: 'Respeito ao idoso', tct: 'Processo de Envelhecimento', ods: 'ODS 10' },
+  { letra: 'M', emoji: '💰', nome: 'Educação financeira', tct: 'Educação Financeira', ods: 'ODS 8' },
+  { letra: 'N', emoji: '🚸', nome: 'Educação para o trânsito', tct: 'Educação para o Trânsito', ods: 'ODS 11' },
+  { letra: 'O', emoji: '💼', nome: 'Trabalho e profissões', tct: 'Trabalho', ods: 'ODS 8' },
+  { letra: 'P', emoji: '✏️', nome: 'Outro tema · digite', custom: true }
+];
+
+// ════════════════════════════════════════════════════════
+// BANCO · ANIMAÇÕES TEMÁTICAS POR ÁREA (16 áreas)
+// ════════════════════════════════════════════════════════
+const ANIMACOES_AREA = {
+  'saude-mental':         ['🧠', '💭', '🕊️'],
+  'comportamento':        ['🤲', '🌱', '👥'],
+  'saude-corpo':          ['❤️', '🩺', '💊'],
+  'corpo-movimento':      ['⚽', '🏃', '💪'],
+  'tecnologia':           ['💻', '⚙️', '🔌'],
+  'arte':                 ['🎨', '🎭', '🎼'],
+  'ciencias':             ['🔬', '🧬', '🌌'],
+  'engenharia':           ['🏗️', '📐', '⚡'],
+  'direito':              ['⚖️', '📜', '🔍'],
+  'seguranca':            ['🛡️', '🚔', '🚨'],
+  'educacao':             ['📚', '✏️', '🍎'],
+  'transporte':           ['🚛', '✈️', '📦'],
+  'gastronomia':          ['🍽️', '👨‍🍳', '🥖'],
+  'empreend-tradicional': ['💼', '📈', '🏪'],
+  'empreend-digital':     ['📱', '💰', '🚀'],
+  'outros-servicos':      ['🤝', '✨', '🛠️']
+};
+
+function toggleModoAdmin() {
+  estado.modoAdmin = !estado.modoAdmin;
+  const lbl = document.getElementById('toggleAdminLabel');
+  if (lbl) {
+    lbl.innerHTML = estado.modoAdmin ? '🔬 Admin/Professor' : '👤 Aluno';
+  }
+  // Re-renderizar cargos se já houver ano selecionado
+  if (estado.ano) renderizarCargos(estado.ano);
+}
+
+// ════════════════════════════════════════════════════════
+// BARRA SUPERIOR UNIFICADA (v03.10)
+// Título letra por letra colorida + relógio de Brasília
+// ════════════════════════════════════════════════════════
+function inicializarBarra() {
+  // Renderiza título letra por letra para a animação de cor pulsante funcionar
+  const titulo = '🚀 Faça como eu fiz';
+  const el = document.getElementById('barraTitulo');
+  if (el) {
+    el.innerHTML = titulo.split('').map(c =>
+      c === ' ' ? '<span>&nbsp;</span>' : `<span>${c}</span>`
+    ).join('');
+  }
+  atualizarRelogio();
+  setInterval(atualizarRelogio, 1000);
+}
+
+function atualizarRelogio() {
+  const el = document.getElementById('barraRelogio');
+  if (!el) return;
+  // Hora de Brasília (UTC-3)
+  const agora = new Date();
+  // Conversão simplificada · funciona para PT-BR ambient
+  const hh = String(agora.getHours()).padStart(2, '0');
+  const mm = String(agora.getMinutes()).padStart(2, '0');
+  el.textContent = `${hh}:${mm}`;
+}
+
+function atualizarSubtituloBarra() {
+  const el = document.getElementById('barraSubtitulo');
+  if (!el) return;
+  const turmaTxt = estado.turma ? `${estado.turma} · ${estado.componente}` : 'StartLab · BMB';
+  el.textContent = turmaTxt;
+}
+
+// ════════════════════════════════════════════════════════
+// DETECÇÃO AUTOMÁTICA DE GÊNERO (v03.10 · banco ampliado)
+// 200+ nomes brasileiros + normalização (acentos · maiúsculas) +
+// regra de terminação + proteção da escolha manual
+// ════════════════════════════════════════════════════════
+
+// Banco de nomes brasileiros mais frequentes (Censo + listas escolares públicas)
+const NOMES_BR = {
+  // ═══ MASCULINOS ═══
+  'jose': 'M', 'joao': 'M', 'pedro': 'M', 'lucas': 'M', 'gabriel': 'M',
+  'matheus': 'M', 'mateus': 'M', 'guilherme': 'M', 'rafael': 'M', 'felipe': 'M',
+  'andre': 'M', 'henrique': 'M', 'vitor': 'M', 'victor': 'M', 'bruno': 'M',
+  'thiago': 'M', 'tiago': 'M', 'leonardo': 'M', 'gustavo': 'M', 'eduardo': 'M',
+  'marcelo': 'M', 'ricardo': 'M', 'roberto': 'M', 'antonio': 'M', 'francisco': 'M',
+  'carlos': 'M', 'paulo': 'M', 'fernando': 'M', 'sergio': 'M', 'marcos': 'M',
+  'rodrigo': 'M', 'daniel': 'M', 'fabio': 'M', 'flavio': 'M', 'alexandre': 'M',
+  'samuel': 'M', 'davi': 'M', 'david': 'M', 'enzo': 'M', 'arthur': 'M',
+  'bernardo': 'M', 'miguel': 'M', 'theo': 'M', 'heitor': 'M', 'benjamin': 'M',
+  'isaac': 'M', 'noah': 'M', 'caio': 'M', 'cauã': 'M', 'caua': 'M',
+  'kevin': 'M', 'ryan': 'M', 'luiz': 'M', 'luis': 'M', 'augusto': 'M',
+  'breno': 'M', 'igor': 'M', 'ivan': 'M', 'jonas': 'M', 'jorge': 'M',
+  'leandro': 'M', 'marcio': 'M', 'mario': 'M', 'mauricio': 'M', 'murilo': 'M',
+  'nelson': 'M', 'nicolas': 'M', 'otavio': 'M', 'pablo': 'M', 'patrick': 'M',
+  'pietro': 'M', 'renan': 'M', 'renato': 'M', 'ronaldo': 'M', 'rubens': 'M',
+  'sandro': 'M', 'saulo': 'M', 'silas': 'M', 'tales': 'M', 'tomas': 'M',
+  'vagner': 'M', 'valter': 'M', 'wagner': 'M', 'wallace': 'M', 'wesley': 'M',
+  'william': 'M', 'yago': 'M', 'yan': 'M', 'yuri': 'M', 'iago': 'M',
+  'alex': 'M', 'allan': 'M', 'alan': 'M', 'aldo': 'M', 'alex': 'M',
+  'anderson': 'M', 'angelo': 'M', 'antonio': 'M', 'arnaldo': 'M', 'arthur': 'M',
+  'cesar': 'M', 'claudio': 'M', 'cristiano': 'M', 'denis': 'M', 'dennis': 'M',
+  'diego': 'M', 'douglas': 'M', 'edson': 'M', 'eric': 'M', 'erick': 'M',
+  'ernesto': 'M', 'evaldo': 'M', 'everton': 'M', 'fabricio': 'M', 'fernando': 'M',
+  'gilberto': 'M', 'helio': 'M', 'hugo': 'M', 'jefferson': 'M', 'jeremias': 'M',
+  'joaquim': 'M', 'julio': 'M', 'kaio': 'M', 'kauan': 'M', 'kauã': 'M',
+  'levi': 'M', 'lorenzo': 'M', 'manoel': 'M', 'manuel': 'M', 'martin': 'M',
+  'milton': 'M', 'moises': 'M', 'natanael': 'M', 'olavo': 'M', 'osvaldo': 'M',
+  'osmar': 'M', 'rafael': 'M', 'raul': 'M', 'reinaldo': 'M', 'rene': 'M',
+  'robson': 'M', 'rogerio': 'M', 'romero': 'M', 'samir': 'M', 'sebastiao': 'M',
+  'simao': 'M', 'tadeu': 'M', 'thomas': 'M', 'valdir': 'M', 'vicente': 'M',
+  'vinicius': 'M', 'walter': 'M', 'jhonatan': 'M', 'jhow': 'M', 'jhoe': 'M',
+  // ═══ FEMININOS ═══
+  'maria': 'F', 'ana': 'F', 'beatriz': 'F', 'julia': 'F', 'julia': 'F',
+  'isabela': 'F', 'isabella': 'F', 'sofia': 'F', 'sophia': 'F', 'helena': 'F',
+  'laura': 'F', 'manuela': 'F', 'alice': 'F', 'lara': 'F', 'lavinia': 'F',
+  'livia': 'F', 'mariana': 'F', 'gabriela': 'F', 'rafaela': 'F', 'fernanda': 'F',
+  'camila': 'F', 'larissa': 'F', 'leticia': 'F', 'amanda': 'F', 'aline': 'F',
+  'andreia': 'F', 'angelica': 'F', 'antonia': 'F', 'aparecida': 'F', 'bianca': 'F',
+  'bruna': 'F', 'cibele': 'F', 'cristina': 'F', 'daniela': 'F', 'daniele': 'F',
+  'debora': 'F', 'denise': 'F', 'eduarda': 'F', 'eliana': 'F', 'eloa': 'F',
+  'esther': 'F', 'ester': 'F', 'evelyn': 'F', 'fabiana': 'F', 'flavia': 'F',
+  'francisca': 'F', 'geovana': 'F', 'giovana': 'F', 'giovanna': 'F', 'gisele': 'F',
+  'graziela': 'F', 'helena': 'F', 'heloisa': 'F', 'iolanda': 'F', 'iris': 'F',
+  'isadora': 'F', 'jaqueline': 'F', 'jessica': 'F', 'joana': 'F', 'jovita': 'F',
+  'juliana': 'F', 'karina': 'F', 'kelly': 'F', 'lais': 'F', 'lais': 'F',
+  'luana': 'F', 'lucia': 'F', 'luiza': 'F', 'luna': 'F', 'madalena': 'F',
+  'marcela': 'F', 'marcia': 'F', 'maria': 'F', 'marina': 'F', 'marlene': 'F',
+  'martina': 'F', 'melissa': 'F', 'monica': 'F', 'nair': 'F', 'natalia': 'F',
+  'nicole': 'F', 'olivia': 'F', 'patricia': 'F', 'paula': 'F', 'priscila': 'F',
+  'rafaela': 'F', 'raquel': 'F', 'rebeca': 'F', 'regina': 'F', 'renata': 'F',
+  'roberta': 'F', 'rosa': 'F', 'sabrina': 'F', 'sandra': 'F', 'sarah': 'F',
+  'sara': 'F', 'silvia': 'F', 'simone': 'F', 'solange': 'F', 'stephany': 'F',
+  'tania': 'F', 'tatiana': 'F', 'tereza': 'F', 'teresa': 'F', 'valeria': 'F',
+  'vanessa': 'F', 'vera': 'F', 'veronica': 'F', 'viviane': 'F', 'wanda': 'F',
+  'yara': 'F', 'zeli': 'F', 'agatha': 'F', 'agata': 'F', 'beatris': 'F',
+  'ayla': 'F', 'celine': 'F', 'cecilia': 'F', 'clara': 'F', 'diana': 'F',
+  'elisa': 'F', 'elisabete': 'F', 'eliza': 'F', 'ema': 'F', 'emma': 'F',
+  'erika': 'F', 'erica': 'F', 'eva': 'F', 'fatima': 'F', 'gloria': 'F',
+  'iasmin': 'F', 'jasmin': 'F', 'jamile': 'F', 'jessika': 'F', 'jhennifer': 'F',
+  'kamile': 'F', 'kamila': 'F', 'kauane': 'F', 'kauã': 'F', 'kethelyn': 'F',
+  'leila': 'F', 'lorena': 'F', 'maitê': 'F', 'maite': 'F', 'malu': 'F',
+  'milena': 'F', 'mirela': 'F', 'naomi': 'F', 'pamela': 'F', 'penelope': 'F',
+  'safira': 'F', 'stefany': 'F', 'tais': 'F', 'thais': 'F', 'valentina': 'F',
+  'wilkenya': 'F', 'zara': 'F'
+};
+
+// Nomes verdadeiramente neutros · sempre cair no manual
+const NOMES_NEUTROS = new Set([
+  'dani', 'sasha', 'sam', 'jean', 'val', 'jo', 'quinn', 'reagan', 'dakota'
+]);
+
+function normalizar(s) {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+function detectarGenero(nomeCompleto) {
+  if (!nomeCompleto || !nomeCompleto.trim()) return null;
+
+  const primeiro = normalizar(nomeCompleto).split(/\s+/)[0];
+
+  if (primeiro.length <= 2) return null;
+  if (NOMES_NEUTROS.has(primeiro)) return null;
+
+  // 1ª tentativa: banco direto
+  if (NOMES_BR[primeiro]) return NOMES_BR[primeiro];
+
+  // 2ª tentativa: regra de terminação
+  const ultima = primeiro.slice(-1);
+  const duas = primeiro.slice(-2);
+
+  if (ultima === 'a' && !['mateusa','andersona'].includes(primeiro)) return 'F';
+  if (duas === 'ah') return 'F';
+
+  // Terminações claramente masculinas
+  if ('oumrl'.includes(ultima)) return 'M';
+
+  // Terminação em S · maioria masculina (Lucas, Mateus, Carlos, mas Iris/Ines = F)
+  if (ultima === 's') return 'M';
+
+  // Ambíguo · cai no manual
+  return null;
+}
+
+// ════════════════════════════════════════════════════════
+// GERADOR DE FOLHAS CAINDO (ambiente NAV)
+// ════════════════════════════════════════════════════════
+const FOLHAS_SVG = [
+  // 4 variantes de folhas em tons de verde
+  '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2 C 8 4, 4 8, 4 14 C 4 18, 8 22, 12 22 C 16 22, 20 18, 20 14 C 20 8, 16 4, 12 2 Z" fill="#5BA84E" opacity="0.7"/><path d="M12 4 L 12 20" stroke="#3D7332" stroke-width="0.5"/></svg>',
+  '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2 Q 18 6, 18 14 Q 18 20, 12 22 Q 6 20, 6 14 Q 6 6, 12 2 Z" fill="#4A8C3F" opacity="0.65"/></svg>',
+  '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="12" rx="6" ry="10" fill="#C0E08E" opacity="0.7"/></svg>',
+  '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2 C 14 8, 18 10, 20 14 C 18 18, 14 20, 12 22 C 10 20, 6 18, 4 14 C 6 10, 10 8, 12 2 Z" fill="#7BCFE0" opacity="0.5"/></svg>'
+];
+
+function gerarFolhas() {
+  const container = document.getElementById('folhasContainer');
+  if (!container) return;
+  const totalFolhas = 18;
+  for (let i = 0; i < totalFolhas; i++) {
+    const folha = document.createElement('div');
+    folha.className = 'folha';
+    folha.style.left = (Math.random() * 100) + 'vw';
+    folha.style.animationDuration = (10 + Math.random() * 12) + 's';
+    folha.style.animationDelay = (Math.random() * 15) + 's';
+    folha.innerHTML = FOLHAS_SVG[Math.floor(Math.random() * FOLHAS_SVG.length)];
+    container.appendChild(folha);
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// INICIALIZAÇÃO
+// ════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  inicializarBarra();
+  renderizarAreas();
+  renderizarTemas();
+  gerarFolhas();
+
+  // Listener do campo nome · detecção em tempo real
+  const inputNome = document.getElementById('nomeCompleto');
+  if (inputNome) {
+    inputNome.addEventListener('input', function() {
+      const nome = this.value.trim();
+      const generoDetectado = detectarGenero(nome);
+      const tinhaManual = estado.genero && !estado.detectado;
+
+      if (nome.length >= 3 && !generoDetectado && !tinhaManual) {
+        // Detecção falhou E não tem escolha manual · mostra aviso + card
+        document.getElementById('avisoGenero').style.display = 'block';
+        document.getElementById('campoGenero').style.display = 'block';
+        if (estado.detectado) {
+          estado.genero = '';
+          estado.detectado = false;
+        }
+      } else if (generoDetectado && !tinhaManual) {
+        // Detectou + sem escolha manual · oculta tudo
+        document.getElementById('avisoGenero').style.display = 'none';
+        document.getElementById('campoGenero').style.display = 'none';
+        estado.genero = generoDetectado;
+        estado.detectado = true;
+      } else if (tinhaManual) {
+        // Tem escolha manual · preserva · mas oculta aviso (não força nova escolha)
+        document.getElementById('avisoGenero').style.display = 'none';
+        // mantém o campoGenero visível com a seleção manual destacada
+      } else {
+        // Nome muito curto · oculta tudo
+        document.getElementById('avisoGenero').style.display = 'none';
+        document.getElementById('campoGenero').style.display = 'none';
+        if (estado.detectado) {
+          estado.genero = '';
+          estado.detectado = false;
+        }
+      }
+    });
+  }
+});
+
+function renderizarAreas() {
+  const grid = document.getElementById('areasGrid');
+  grid.innerHTML = AREAS.map(a => `
+    <div class="area-card" data-area="${a.id}" onclick="selecionarArea(this)">
+      <span class="area-emoji">${a.emoji}</span>
+      <span class="area-nome">${a.nome}</span>
+    </div>
+  `).join('');
+}
+
+function renderizarTemas() {
+  const lista = document.getElementById('temasLista');
+  lista.innerHTML = TEMAS.map(t => `
+    <div class="tema-item ${t.recomendado ? 'recomendado' : ''}" data-letra="${t.letra}" onclick="selecionarTema(this)">
+      <div style="flex:1;">
+        <span class="tema-letra">${t.letra})</span>
+        <span class="tema-emoji">${t.emoji}</span>
+        <span class="tema-nome">${t.nome}</span>
+        ${t.custom ? '' : `<span class="tema-meta">TCT: ${t.tct} · ${t.ods}</span>`}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderizarCargos(ano) {
+  const grid = document.getElementById('cardsCargo');
+  let lista = [...CARGOS_COMUNS];
+
+  // Cargos exclusivos de 9º ano
+  if (ano === '9') {
+    lista = lista.concat(CARGOS_9ANO);
+    if (estado.modoAdmin) lista = lista.concat(CARGOS_IC_9ANO);
+  }
+  // IC voluntário só 8º
+  if (ano === '8' && estado.modoAdmin) {
+    lista = lista.concat(CARGOS_IC_8ANO);
+  }
+
+  // "Não ocupo cargo formal" SEMPRE como último item
+  lista.push(CARGO_SEM);
+
+  grid.innerHTML = lista.map(c => `
+    <div class="card-opcao${c.admin ? ' card-admin' : ''}" data-cargo="${c.id}" data-cargo-nome="${c.nome}" onclick="selecionarCargo(this)">
+      <span class="emoji">${c.emoji}</span>
+      ${c.nome}${c.admin ? ' <small style="display:block;font-size:10px;opacity:0.6;">(admin)</small>' : ''}
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════════════════════════════════
+// NAVEGAÇÃO ENTRE TELAS
+// ════════════════════════════════════════════════════════
+function proximaTela(numero) {
+  // Validações por tela
+  if (numero === 3 && !validarTela2()) return;
+  if (numero === 4 && !validarTela3()) return;
+  if (numero === 5 && !validarTela4()) return;
+  if (numero === 6 && !validarTela5()) return;
+  if (numero === 7) {
+    if (!validarTela6()) return;
+    gerarPrompt();
+  }
+
+  document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+  document.getElementById('tela' + numero).classList.add('ativa');
+
+  const progresso = document.getElementById('progresso');
+  if (numero >= 2 && numero <= 6) {
+    progresso.style.display = 'flex';
+    progresso.querySelectorAll('.progresso-bola').forEach(b => {
+      const passo = parseInt(b.dataset.passo);
+      b.classList.remove('ativa', 'completa');
+      if (passo < numero) b.classList.add('completa');
+      if (passo === numero) b.classList.add('ativa');
+    });
+  } else {
+    progresso.style.display = 'none';
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ════════════════════════════════════════════════════════
+// VALIDAÇÕES MÍNIMAS
+// ════════════════════════════════════════════════════════
+function validarTela2() {
+  const nome = document.getElementById('nomeCompleto').value.trim();
+  if (!nome) { alert('Digite seu nome completo'); return false; }
+
+  // Tenta detectar gênero a partir do nome atual (caso input não tenha disparado)
+  if (!estado.genero) {
+    const detectado = detectarGenero(nome);
+    if (detectado) {
+      estado.genero = detectado;
+      estado.detectado = true;
+    }
+  }
+
+  // Se ainda não tem gênero (detecção falhou e estudante não escolheu manual)
+  if (!estado.genero) {
+    // Mostra os cards forçadamente e alerta
+    document.getElementById('avisoGenero').style.display = 'block';
+    document.getElementById('campoGenero').style.display = 'block';
+    alert('Não consegui identificar pelo nome · escolha Menina ou Menino abaixo');
+    return false;
+  }
+
+  if (!estado.turma) { alert('Selecione sua turma'); return false; }
+  estado.nome = nome;
+  return true;
+}
+
+function validarTela3() {
+  if (estado.cargos.length === 0) {
+    alert('Selecione pelo menos um cargo (ou "Não ocupo cargo formal")');
+    return false;
+  }
+  if (estado.cargos.includes('Gremista') && !estado.gremioCargo) {
+    alert('Você selecionou Gremista · escolha qual é o seu cargo no grêmio');
+    return false;
+  }
+  if (estado.cargos.includes('Comissão de Formatura') && !estado.formaturaCargo) {
+    alert('Você selecionou Comissão de Formatura · escolha qual é a sua função');
+    return false;
+  }
+  if (!estado.perfil.apr || !estado.perfil.con || !estado.perfil.freq) {
+    alert('Responda os 3 eixos PEI');
+    return false;
+  }
+  return true;
+}
+
+function validarTela4() {
+  const profOutra = document.getElementById('profissaoOutra').value.trim();
+  if (!estado.profissao && !profOutra) {
+    alert('Selecione uma profissão ou digite uma');
+    return false;
+  }
+  if (profOutra) {
+    estado.profissao = profOutra;
+    logOutros('profissao', profOutra);
+  }
+  return true;
+}
+
+function validarTela5() {
+  if (!estado.tema) { alert('Selecione um tema'); return false; }
+  return true;
+}
+
+function validarTela6() {
+  estado.nomeUnidade = document.getElementById('nomeUnidade').value.trim();
+  estado.nomeAula = document.getElementById('nomeAula').value.trim();
+  estado.linkCard = document.getElementById('linkCard').value.trim();
+  estado.conteudoCard = document.getElementById('conteudoCard').value.trim();
+  if (!estado.nomeAula || !estado.conteudoCard) {
+    alert('Preencha pelo menos o nome da aula e o conteúdo do Card');
+    return false;
+  }
+  return true;
+}
+
+// ════════════════════════════════════════════════════════
+// SELETORES DE CARDS / OPÇÕES
+// ════════════════════════════════════════════════════════
+function selecionarGenero(el) {
+  document.querySelectorAll('[data-genero]').forEach(c => c.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.genero = el.dataset.genero;
+  estado.detectado = false; // marca que veio de seleção manual
+}
+
+function selecionarTurma(el) {
+  document.querySelectorAll('#cardsTurma .card-opcao').forEach(c => c.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.turma = el.dataset.turma;
+  estado.ano = el.dataset.ano;
+  estado.componente = el.dataset.comp;
+  renderizarCargos(estado.ano);
+  atualizarFraseTematica();
+  atualizarSubtituloBarra();
+}
+
+function atualizarFraseTematica() {
+  const turmaTxt = estado.turma ? `${estado.turma} · ${estado.componente}` : 'BMB';
+  document.getElementById('fraseLinha2').textContent = `${turmaTxt} · StartLab`;
+}
+
+function selecionarCargo(el) {
+  el.classList.toggle('selecionado');
+  const selecionados = document.querySelectorAll('#cardsCargo .card-opcao.selecionado');
+  if (selecionados.length > 2) {
+    el.classList.remove('selecionado');
+    alert('Máximo de 2 cargos');
+    return;
+  }
+  estado.cargos = Array.from(selecionados).map(c => c.dataset.cargoNome);
+
+  // Cascata Grêmio
+  const temGremio = estado.cargos.some(c => c.toLowerCase().includes('gremista'));
+  document.getElementById('cascataGremio').style.display = temGremio ? 'block' : 'none';
+  if (!temGremio) estado.gremioCargo = '';
+
+  // Cascata Comissão de Formatura
+  const temFormatura = estado.cargos.some(c => c.toLowerCase().includes('formatura'));
+  const cascFormatura = document.getElementById('cascataFormatura');
+  if (cascFormatura) {
+    cascFormatura.style.display = temFormatura ? 'block' : 'none';
+    if (!temFormatura) estado.formaturaCargo = '';
+  }
+}
+
+function selecionarFormatura(el) {
+  document.querySelectorAll('#cardsFormatura .card-opcao').forEach(c => c.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.formaturaCargo = el.dataset.funcao;
+  const inputOutro = document.getElementById('formaturaOutro');
+  if (estado.formaturaCargo === 'Outro') {
+    inputOutro.style.display = 'block';
+    inputOutro.focus();
+    inputOutro.oninput = function() {
+      if (this.value.trim()) {
+        estado.formaturaCargo = this.value.trim();
+        logOutros('formatura-funcao', this.value.trim());
+      }
+    };
+  } else {
+    inputOutro.style.display = 'none';
+  }
+}
+
+function selecionarGremio(el) {
+  document.querySelectorAll('#cardsGremio .card-opcao').forEach(c => c.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.gremioCargo = el.dataset.gremio;
+  const inputOutro = document.getElementById('gremioOutro');
+  if (estado.gremioCargo === 'Outro') {
+    inputOutro.style.display = 'block';
+    inputOutro.focus();
+    inputOutro.oninput = function() {
+      if (this.value.trim()) {
+        estado.gremioCargo = this.value.trim();
+        logOutros('gremio-cargo', this.value.trim());
+      }
+    };
+  } else {
+    inputOutro.style.display = 'none';
+  }
+}
+
+function selecionarEixo(el) {
+  const eixo = el.dataset.eixo;
+  const grupo = el.parentElement;
+  grupo.querySelectorAll('.eixo-opcao').forEach(o => o.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.perfil[eixo] = el.dataset.valor;
+}
+
+function selecionarArea(el) {
+  document.querySelectorAll('#areasGrid .area-card').forEach(c => c.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.area = el.dataset.area;
+  const select = document.getElementById('selectProfissao');
+  select.innerHTML = '<option value="">Selecione...</option>' +
+    PROFISSOES[estado.area].map(p => `<option value="${p}">${p}</option>`).join('');
+  select.disabled = false;
+  select.onchange = function() { estado.profissao = this.value; };
+}
+
+function selecionarAnos(el) {
+  document.querySelectorAll('[data-anos]').forEach(c => c.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.anos = el.dataset.anos;
+}
+
+function selecionarTema(el) {
+  document.querySelectorAll('.tema-item').forEach(t => t.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  const letra = el.dataset.letra;
+  const tema = TEMAS.find(t => t.letra === letra);
+  if (tema.custom) {
+    document.getElementById('temaOutroCampo').style.display = 'block';
+    estado.tema = '';
+    document.getElementById('temaOutro').oninput = function() {
+      estado.tema = this.value.trim();
+      if (this.value.trim()) logOutros('tema-semana', this.value.trim());
+    };
+  } else {
+    document.getElementById('temaOutroCampo').style.display = 'none';
+    estado.tema = tema.nome;
+    estado.temaTCT = tema.tct;
+    estado.temaODS = tema.ods;
+  }
+}
+
+function selecionarBimestre(el) {
+  document.querySelectorAll('[data-bim]').forEach(c => c.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.bimestre = el.dataset.bim;
+}
+
+function selecionarProjeto(el) {
+  document.querySelectorAll('[data-projeto]').forEach(c => c.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.tipoProjeto = el.dataset.projeto;
+  const inputOutro = document.getElementById('projetoOutro');
+  if (estado.tipoProjeto === 'Outro') {
+    inputOutro.style.display = 'block';
+    inputOutro.focus();
+    inputOutro.oninput = function() {
+      if (this.value.trim()) {
+        estado.tipoProjeto = this.value.trim();
+        logOutros('tipo-projeto', this.value.trim());
+      }
+    };
+  } else {
+    inputOutro.style.display = 'none';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// GERAR PROMPT (com todos os novos campos)
+// ════════════════════════════════════════════════════════
+function gerarPrompt() {
+  const data = new Date().toLocaleDateString('pt-BR');
+  const primeiroNome = estado.nome.split(' ')[0];
+  const generoTxt = estado.genero === 'F'
+    ? 'FEMININO (flexão de verbos · adjetivos · particípios no feminino · ex: "atenta", "decidida")'
+    : 'MASCULINO (flexão de verbos · adjetivos · particípios no masculino · ex: "atento", "decidido")';
+
+  let cargosCompleto = estado.cargos.join(' + ');
+  if (estado.gremioCargo) cargosCompleto += ` (Gremista · cargo: ${estado.gremioCargo})`;
+  if (estado.formaturaCargo) cargosCompleto += ` (Comissão de Formatura · função: ${estado.formaturaCargo})`;
+
+  const prompt = `Olá! Vou gerar 3 textos para o Card "Faça como eu fiz" do Alura na E.E. Dr. Benedito Martins Barbosa - BMB.
+
+DADOS DO ESTUDANTE:
+- Nome completo: ${estado.nome}
+- Primeiro nome (usar dentro dos textos): ${primeiroNome}
+- Gênero para flexão textual: ${generoTxt}
+- Turma: ${estado.turma} (${estado.componente})
+- Cargo(s) protagonista 2026: ${cargosCompleto}
+- Perfil PEI: APR-${estado.perfil.apr} · CON-${estado.perfil.con} · FREQ-${estado.perfil.freq}
+- Projeto de Vida (profissão admirada): ${estado.profissao} (${estado.anos} anos de experiência)
+- Tema da semana: ${estado.tema} · TCT: ${estado.temaTCT} · ${estado.temaODS}
+- Bimestre: ${estado.bimestre}
+- Unidade: ${estado.nomeUnidade || '(não informado)'}
+- Aula: ${estado.nomeAula}
+- Tipo de projeto: ${estado.tipoProjeto}
+- Link: ${estado.linkCard || '(sem link)'}
+- Data: ${data}
+
+CONTEÚDO DO CARD "Faça como eu fiz":
+${estado.conteudoCard}
+
+INSTRUÇÕES DE GERAÇÃO:
+
+Gere EXATAMENTE 3 textos na ordem abaixo, separados por marcadores claros.
+
+═══════════════════════════════════════
+📐 CABEÇALHO COMPARTILHADO (uma vez, antes dos 3 textos):
+👤 Nome: ${estado.nome}
+🎓 Turma: ${estado.turma} · ${estado.componente}
+💼 PV: ${estado.profissao} (${estado.anos} anos)
+🏷️ Cargo(s): ${cargosCompleto}
+💭 Perfil PEI: APR-${estado.perfil.apr} · CON-${estado.perfil.con} · FREQ-${estado.perfil.freq}
+🎯 Tema: ${estado.tema} · TCT: ${estado.temaTCT} · ${estado.temaODS}
+📄 Card "Faça como eu fiz": ${estado.bimestre} · ${estado.nomeUnidade} · ${estado.nomeAula} · Tipo: ${estado.tipoProjeto}
+🏫 Escola: E.E. Dr. Benedito Martins Barbosa - BMB
+📅 Data: ${data}
+
+═══════════════════════════════════════
+📘 TEXTO 1 · COMO PROFISSIONAL ADMIRADO
+[Profissional ${estado.profissao} com nome fictício, narra em 1ª pessoa (flexão ${estado.genero === 'F' ? 'feminina' : 'masculina'} se for o caso do gênero do profissional fictício), faz "Atuação solidária" (NUNCA usar "voluntário") na BMB, resolve o Card incluindo concurso (3-4 itens reais + 1 inventado, pelo menos 1 nascido da expertise da profissão), tem 3 ações antes/durante + 3 ações depois (cada uma com dinâmica lúdica nomeada, etiqueta [Preventiva/Remediativa · Plugada/Desplugada], eixo PEI), parceria fixa com Prof Tec + Prof Rob (use Camila Tec / Roberto Rob como default), sutilmente menciona as 4 missões do profissional (pessoa/profissional/gerador de recursos/replicador), fechamento como bilhete curto não palestra.]
+
+═══════════════════════════════════════
+📗 TEXTO 2 · COMO ESTUDANTE PROTAGONISTA
+[Estudante ${primeiroNome} (${generoTxt}), do ${estado.turma}, narra em 1ª pessoa, protagoniza dentro da escola conforme cargo(s) ${cargosCompleto} e perfil APR-${estado.perfil.apr}/CON-${estado.perfil.con}/FREQ-${estado.perfil.freq}, com 3 ações presentes + 3 futuras, todas com dinâmica lúdica, etiqueta, eixo PEI, fechamento como carta ao próprio futuro.
+
+Use o perfil PEI para guiar o jeito de protagonizar:
+- APR-A: monitoria ativa de pares
+- APR-B: pedir/organizar tutoria
+- APR-C: mix
+- APR-D: estudo individual + compartilhar resultado depois (sem deixar de contribuir)
+- CON-A: mediação imparcial
+- CON-B: aprendendo a parar antes do conflito escalar
+- CON-C: aproximação gradual
+- CON-D: reconhecer quando provoca e propor reparação
+- FREQ-A: campanha de presença para a turma
+- FREQ-B: sistema de recuperação
+- FREQ-C: parceria com colega que ajuda]
+
+═══════════════════════════════════════
+📕 TEXTO 3 · INTEGRADO · ESTUDANTE + PROFISSIONAL JUNTOS
+[Estudante ${primeiroNome} recebe profissional ${estado.profissao} com nome fictício DIFERENTE do TEXTO 1, atuam juntos no Card. Estudante apresenta a escola e o conflito que viveu, profissional traz expertise técnica. 3 ações compartilhadas presentes + 3 futuras (1 do profissional, 1 do estudante, 1 conectada). Fechamento com 2 bilhetes curtos trocados entre os dois sobre as 4 missões.]
+
+═══════════════════════════════════════
+=== FIM ===
+
+REGRAS DURAS:
+- Escola sempre "E.E. Dr. Benedito Martins Barbosa - BMB"
+- NUNCA use "voluntário" (use "atuação solidária" ou "convidado(a) especialista")
+- Roda de conversa só no FECHAMENTO curto, NUNCA como ação principal
+- Toda ação que CONSTRÓI algo (regras · combinados · produtos) usa dinâmica lúdica NOMEADA
+- Princípio "aprender se divertindo" sempre que possível
+- Profissional é PROTAGONISTA criativo, professores Tec/Rob são EXECUTORES parceiros
+- Cargos da gestão: Vice-Dir./Mediador (em algumas variações) · Coordenador Pedagógico (no fechamento)
+- Use repertório real de dinâmicas: Círculo Restaurativo, Aula Invertida, Storytelling, Hackathon, Cafezinho do Aluno, Dramatização, Gamificação, ABP, Design Thinking
+- Cada ação cita pelo menos 1 dos 3 eixos PEI (Aprendizagem, Convivência, Frequência)
+- IDEALMENTE cada texto toca nos 3 eixos PEI (não obrigatório os 3 em cada ação)
+
+RESTRIÇÃO NARRATIVA (importante):
+- NÃO use pronomes "ela" / "ele" / "dela" / "dele" / "delas" / "deles" no texto
+- Use o NOME PRÓPRIO (${primeiroNome}) quando precisar identificar
+- OU oculte o sujeito (frequente em PT-BR · "Conversou com a coordenadora")
+- A FLEXÃO de verbos · adjetivos · particípios segue o gênero ${generoTxt}
+- Exemplo CERTO: "${primeiroNome} foi à escola. Conversou com a coordenadora. Está ${estado.genero === 'F' ? 'atenta' : 'atento'}."
+- Exemplo ERRADO: "${primeiroNome} foi à escola. ${estado.genero === 'F' ? 'Ela' : 'Ele'} conversou. ${estado.genero === 'F' ? 'Ela' : 'Ele'} está ${estado.genero === 'F' ? 'atenta' : 'atento'}."
+
+- Termine com "=== FIM ===" para eu saber que acabou`;
+
+  document.getElementById('promptGerado').textContent = prompt;
+}
+
+function copiarPrompt() {
+  const texto = document.getElementById('promptGerado').textContent;
+  navigator.clipboard.writeText(texto).then(() => {
+    alert('Prompt copiado! Agora cole no Claude.ai.');
+  });
+}
+
+function trocarAba(nome) {
+  document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
+  document.querySelectorAll('.aba-conteudo').forEach(a => a.classList.remove('ativa'));
+  document.querySelector(`.aba[data-aba="${nome}"]`).classList.add('ativa');
+  document.getElementById('aba' + nome.charAt(0).toUpperCase() + nome.slice(1)).classList.add('ativa');
+}
+
+// ════════════════════════════════════════════════════════
+// PROCESSAR RESPOSTA · separar 3 textos
+// ════════════════════════════════════════════════════════
+function processarResposta() {
+  const txt = document.getElementById('respostaIA').value.trim();
+  if (!txt) { alert('Cole a resposta da IA primeiro'); return; }
+
+  // Tenta separar pelos marcadores
+  const regex1 = /📘\s*TEXTO\s*1[^\n]*\n([\s\S]*?)(?=📗\s*TEXTO\s*2)/i;
+  const regex2 = /📗\s*TEXTO\s*2[^\n]*\n([\s\S]*?)(?=📕\s*TEXTO\s*3)/i;
+  const regex3 = /📕\s*TEXTO\s*3[^\n]*\n([\s\S]*?)(?====\s*FIM|$)/i;
+
+  const m1 = txt.match(regex1);
+  const m2 = txt.match(regex2);
+  const m3 = txt.match(regex3);
+
+  if (!m1 || !m2 || !m3) {
+    alert('Não consegui detectar os 3 textos. Verifique se a resposta tem os marcadores 📘 TEXTO 1, 📗 TEXTO 2 e 📕 TEXTO 3.');
+    return;
+  }
+
+  estado.textosProcessados.t1 = m1[1].trim();
+  estado.textosProcessados.t2 = m2[1].trim();
+  estado.textosProcessados.t3 = m3[1].trim();
+
+  // Cabeçalho compartilhado · tenta extrair (entre o início e o primeiro TEXTO 1)
+  const cabIdx = txt.indexOf('📘');
+  if (cabIdx > 0) {
+    estado.textosProcessados.cabecalho = txt.substring(0, cabIdx).trim();
+  }
+
+  let cargosCompleto = estado.cargos.join(' + ');
+  if (estado.gremioCargo) cargosCompleto += ` (Gremista: ${estado.gremioCargo})`;
+  if (estado.formaturaCargo) cargosCompleto += ` (Comissão: ${estado.formaturaCargo})`;
+
+  document.getElementById('cabecalhoFinal').innerHTML = `
+    <div class="cabecalho-compartilhado">
+      <div class="linha"><span class="label">👤 Nome:</span> ${estado.nome}</div>
+      <div class="linha"><span class="label">🎓 Turma:</span> ${estado.turma} · ${estado.componente}</div>
+      <div class="linha"><span class="label">💼 PV:</span> ${estado.profissao} (${estado.anos} anos)</div>
+      <div class="linha"><span class="label">🏷️ Cargo(s):</span> ${cargosCompleto}</div>
+      <div class="linha"><span class="label">💭 Perfil PEI:</span> APR-${estado.perfil.apr} · CON-${estado.perfil.con} · FREQ-${estado.perfil.freq}</div>
+      <div class="linha"><span class="label">🎯 Tema:</span> ${estado.tema} · TCT: ${estado.temaTCT} · ${estado.temaODS}</div>
+      <div class="linha"><span class="label">📄 Card:</span> ${estado.bimestre} · ${estado.nomeUnidade} · ${estado.nomeAula} · Tipo: ${estado.tipoProjeto}</div>
+      <div class="linha"><span class="label">🏫 Escola:</span> E.E. Dr. Benedito Martins Barbosa - BMB</div>
+      <div class="linha"><span class="label">📅 Data:</span> ${new Date().toLocaleDateString('pt-BR')}</div>
+    </div>
+  `;
+
+  document.getElementById('conteudoTexto1').textContent = estado.textosProcessados.t1;
+  document.getElementById('conteudoTexto2').textContent = estado.textosProcessados.t2;
+  document.getElementById('conteudoTexto3').textContent = estado.textosProcessados.t3;
+  document.getElementById('textosProcessados').style.display = 'block';
+
+  ativarAnimacaoTematica();
+}
+
+function ativarAnimacaoTematica() {
+  const emojis = ANIMACOES_AREA[estado.area] || ['✨'];
+  for (let i = 0; i < 6; i++) {
+    const el = document.createElement('div');
+    el.className = 'anim-tematica';
+    el.textContent = emojis[i % emojis.length];
+    el.style.left = Math.random() * 90 + 'vw';
+    el.style.top = Math.random() * 60 + 20 + 'vh';
+    el.style.animation = `flutuarSuave ${4 + Math.random() * 3}s ease-in-out infinite`;
+    el.style.animationDelay = (Math.random() * 2) + 's';
+    document.body.appendChild(el);
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// EXPORT · .docx (placeholder · CM-FACA-002 implementa com docx.js)
+// ════════════════════════════════════════════════════════
+function baixarDocx() {
+  alert('Função "Baixar .docx" será implementada no CM-FACA-002 usando docx.js via CDN. Por enquanto, use "Copiar tudo" e cole no Google Docs ou Word.');
+}
+
+function copiarTudo() {
+  const cab = document.getElementById('cabecalhoFinal').innerText;
+  const t1 = '📘 TEXTO 1 · COMO PROFISSIONAL ADMIRADO\n' + estado.textosProcessados.t1;
+  const t2 = '📗 TEXTO 2 · COMO ESTUDANTE PROTAGONISTA\n' + estado.textosProcessados.t2;
+  const t3 = '📕 TEXTO 3 · INTEGRADO · ESTUDANTE + PROFISSIONAL JUNTOS\n' + estado.textosProcessados.t3;
+  const tudo = cab + '\n\n' + t1 + '\n\n' + t2 + '\n\n' + t3 + '\n\n=== FIM ===';
+  navigator.clipboard.writeText(tudo).then(() => {
+    alert('Tudo copiado! Agora cole no Google Docs ou Word para salvar.');
+  });
+}
+</script>
+
+</body>
+</html>
