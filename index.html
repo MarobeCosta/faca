@@ -5,40 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Faça como eu fiz · StartLab Alura · BMB · 6º ao 9º ano</title>
 <!--
-  v03.10 · BARRA UNIFICADA + BANCO DE NOMES + CARGOS (sobre v03.02)
-  Origem: CM-FACA-001 CLD-069 · 21/05/2026
+  v03.20 · CASCATA TELA 6 + 3 BOTOES + BLOCO COPIAVEL (sobre v03.10)
+  Origem: CM-FACA-001 CLD-086 · 22/05/2026
   Escola: E.E. Dr. Benedito Martins Barbosa - BMB
 
-  NOVO PADRÃO DE VERSIONAMENTO V.XX.YY:
-  - YY +1 (unidade) = mudança pequena (cosmético · texto · 1 emoji)
-  - YY +10 (dezena) = mudança média (novo card · função · bug fix)
-  - XX +1 = mudança grande (refatoração estrutural)
+  CHANGELOG v03.10 → v03.20 (8 mudanças · MÉDIA · dezena +10):
+  · 📅 Data DD/MM na barra (BSB · HH:MM · DD/MM)
+  · 🔄 Tela 6 · Unidade refatorada (2 campos: U.NN/MM contador + descricao)
+  · 🔄 Tela 6 · Aula refatorada (3 campos: NN/MM unidade + (XX) bimestre + descricao)
+  · 🆕 Tela 6 · Card específico Faça como eu fiz (numero + link separado)
+  · 🆕 Tela 7 · 3 botões (Copiar · Claude · GPT · Outros)
+  · 🆕 Tela 7 · Menu Outros com links (IAs + imagens + storyboard)
+  · 🔧 PROMPT · pede resposta em bloco copiável único (fix GPT sem botão copiar)
+  · 🔧 Parser local · limpa crases do bloco antes de processar
 
-  CHANGELOG v03.02 → v03.10 (10 mudanças · MÉDIA):
-  · 🐛 BUG · botão Continuar não travava com gênero indefinido
-  · 🧠 Banco de 200+ nomes brasileiros + normalização de acentos
-  · 🛡️ Proteção da escolha manual de gênero (não sobrescreve silenciosamente)
-  · 🆕 Cards IC (Bolsista IC 9º + Voluntário IC 8º) · só modo admin
-  · 🆕 Cascata Comissão de Formatura (7 funções tradicionais)
-  · 🔄 "Não ocupo cargo formal" reposicionado como ÚLTIMO card
-  · 🎨 Emoji Gremista 🎓 → 🗳️ (distinto de Comissão de Formatura)
-  · 📝 Eixo Aprendizagem D · reescrito sem "trocar" (ambíguo)
-  · 💬 Texto "(usado só para flexão)" só visível quando cards aparecem
-  · 🆕 BARRA SUPERIOR UNIFICADA (replicada do NAV.05 v04.21):
-    - Esquerda: 🚀 título colorido letra por letra + 2 pombinhas + subtítulo dinâmico
-    - Direita: 🕐 relógio de Brasília
-    - Sem cronômetro de prova · sem badge de saídas (atividade não é avaliativa)
-    - body padding-top adaptativo
-    - frase-temática antiga vira fallback (display:none)
-
-  PENDÊNCIAS REGISTRADAS (não bloqueiam uso)·
-  · Bolsista/Voluntário IC sem lista oficial (modo admin já preparado)
-  · Lista oficial cargos Grêmio (provisória aplicada)
-  · Lista oficial clubes BMB (provisória aplicada)
-  · Lista equipes Tec/Rob (Líder de Equipe sem cascata)
-  · Export .docx (placeholder · CM-FACA-002 implementa)
-  · Cenário dinâmico por TEMA (atual fixo · Paz Digital)
-  · Modo Admin completo com relatório "Outros" (parcial)
+  PENDÊNCIAS:
+  · Listas oficiais Unidades/Aulas do Guia (campo variável até 10 · ajustar quando vier)
+  · Export .docx funcional
+  · Cenário dinâmico por TEMA
 -->
 <style>
 :root {
@@ -832,6 +816,24 @@ body {
   opacity: 0.6;
 }
 
+.link-outro {
+  display: inline-block;
+  padding: 8px 14px;
+  background: var(--branco);
+  border: 1.5px solid var(--lilas-base-3);
+  border-radius: 999px;
+  color: var(--roxo-conviva);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.link-outro:hover {
+  background: var(--roxo-claro);
+  border-color: var(--roxo-conviva);
+  transform: translateY(-1px);
+}
+
 /* ════════════════════════════════════════════════════════════════
    PROGRESSO · indicador entre telas
    ──────────────────────────────────────────────────────────────── */
@@ -1327,11 +1329,11 @@ body {
   </section>
 
   <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- TELA 6 · CARD ALURA "Faça como eu fiz"                  -->
+  <!-- TELA 6 · CARD ALURA "Faça como eu fiz" (v03.20 cascata) -->
   <!-- ═══════════════════════════════════════════════════════ -->
   <section class="tela" id="tela6">
     <div class="bv-titulo">📄 Card "Faça como eu fiz"</div>
-    <div class="bv-subtitulo">Identifique o bimestre, a unidade, a aula e o tipo de projeto</div>
+    <div class="bv-subtitulo">Identifique o bimestre, a unidade, a aula e o card específico</div>
 
     <div class="campo">
       <label>Bimestre</label>
@@ -1343,14 +1345,84 @@ body {
       </div>
     </div>
 
-    <div class="campo">
-      <label for="nomeUnidade">Nome da Unidade</label>
-      <input type="text" id="nomeUnidade" placeholder="Ex: Unidade 2 · Coleção de itens">
+    <!-- UNIDADE · 2 campos -->
+    <div class="campo" style="background:var(--cinza-suave); padding:16px; border-radius:14px;">
+      <label style="font-size:16px; color:var(--roxo-conviva);">📚 Unidade</label>
+
+      <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
+        <div style="flex:0 0 110px;">
+          <label style="font-size:13px;">Contador</label>
+          <select id="unidadeAtual" onchange="atualizarUnidadeDisplay()">
+            <option value="">--</option>
+            <option value="1">U.01</option>
+            <option value="2" selected>U.02</option>
+            <option value="3">U.03</option>
+            <option value="4">U.04</option>
+            <option value="5">U.05</option>
+            <option value="6">U.06</option>
+            <option value="7">U.07</option>
+            <option value="8">U.08</option>
+          </select>
+        </div>
+        <div style="flex:0 0 110px;">
+          <label style="font-size:13px;">de total</label>
+          <select id="unidadeTotal" onchange="atualizarUnidadeDisplay()">
+            <option value="2" selected>02</option>
+            <option value="3">03</option>
+            <option value="4">04</option>
+            <option value="5">05</option>
+            <option value="6">06</option>
+            <option value="7">07</option>
+            <option value="8">08</option>
+          </select>
+        </div>
+        <div style="flex:1; min-width:200px;">
+          <label style="font-size:13px;">Descrição da Unidade</label>
+          <input type="text" id="unidadeDescricao" placeholder="Ex: Tipos de dados: criando uma coleção de máquinas">
+        </div>
+      </div>
+      <div class="hint" id="unidadeDisplay" style="margin-top:8px; font-weight:600; color:var(--roxo-conviva);">
+        Exemplo: U.02/02 - Tipos de dados: criando uma coleção de máquinas
+      </div>
     </div>
 
-    <div class="campo">
-      <label for="nomeAula">Nome da Aula</label>
-      <input type="text" id="nomeAula" placeholder="Ex: Aula 3 · Concurso de máquinas">
+    <!-- AULA · 3 campos -->
+    <div class="campo" style="background:var(--cinza-suave); padding:16px; border-radius:14px;">
+      <label style="font-size:16px; color:var(--roxo-conviva);">🎯 Aula</label>
+
+      <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
+        <div style="flex:0 0 110px;">
+          <label style="font-size:13px;">Contador</label>
+          <select id="aulaAtual" onchange="atualizarAulaDisplay()">
+            <option value="">--</option>
+            <option value="1">01</option><option value="2">02</option>
+            <option value="3" selected>03</option><option value="4">04</option>
+            <option value="5">05</option><option value="6">06</option>
+            <option value="7">07</option><option value="8">08</option>
+            <option value="9">09</option><option value="10">10</option>
+          </select>
+        </div>
+        <div style="flex:0 0 110px;">
+          <label style="font-size:13px;">de total</label>
+          <select id="aulaTotal" onchange="atualizarAulaDisplay()">
+            <option value="4">04</option><option value="5">05</option>
+            <option value="6">06</option><option value="7">07</option>
+            <option value="8" selected>08</option><option value="9">09</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+        <div style="flex:0 0 110px;">
+          <label style="font-size:13px;">Nº geral (XX)</label>
+          <input type="number" id="aulaGeral" placeholder="25" min="1" max="999" onchange="atualizarAulaDisplay()">
+        </div>
+        <div style="flex:1; min-width:200px;">
+          <label style="font-size:13px;">Descrição da Aula</label>
+          <input type="text" id="aulaDescricao" placeholder="Ex: Sorteando elementos">
+        </div>
+      </div>
+      <div class="hint" id="aulaDisplay" style="margin-top:8px; font-weight:600; color:var(--roxo-conviva);">
+        Exemplo: 03/08 (25) - Sorteando elementos
+      </div>
     </div>
 
     <div class="campo">
@@ -1366,9 +1438,23 @@ body {
       <input type="text" id="projetoOutro" placeholder="Digite qual ferramenta" style="margin-top:10px; display:none;">
     </div>
 
-    <div class="campo">
-      <label for="linkCard">Link do Card no Alura <span style="font-weight:400; color:var(--cinza-medio);">(opcional · só para registro)</span></label>
-      <input type="url" id="linkCard" placeholder="https://cursos.alura.com.br/...">
+    <!-- CARD ESPECÍFICO "Faça como eu fiz" -->
+    <div class="campo" style="background:var(--cinza-suave); padding:16px; border-radius:14px;">
+      <label style="font-size:16px; color:var(--roxo-conviva);">📌 Card "Faça como eu fiz" nesta aula</label>
+
+      <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
+        <div style="flex:0 0 110px;">
+          <label style="font-size:13px;">Nº do card</label>
+          <input type="number" id="cardNumero" placeholder="3" min="1" max="20">
+        </div>
+        <div style="flex:1; min-width:200px;">
+          <label style="font-size:13px;">Link no Alura (opcional)</label>
+          <input type="url" id="linkCard" placeholder="https://cursos.alura.com.br/...">
+        </div>
+      </div>
+      <div class="hint" style="margin-top:8px;">
+        Cada aula tem vários cards · o "Faça como eu fiz" pode estar em posições diferentes
+      </div>
     </div>
 
     <div class="campo">
@@ -1401,10 +1487,10 @@ body {
         <div class="bv-secao-texto">
           <ol>
             <li>Clique em "Copiar prompt"</li>
-            <li>Abra o Claude.ai (gratuito · login só com email)</li>
+            <li>Abra uma IA (Claude.ai · ChatGPT ou outra)</li>
             <li>Cole o prompt e envie</li>
-            <li>Aguarde a resposta com os 3 textos</li>
-            <li>Copie a resposta INTEIRA</li>
+            <li>Aguarde a resposta com os 3 textos em UM BLOCO copiável</li>
+            <li>Use o botão Copiar da própria IA</li>
             <li>Volte aqui e vá para a aba "Colar resposta"</li>
           </ol>
         </div>
@@ -1412,9 +1498,42 @@ body {
 
       <div class="prompt-box" id="promptGerado">Preencha todas as telas anteriores para o prompt ser gerado.</div>
 
-      <div class="btn-grupo">
-        <button class="btn btn-primary" onclick="copiarPrompt()">📋 Copiar prompt</button>
-        <button class="btn btn-secondary" onclick="window.open('https://claude.ai', '_blank')">↗ Abrir Claude.ai</button>
+      <!-- Linha 1: botão Copiar destacado -->
+      <div class="btn-grupo" style="margin-bottom:8px;">
+        <button class="btn btn-primary" onclick="copiarPrompt()" style="min-width:280px;">📋 Copiar prompt</button>
+      </div>
+
+      <!-- Linha 2: botões de IAs principais + Outros -->
+      <div class="btn-grupo" style="gap:8px;">
+        <button class="btn btn-secondary" onclick="window.open('https://claude.ai', '_blank')">🤖 Claude.ai</button>
+        <button class="btn btn-secondary" onclick="window.open('https://chat.openai.com', '_blank')">🤖 ChatGPT</button>
+        <button class="btn btn-secondary" onclick="toggleMenuOutros()">⚙️ Outros ▾</button>
+      </div>
+
+      <!-- Menu Outros · expansível inline -->
+      <div id="menuOutros" style="display:none; margin-top:14px; background:var(--cinza-suave); border-radius:14px; padding:18px;">
+        <div style="font-weight:700; color:var(--roxo-conviva); margin-bottom:8px; font-size:14px;">🤖 Outras IAs (texto)</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+          <a href="https://gemini.google.com" target="_blank" class="link-outro">🤖 Gemini (Google)</a>
+          <a href="https://copilot.microsoft.com" target="_blank" class="link-outro">🤖 Copilot (Microsoft)</a>
+          <a href="https://www.perplexity.ai" target="_blank" class="link-outro">🤖 Perplexity</a>
+          <a href="https://chat.deepseek.com" target="_blank" class="link-outro">🤖 DeepSeek</a>
+        </div>
+
+        <div style="font-weight:700; color:var(--roxo-conviva); margin-bottom:8px; font-size:14px;">🎨 Gerar imagens (free)</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+          <a href="https://www.bing.com/create" target="_blank" class="link-outro">🎨 Bing Image Creator</a>
+          <a href="https://aitestkitchen.withgoogle.com/tools/image-fx" target="_blank" class="link-outro">🎨 Image FX (Google)</a>
+          <a href="https://leonardo.ai" target="_blank" class="link-outro">🎨 Leonardo.ai</a>
+          <a href="https://www.canva.com/ai-image-generator/" target="_blank" class="link-outro">🎨 Canva AI</a>
+        </div>
+
+        <div style="font-weight:700; color:var(--roxo-conviva); margin-bottom:8px; font-size:14px;">🎬 Storyboard · cena a cena · vídeo</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <a href="https://www.canva.com/storyboards/" target="_blank" class="link-outro">🎬 Canva Storyboard</a>
+          <a href="https://pictory.ai" target="_blank" class="link-outro">🎬 Pictory (trial)</a>
+          <a href="https://app.simpleshow.com" target="_blank" class="link-outro">🎬 simpleshow (free)</a>
+        </div>
       </div>
     </div>
 
@@ -1498,6 +1617,7 @@ const estado = {
   nomeUnidade: '',
   nomeAula: '',
   tipoProjeto: 'StartLab',
+  cardNumero: '',
   linkCard: '',
   conteudoCard: '',
   respostaIA: '',
@@ -1748,12 +1868,12 @@ function inicializarBarra() {
 function atualizarRelogio() {
   const el = document.getElementById('barraRelogio');
   if (!el) return;
-  // Hora de Brasília (UTC-3)
   const agora = new Date();
-  // Conversão simplificada · funciona para PT-BR ambient
   const hh = String(agora.getHours()).padStart(2, '0');
   const mm = String(agora.getMinutes()).padStart(2, '0');
-  el.textContent = `${hh}:${mm}`;
+  const dia = String(agora.getDate()).padStart(2, '0');
+  const mes = String(agora.getMonth() + 1).padStart(2, '0');
+  el.textContent = `${hh}:${mm} · ${dia}/${mes}`;
 }
 
 function atualizarSubtituloBarra() {
@@ -2100,15 +2220,66 @@ function validarTela5() {
 }
 
 function validarTela6() {
-  estado.nomeUnidade = document.getElementById('nomeUnidade').value.trim();
-  estado.nomeAula = document.getElementById('nomeAula').value.trim();
-  estado.linkCard = document.getElementById('linkCard').value.trim();
+  const desc = document.getElementById('aulaDescricao').value.trim();
   estado.conteudoCard = document.getElementById('conteudoCard').value.trim();
-  if (!estado.nomeAula || !estado.conteudoCard) {
-    alert('Preencha pelo menos o nome da aula e o conteúdo do Card');
+  estado.linkCard = document.getElementById('linkCard').value.trim();
+  estado.cardNumero = document.getElementById('cardNumero').value.trim();
+
+  // Compor Unidade completa
+  const uAtual = document.getElementById('unidadeAtual').value;
+  const uTotal = document.getElementById('unidadeTotal').value;
+  const uDesc = document.getElementById('unidadeDescricao').value.trim();
+  if (uAtual && uTotal && uDesc) {
+    estado.nomeUnidade = `U.${String(uAtual).padStart(2,'0')}/${String(uTotal).padStart(2,'0')} - ${uDesc}`;
+  } else if (uDesc) {
+    estado.nomeUnidade = uDesc;
+  } else {
+    estado.nomeUnidade = '';
+  }
+
+  // Compor Aula completa
+  const aAtual = document.getElementById('aulaAtual').value;
+  const aTotal = document.getElementById('aulaTotal').value;
+  const aGeral = document.getElementById('aulaGeral').value;
+  if (aAtual && aTotal && desc) {
+    const geral = aGeral ? ` (${aGeral})` : '';
+    estado.nomeAula = `${String(aAtual).padStart(2,'0')}/${String(aTotal).padStart(2,'0')}${geral} - ${desc}`;
+  } else {
+    estado.nomeAula = desc;
+  }
+
+  if (!desc || !estado.conteudoCard) {
+    alert('Preencha pelo menos a descrição da aula e o conteúdo do Card');
     return false;
   }
   return true;
+}
+
+function atualizarUnidadeDisplay() {
+  const uAtual = document.getElementById('unidadeAtual').value || '?';
+  const uTotal = document.getElementById('unidadeTotal').value || '?';
+  const uDesc = document.getElementById('unidadeDescricao').value.trim() || '[descrição]';
+  const padAtual = uAtual !== '?' ? String(uAtual).padStart(2,'0') : '??';
+  const padTotal = uTotal !== '?' ? String(uTotal).padStart(2,'0') : '??';
+  document.getElementById('unidadeDisplay').textContent = `→ U.${padAtual}/${padTotal} - ${uDesc}`;
+}
+
+function atualizarAulaDisplay() {
+  const aAtual = document.getElementById('aulaAtual').value || '?';
+  const aTotal = document.getElementById('aulaTotal').value || '?';
+  const aGeral = document.getElementById('aulaGeral').value || '';
+  const aDesc = document.getElementById('aulaDescricao')?.value.trim() || '[descrição]';
+  const padAtual = aAtual !== '?' ? String(aAtual).padStart(2,'0') : '??';
+  const padTotal = aTotal !== '?' ? String(aTotal).padStart(2,'0') : '??';
+  const geral = aGeral ? ` (${aGeral})` : '';
+  const el = document.getElementById('aulaDisplay');
+  if (el) el.textContent = `→ ${padAtual}/${padTotal}${geral} - ${aDesc}`;
+}
+
+function toggleMenuOutros() {
+  const m = document.getElementById('menuOutros');
+  if (!m) return;
+  m.style.display = m.style.display === 'none' ? 'block' : 'none';
 }
 
 // ════════════════════════════════════════════════════════
@@ -2285,6 +2456,9 @@ function gerarPrompt() {
 
   const prompt = `Olá! Vou gerar 3 textos para o Card "Faça como eu fiz" do Alura na E.E. Dr. Benedito Martins Barbosa - BMB.
 
+INSTRUÇÃO DE FORMATAÇÃO CRÍTICA (obrigatória):
+Sua resposta INTEIRA deve estar dentro de UM ÚNICO bloco de código (usando três crases antes e depois). Não escreva nada FORA do bloco · isso permite ao aluno usar o botão "Copiar" nativo da plataforma e colar tudo de uma vez no Google Docs. Dentro do bloco use TEXTO CORRIDO sem markdown extra (sem **negrito** · sem # títulos · sem - bullets). Use separadores === para dividir os 3 textos visualmente.
+
 DADOS DO ESTUDANTE:
 - Nome completo: ${estado.nome}
 - Primeiro nome (usar dentro dos textos): ${primeiroNome}
@@ -2298,6 +2472,7 @@ DADOS DO ESTUDANTE:
 - Unidade: ${estado.nomeUnidade || '(não informado)'}
 - Aula: ${estado.nomeAula}
 - Tipo de projeto: ${estado.tipoProjeto}
+- Card "Faça como eu fiz" nº ${estado.cardNumero || '?'} desta aula
 - Link: ${estado.linkCard || '(sem link)'}
 - Data: ${data}
 
@@ -2306,27 +2481,32 @@ ${estado.conteudoCard}
 
 INSTRUÇÕES DE GERAÇÃO:
 
-Gere EXATAMENTE 3 textos na ordem abaixo, separados por marcadores claros.
+Gere EXATAMENTE 3 textos na ordem abaixo · TUDO dentro de UM ÚNICO bloco de código.
 
+ESTRUTURA EXATA DO BLOCO ÚNICO COPIÁVEL:
+
+\`\`\`
 ═══════════════════════════════════════
-📐 CABEÇALHO COMPARTILHADO (uma vez, antes dos 3 textos):
 👤 Nome: ${estado.nome}
 🎓 Turma: ${estado.turma} · ${estado.componente}
 💼 PV: ${estado.profissao} (${estado.anos} anos)
 🏷️ Cargo(s): ${cargosCompleto}
 💭 Perfil PEI: APR-${estado.perfil.apr} · CON-${estado.perfil.con} · FREQ-${estado.perfil.freq}
 🎯 Tema: ${estado.tema} · TCT: ${estado.temaTCT} · ${estado.temaODS}
-📄 Card "Faça como eu fiz": ${estado.bimestre} · ${estado.nomeUnidade} · ${estado.nomeAula} · Tipo: ${estado.tipoProjeto}
+📄 Card "Faça como eu fiz" nº ${estado.cardNumero || '?'} · ${estado.bimestre} · ${estado.nomeUnidade} · ${estado.nomeAula} · Tipo: ${estado.tipoProjeto}
 🏫 Escola: E.E. Dr. Benedito Martins Barbosa - BMB
 📅 Data: ${data}
-
 ═══════════════════════════════════════
+
 📘 TEXTO 1 · COMO PROFISSIONAL ADMIRADO
-[Profissional ${estado.profissao} com nome fictício, narra em 1ª pessoa (flexão ${estado.genero === 'F' ? 'feminina' : 'masculina'} se for o caso do gênero do profissional fictício), faz "Atuação solidária" (NUNCA usar "voluntário") na BMB, resolve o Card incluindo concurso (3-4 itens reais + 1 inventado, pelo menos 1 nascido da expertise da profissão), tem 3 ações antes/durante + 3 ações depois (cada uma com dinâmica lúdica nomeada, etiqueta [Preventiva/Remediativa · Plugada/Desplugada], eixo PEI), parceria fixa com Prof Tec + Prof Rob (use Camila Tec / Roberto Rob como default), sutilmente menciona as 4 missões do profissional (pessoa/profissional/gerador de recursos/replicador), fechamento como bilhete curto não palestra.]
+
+[Profissional ${estado.profissao} com nome fictício · narra em 1ª pessoa · faz "Atuação solidária" (NUNCA usar "voluntário") na BMB · resolve o Card incluindo concurso (3-4 itens reais + 1 inventado · pelo menos 1 nascido da expertise da profissão) · tem 3 ações antes/durante + 3 ações depois (cada uma com dinâmica lúdica nomeada · etiqueta Preventiva/Remediativa · Plugada/Desplugada · eixo PEI) · parceria fixa com Prof Tec + Prof Rob (use Camila Tec / Roberto Rob como default) · sutilmente menciona as 4 missões do profissional (pessoa/profissional/gerador de recursos/replicador) · fechamento como bilhete curto não palestra.]
 
 ═══════════════════════════════════════
+
 📗 TEXTO 2 · COMO ESTUDANTE PROTAGONISTA
-[Estudante ${primeiroNome} (${generoTxt}), do ${estado.turma}, narra em 1ª pessoa, protagoniza dentro da escola conforme cargo(s) ${cargosCompleto} e perfil APR-${estado.perfil.apr}/CON-${estado.perfil.con}/FREQ-${estado.perfil.freq}, com 3 ações presentes + 3 futuras, todas com dinâmica lúdica, etiqueta, eixo PEI, fechamento como carta ao próprio futuro.
+
+[Estudante ${primeiroNome} (${generoTxt}) · do ${estado.turma} · narra em 1ª pessoa · protagoniza dentro da escola conforme cargo(s) ${cargosCompleto} e perfil APR-${estado.perfil.apr}/CON-${estado.perfil.con}/FREQ-${estado.perfil.freq} · com 3 ações presentes + 3 futuras · todas com dinâmica lúdica · etiqueta · eixo PEI · fechamento como carta ao próprio futuro.
 
 Use o perfil PEI para guiar o jeito de protagonizar:
 - APR-A: monitoria ativa de pares
@@ -2342,22 +2522,25 @@ Use o perfil PEI para guiar o jeito de protagonizar:
 - FREQ-C: parceria com colega que ajuda]
 
 ═══════════════════════════════════════
+
 📕 TEXTO 3 · INTEGRADO · ESTUDANTE + PROFISSIONAL JUNTOS
-[Estudante ${primeiroNome} recebe profissional ${estado.profissao} com nome fictício DIFERENTE do TEXTO 1, atuam juntos no Card. Estudante apresenta a escola e o conflito que viveu, profissional traz expertise técnica. 3 ações compartilhadas presentes + 3 futuras (1 do profissional, 1 do estudante, 1 conectada). Fechamento com 2 bilhetes curtos trocados entre os dois sobre as 4 missões.]
+
+[Estudante ${primeiroNome} recebe profissional ${estado.profissao} com nome fictício DIFERENTE do TEXTO 1 · atuam juntos no Card. Estudante apresenta a escola e o conflito que viveu · profissional traz expertise técnica. 3 ações compartilhadas presentes + 3 futuras (1 do profissional · 1 do estudante · 1 conectada). Fechamento com 2 bilhetes curtos trocados entre os dois sobre as 4 missões.]
 
 ═══════════════════════════════════════
 === FIM ===
+\`\`\`
 
 REGRAS DURAS:
 - Escola sempre "E.E. Dr. Benedito Martins Barbosa - BMB"
 - NUNCA use "voluntário" (use "atuação solidária" ou "convidado(a) especialista")
-- Roda de conversa só no FECHAMENTO curto, NUNCA como ação principal
+- Roda de conversa só no FECHAMENTO curto · NUNCA como ação principal
 - Toda ação que CONSTRÓI algo (regras · combinados · produtos) usa dinâmica lúdica NOMEADA
 - Princípio "aprender se divertindo" sempre que possível
-- Profissional é PROTAGONISTA criativo, professores Tec/Rob são EXECUTORES parceiros
+- Profissional é PROTAGONISTA criativo · professores Tec/Rob são EXECUTORES parceiros
 - Cargos da gestão: Vice-Dir./Mediador (em algumas variações) · Coordenador Pedagógico (no fechamento)
-- Use repertório real de dinâmicas: Círculo Restaurativo, Aula Invertida, Storytelling, Hackathon, Cafezinho do Aluno, Dramatização, Gamificação, ABP, Design Thinking
-- Cada ação cita pelo menos 1 dos 3 eixos PEI (Aprendizagem, Convivência, Frequência)
+- Use repertório real de dinâmicas: Círculo Restaurativo · Aula Invertida · Storytelling · Hackathon · Cafezinho do Aluno · Dramatização · Gamificação · ABP · Design Thinking
+- Cada ação cita pelo menos 1 dos 3 eixos PEI (Aprendizagem · Convivência · Frequência)
 - IDEALMENTE cada texto toca nos 3 eixos PEI (não obrigatório os 3 em cada ação)
 
 RESTRIÇÃO NARRATIVA (importante):
@@ -2368,7 +2551,11 @@ RESTRIÇÃO NARRATIVA (importante):
 - Exemplo CERTO: "${primeiroNome} foi à escola. Conversou com a coordenadora. Está ${estado.genero === 'F' ? 'atenta' : 'atento'}."
 - Exemplo ERRADO: "${primeiroNome} foi à escola. ${estado.genero === 'F' ? 'Ela' : 'Ele'} conversou. ${estado.genero === 'F' ? 'Ela' : 'Ele'} está ${estado.genero === 'F' ? 'atenta' : 'atento'}."
 
-- Termine com "=== FIM ===" para eu saber que acabou`;
+LEMBRETE FINAL:
+- TUDO dentro de UM bloco com 3 crases
+- NADA fora do bloco
+- Termine com "=== FIM ===" dentro do bloco
+- Texto corrido · separadores === entre os 3 textos`;
 
   document.getElementById('promptGerado').textContent = prompt;
 }
@@ -2391,8 +2578,11 @@ function trocarAba(nome) {
 // PROCESSAR RESPOSTA · separar 3 textos
 // ════════════════════════════════════════════════════════
 function processarResposta() {
-  const txt = document.getElementById('respostaIA').value.trim();
+  let txt = document.getElementById('respostaIA').value.trim();
   if (!txt) { alert('Cole a resposta da IA primeiro'); return; }
+
+  // Remove crases do bloco copiável (``` ou ```linguagem)
+  txt = txt.replace(/^```\w*\s*\n?/, '').replace(/\n?```\s*$/, '').trim();
 
   // Tenta separar pelos marcadores
   const regex1 = /📘\s*TEXTO\s*1[^\n]*\n([\s\S]*?)(?=📗\s*TEXTO\s*2)/i;
