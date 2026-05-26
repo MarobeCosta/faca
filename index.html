@@ -3,46 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Faça como eu fiz · StartLab Alura · BMB · 6º ao 9º ano</title>
+<title>Faça como eu fiz · StartLab Alura · BMB · 6º ao 9º ano · v04.00</title>
 <!--
-  v03.20 · CASCATA TELA 6 + 3 BOTOES + BLOCO COPIAVEL (sobre v03.10)
-  Origem: CM-FACA-001 CLD-086 · 22/05/2026
+  v04.00 · REFATORAÇÃO VISUAL + ESTRUTURAL (sobre v03.20)
+  Origem: CM-FACA-INTERP_002 CLD-007 · 26/05/2026 · 08:25 BRT
   Escola: E.E. Dr. Benedito Martins Barbosa - BMB
 
-  CHANGELOG v03.10 → v03.20 (8 mudanças · MÉDIA · dezena +10):
-  · 📅 Data DD/MM na barra (BSB · HH:MM · DD/MM)
-  · 🔄 Tela 6 · Unidade refatorada (2 campos: U.NN/MM contador + descricao)
-  · 🔄 Tela 6 · Aula refatorada (3 campos: NN/MM unidade + (XX) bimestre + descricao)
-  · 🆕 Tela 6 · Card específico Faça como eu fiz (numero + link separado)
-  · 🆕 Tela 7 · 3 botões (Copiar · Claude · GPT · Outros)
-  · 🆕 Tela 7 · Menu Outros com links (IAs + imagens + storyboard)
-  · 🔧 PROMPT · pede resposta em bloco copiável único (fix GPT sem botão copiar)
-  · 🔧 Parser local · limpa crases do bloco antes de processar
+  CHANGELOG v03.20 → v04.00 (8 grupos · refatoração visual+estrutural):
+  · M1 · Tela 3 · cargos limite 2 → 3 (alert atualizado)
+  · M2 · Tela 4 · cards de área + select de profissão + cards de anos
+         com fundo branco, bordas roxas visíveis e sombra (contraste sobre fundo lilás)
+  · M3 · Tela 5 · cards de tema com mesmo padrão de contraste
+         + opção P "Outro tema" destacada (bloco amarelo + 📢 + texto fixo)
+         orientando estudante a conferir Sala do Futuro ANTES de digitar
+  · M4 · Tela 6 · variação de cor por etapa:
+         Bimestre azul · Unidade verde · Aula laranja
+         Tipo de projeto roxo · Card Faça amarelo · Conteúdo branco
+  · M5 · Global · font-size base 18px → 19px · labels 15px → 17px
+         · hints com cinza-forte (mais legível) · paleta com tons "medio"
+  · M6 · Sistema de obrigatoriedade Google-Forms-like:
+         label.obrigatorio (* vermelho) + span.obrig-aviso (texto vermelho abaixo)
+         aplicado em Tela 6 (Unidade · Aula · Conteúdo) e Tela 8 (Resposta IA)
+  · M7 · Tela 7 dividida em 2 telas:
+         Tela 7 = Gerar prompt (com botão "Avançar para colar resposta ▶")
+         Tela 8 = Colar resposta (com "◀ Voltar ao prompt")
+         Substitui sistema de abas que forçava rolar e voltar ao topo
+  · M8 · Cards de seleção única detectam clique redundante:
+         aplicado em Gênero, Turma, Área, Anos, Bimestre
+         (NÃO em Cargos·tem toggle · NÃO em Tema·custom abre campo · NÃO em Projeto·idem)
+         alerta amigável "este card é só de seleção, pode seguir"
 
-  PENDÊNCIAS:
-  · Listas oficiais Unidades/Aulas do Guia (campo variável até 10 · ajustar quando vier)
-  · Export .docx funcional
-  · Cenário dinâmico por TEMA
+  PENDÊNCIAS PRÓXIMA VERSÃO (v04.10 · trabalho textual):
+  · Estrutura do prompt · revisão da produção textual
+  · Diferenciação entre textos por profissão (estudantes notaram repetição)
+  · Listas oficiais Unidades/Aulas do Guia (quando vier)
+  · Export .docx funcional (ainda placeholder)
+  · Cenário dinâmico por TEMA (ainda fixo Paz Digital)
+  · Limpeza do CSS .abas/.aba-conteudo agora sem uso
 -->
 <style>
 :root {
+  /* Cores base · v03.20 mantidas */
   --azul-paz: #2E5C8A;
   --azul-claro: #E8F1FB;
+  --azul-medio: #B8D4F0;          /* v04.00 · M4 borda Bimestre */
   --verde-vida: #4A8C3F;
   --verde-claro: #E8F5E5;
+  --verde-medio: #BFE0B5;         /* v04.00 · M4 borda Unidade */
   --laranja-energia: #E07B2C;
   --laranja-claro: #FBEEDE;
+  --laranja-medio: #F5C896;       /* v04.00 · M4 borda Aula */
   --roxo-conviva: #6B4B9C;
   --roxo-claro: #EDE6F5;
+  --roxo-medio: #C9B4E0;          /* v04.00 · borda forte de card */
   --lilas-base-1: #B8A0D8;
   --lilas-base-2: #C8B8E0;
   --lilas-base-3: #D4C5E8;
   --vermelho-alerta: #B83D3D;
+  --vermelho-obrig: #D62828;      /* v04.00 · M6 asterisco obrigatoriedade · mais vibrante */
   --cinza-texto: #2D2D2D;
   --cinza-medio: #6E6E6E;
+  --cinza-forte: #4A4A4A;         /* v04.00 · M5 textos hints mais legíveis */
   --cinza-suave: #F4F4F4;
   --branco: #FFFFFF;
   --amarelo-destaque: #FFF3CD;
+  --amarelo-aviso: #FFEAA7;       /* v04.00 · M3 fundo aviso Sala do Futuro */
+  --amarelo-borda: #E8B923;       /* v04.00 · M3 borda aviso Sala do Futuro */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -104,7 +130,7 @@
 
 body {
   font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-  font-size: 18px;
+  font-size: 19px;             /* v04.00 · M5 era 18px */
   line-height: 1.6;
   color: var(--cinza-texto);
   background: linear-gradient(135deg, var(--lilas-base-1) 0%, var(--lilas-base-2) 30%, var(--lilas-base-3) 70%, var(--lilas-base-1) 100%);
@@ -498,31 +524,55 @@ body {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   FORM · campos e seletores
+   FORM · campos e seletores · v04.00 refatorado (M2 + M5 + M6)
    ──────────────────────────────────────────────────────────────── */
 .campo {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 .campo label {
   display: block;
-  font-size: 15px;
+  font-size: 17px;                 /* v04.00 · era 15px */
   font-weight: 700;
   color: var(--cinza-texto);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+}
+/* M6 · marca de obrigatoriedade ao lado do label */
+.campo label.obrigatorio::after {
+  content: " *";
+  color: var(--vermelho-obrig);
+  font-weight: 900;
+  font-size: 19px;
+}
+.campo .obrig-aviso {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--vermelho-obrig);
+  margin-top: 4px;
+  letter-spacing: 0.2px;
 }
 .campo input[type="text"],
 .campo input[type="url"],
+.campo input[type="number"],
 .campo select,
 .campo textarea {
   width: 100%;
-  padding: 12px 16px;
+  padding: 14px 18px;              /* v04.00 · era 12/16 · mais respiro */
   font-family: inherit;
-  font-size: 16px;
+  font-size: 17px;                 /* v04.00 · era 16px */
+  font-weight: 500;
   color: var(--cinza-texto);
-  background: var(--cinza-suave);
-  border: 2px solid transparent;
+  background: var(--branco);       /* v04.00 · era cinza-suave · destaca sobre fundo */
+  border: 2px solid var(--roxo-medio);   /* v04.00 · era transparent · visível antes de focar */
   border-radius: 12px;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(107, 75, 156, 0.08);
+}
+.campo input::placeholder,
+.campo textarea::placeholder {
+  color: var(--cinza-medio);
+  font-style: italic;
+  font-weight: 400;
 }
 .campo input:focus,
 .campo select:focus,
@@ -530,20 +580,23 @@ body {
   outline: none;
   border-color: var(--roxo-conviva);
   background: var(--branco);
+  box-shadow: 0 4px 14px rgba(107, 75, 156, 0.22);
 }
 .campo textarea {
-  min-height: 160px;
+  min-height: 180px;
   resize: vertical;
   font-family: inherit;
+  line-height: 1.55;
 }
 .campo .hint {
-  font-size: 13px;
-  color: var(--cinza-medio);
-  margin-top: 4px;
+  font-size: 14px;                 /* v04.00 · era 13px */
+  color: var(--cinza-forte);       /* v04.00 · era cinza-medio · mais legível */
+  margin-top: 6px;
+  font-weight: 500;
 }
 
 /* ════════════════════════════════════════════════════════════════
-   CARDS · sistema de seleção em grade (igual NAV)
+   CARDS · sistema de seleção em grade (v04.00 · M2 contraste forte)
    ──────────────────────────────────────────────────────────────── */
 .cards-grid {
   display: grid;
@@ -552,26 +605,30 @@ body {
   margin-top: 12px;
 }
 .card-opcao {
-  background: var(--cinza-suave);
-  border: 2px solid transparent;
+  background: var(--branco);              /* v04.00 · era cinza-suave · destaca */
+  border: 2px solid var(--roxo-medio);    /* v04.00 · era transparent · visível */
   border-radius: 16px;
   padding: 16px 12px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 14px;
+  font-size: 15px;                        /* v04.00 · era 14px */
   font-weight: 600;
   color: var(--cinza-texto);
+  box-shadow: 0 2px 8px rgba(107, 75, 156, 0.12);
 }
 .card-opcao:hover {
   background: var(--roxo-claro);
+  border-color: var(--roxo-conviva);
   transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(107, 75, 156, 0.28);
 }
 .card-opcao.selecionado {
   background: var(--roxo-claro);
   border-color: var(--roxo-conviva);
+  border-width: 3px;                      /* v04.00 · borda mais grossa quando ativo */
   color: var(--roxo-conviva);
-  box-shadow: 0 4px 12px rgba(107, 75, 156, 0.25);
+  box-shadow: 0 4px 16px rgba(107, 75, 156, 0.35);
 }
 .card-opcao .emoji {
   display: block;
@@ -580,7 +637,7 @@ body {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   ÁREAS DE PROFISSÃO · grid 11 áreas
+   ÁREAS DE PROFISSÃO · grid 16 áreas (v04.00 · M2)
    ──────────────────────────────────────────────────────────────── */
 .areas-grid {
   display: grid;
@@ -589,98 +646,242 @@ body {
   margin-bottom: 20px;
 }
 .area-card {
-  background: var(--cinza-suave);
-  border: 2px solid transparent;
+  background: var(--branco);              /* v04.00 · era cinza-suave */
+  border: 2px solid var(--roxo-medio);    /* v04.00 · era transparent */
   border-radius: 14px;
   padding: 14px 10px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(107, 75, 156, 0.12);
 }
 .area-card:hover {
   background: var(--roxo-claro);
+  border-color: var(--roxo-conviva);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(107, 75, 156, 0.28);
 }
 .area-card.selecionado {
   background: var(--roxo-claro);
   border-color: var(--roxo-conviva);
+  border-width: 3px;
+  box-shadow: 0 4px 16px rgba(107, 75, 156, 0.35);
 }
 .area-card .area-emoji {
   font-size: 28px;
   display: block;
 }
 .area-card .area-nome {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;                        /* v04.00 · era 13px */
+  font-weight: 700;                       /* v04.00 · era 600 */
   color: var(--cinza-texto);
   margin-top: 4px;
 }
 
 /* ════════════════════════════════════════════════════════════════
-   TEMAS TRANSVERSAIS · lista vertical
+   TEMAS TRANSVERSAIS · lista vertical (v04.00 · M3)
    ──────────────────────────────────────────────────────────────── */
 .temas-lista {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 .tema-item {
-  background: var(--cinza-suave);
-  border: 2px solid transparent;
+  background: var(--branco);                /* v04.00 · era cinza-suave */
+  border: 2px solid var(--roxo-medio);      /* v04.00 · era transparent */
   border-radius: 12px;
-  padding: 12px 16px;
+  padding: 14px 18px;                       /* v04.00 · era 12/16 */
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 12px;
+  box-shadow: 0 2px 8px rgba(107, 75, 156, 0.10);
 }
 .tema-item:hover {
   background: var(--roxo-claro);
+  border-color: var(--roxo-conviva);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(107, 75, 156, 0.22);
 }
 .tema-item.selecionado {
   background: var(--roxo-claro);
   border-color: var(--roxo-conviva);
+  border-width: 3px;
+  box-shadow: 0 4px 16px rgba(107, 75, 156, 0.35);
 }
 .tema-item.recomendado::before {
   content: "🎯";
-  font-size: 20px;
+  font-size: 22px;
 }
 .tema-item .tema-letra {
   font-weight: 800;
+  font-size: 18px;                           /* v04.00 · estava implícito */
   color: var(--roxo-conviva);
   margin-right: 6px;
 }
 .tema-item .tema-emoji {
-  font-size: 20px;
+  font-size: 22px;                           /* v04.00 · era 20px */
   margin-right: 8px;
 }
 .tema-item .tema-nome {
   font-weight: 700;
+  font-size: 16px;                           /* v04.00 · novo · era herdado */
   color: var(--cinza-texto);
 }
 .tema-item .tema-meta {
-  font-size: 12px;
-  color: var(--cinza-medio);
+  font-size: 13px;                           /* v04.00 · era 12px */
+  color: var(--cinza-forte);                 /* v04.00 · era cinza-medio */
   display: block;
-  margin-top: 2px;
+  margin-top: 4px;
   margin-left: 32px;
+  font-weight: 500;
 }
 
 /* ════════════════════════════════════════════════════════════════
-   PERFIL PEI · 3 eixos
+   TEMA · OPÇÃO P (Outro / Sala do Futuro) · v04.00 · M3
+   Separação visual e aviso permanente ANTES do campo de digitação
+   ──────────────────────────────────────────────────────────────── */
+.tema-item.opcao-p {
+  margin-top: 22px;                          /* separação extra das outras */
+  background: var(--amarelo-aviso);
+  border: 3px solid var(--amarelo-borda);
+  box-shadow: 0 4px 14px rgba(232, 185, 35, 0.30);
+}
+.tema-item.opcao-p:hover {
+  background: var(--amarelo-destaque);
+  border-color: var(--laranja-energia);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232, 185, 35, 0.45);
+}
+.tema-item.opcao-p.selecionado {
+  background: var(--amarelo-destaque);
+  border-color: var(--laranja-energia);
+  border-width: 3px;
+}
+.aviso-sala-futuro {
+  margin-top: 14px;
+  background: var(--amarelo-aviso);
+  border: 2px solid var(--amarelo-borda);
+  border-left: 6px solid var(--laranja-energia);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cinza-texto);
+  line-height: 1.5;
+  box-shadow: 0 2px 10px rgba(224, 123, 44, 0.18);
+}
+.aviso-sala-futuro .aviso-titulo {
+  display: block;
+  font-weight: 800;
+  color: var(--laranja-energia);
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TELA 6 · BLOCOS POR ETAPA · v04.00 · M4
+   Variação de cor de fundo por etapa para hierarquia visual
+   ──────────────────────────────────────────────────────────────── */
+.bloco-etapa {
+  padding: 18px 20px;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  border: 2px solid;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+.bloco-etapa .bloco-titulo {
+  display: block;
+  font-size: 17px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  letter-spacing: 0.2px;
+}
+.bloco-etapa .bloco-display {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+/* Bimestre · azul */
+.bloco-bimestre {
+  background: var(--azul-claro);
+  border-color: var(--azul-medio);
+}
+.bloco-bimestre .bloco-titulo { color: var(--azul-paz); }
+.bloco-bimestre .bloco-display { color: var(--azul-paz); }
+
+/* Unidade · verde */
+.bloco-unidade {
+  background: var(--verde-claro);
+  border-color: var(--verde-medio);
+}
+.bloco-unidade .bloco-titulo { color: var(--verde-vida); }
+.bloco-unidade .bloco-display { color: var(--verde-vida); }
+
+/* Aula · laranja */
+.bloco-aula {
+  background: var(--laranja-claro);
+  border-color: var(--laranja-medio);
+}
+.bloco-aula .bloco-titulo { color: var(--laranja-energia); }
+.bloco-aula .bloco-display { color: var(--laranja-energia); }
+
+/* Tipo de projeto · roxo */
+.bloco-tipo {
+  background: var(--roxo-claro);
+  border-color: var(--roxo-medio);
+}
+.bloco-tipo .bloco-titulo { color: var(--roxo-conviva); }
+
+/* Card Faça (Alura) · amarelo */
+.bloco-card-faca {
+  background: var(--amarelo-destaque);
+  border-color: var(--amarelo-borda);
+}
+.bloco-card-faca .bloco-titulo { color: #8B6914; }
+
+/* Conteúdo · branco com borda roxa */
+.bloco-conteudo {
+  background: var(--branco);
+  border-color: var(--roxo-medio);
+}
+.bloco-conteudo .bloco-titulo { color: var(--roxo-conviva); }
+
+/* Sub-labels dentro dos blocos (Contador, de total, Descrição, etc) */
+.bloco-etapa .sub-label {
+  display: block;
+  font-size: 14px;                /* v04.00 · era 13px */
+  font-weight: 700;
+  color: var(--cinza-texto);
+  margin-bottom: 4px;
+}
+.bloco-etapa .sub-label.obrigatorio::after {
+  content: " *";
+  color: var(--vermelho-obrig);
+  font-weight: 900;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PERFIL PEI · 3 eixos · v04.00 reforço de contraste
    ──────────────────────────────────────────────────────────────── */
 .eixo-bloco {
-  background: var(--cinza-suave);
+  background: var(--branco);         /* v04.00 · era cinza-suave */
+  border: 2px solid var(--roxo-medio);
   border-radius: 16px;
   padding: 18px 20px;
   margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(107, 75, 156, 0.12);
 }
-.eixo-bloco.aprendizagem { border-left: 4px solid var(--verde-vida); }
-.eixo-bloco.convivencia { border-left: 4px solid var(--azul-paz); }
-.eixo-bloco.frequencia { border-left: 4px solid var(--laranja-energia); }
+.eixo-bloco.aprendizagem { border-left: 6px solid var(--verde-vida); }
+.eixo-bloco.convivencia { border-left: 6px solid var(--azul-paz); }
+.eixo-bloco.frequencia { border-left: 6px solid var(--laranja-energia); }
 .eixo-titulo {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 17px;                   /* v04.00 · era 16px */
+  font-weight: 800;
   color: var(--cinza-texto);
   margin-bottom: 8px;
 }
@@ -1180,7 +1381,7 @@ body {
     <div class="bv-subtitulo">Cargo(s) na BMB em 2026 e seu perfil nos 3 eixos PEI</div>
 
     <div class="campo">
-      <label>Cargo(s) protagonista (escolha até 2)</label>
+      <label>Cargo(s) protagonista (escolha até 3)</label>
       <div class="cards-grid" id="cardsCargo">
         <!-- preenchido dinamicamente pelo JS conforme o ano -->
       </div>
@@ -1318,8 +1519,9 @@ body {
     </div>
 
     <div class="campo" id="temaOutroCampo" style="display: none;">
-      <label>Digite seu tema</label>
-      <input type="text" id="temaOutro" placeholder="Ex: Dia do Estudante">
+      <label class="obrigatorio">Digite o tema que apareceu no Sala do Futuro · ou outro tema da semana</label>
+      <input type="text" id="temaOutro" placeholder="Ex: ação do Sala do Futuro · Dia do Estudante · etc">
+      <span class="obrig-aviso">⚠ Não esqueça de conferir o Sala do Futuro antes de digitar</span>
     </div>
 
     <div class="btn-grupo">
@@ -1335,9 +1537,10 @@ body {
     <div class="bv-titulo">📄 Card "Faça como eu fiz"</div>
     <div class="bv-subtitulo">Identifique o bimestre, a unidade, a aula e o card específico</div>
 
-    <div class="campo">
-      <label>Bimestre</label>
-      <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr); max-width: 480px;">
+    <!-- BIMESTRE · bloco azul (v04.00 · M4) -->
+    <div class="bloco-etapa bloco-bimestre">
+      <span class="bloco-titulo">📅 Bimestre <span style="color:var(--vermelho-obrig);font-weight:900;">*</span></span>
+      <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr); max-width: 520px;">
         <div class="card-opcao" data-bim="1B" onclick="selecionarBimestre(this)"><span class="emoji">1️⃣</span>1º Bim.</div>
         <div class="card-opcao selecionado" data-bim="2B" onclick="selecionarBimestre(this)"><span class="emoji">2️⃣</span>🎯 2º Bim.</div>
         <div class="card-opcao" data-bim="3B" onclick="selecionarBimestre(this)"><span class="emoji">3️⃣</span>3º Bim.</div>
@@ -1345,13 +1548,13 @@ body {
       </div>
     </div>
 
-    <!-- UNIDADE · 2 campos -->
-    <div class="campo" style="background:var(--cinza-suave); padding:16px; border-radius:14px;">
-      <label style="font-size:16px; color:var(--roxo-conviva);">📚 Unidade</label>
+    <!-- UNIDADE · bloco verde (v04.00 · M4) -->
+    <div class="bloco-etapa bloco-unidade">
+      <span class="bloco-titulo">📚 Unidade</span>
 
-      <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-        <div style="flex:0 0 110px;">
-          <label style="font-size:13px;">Contador</label>
+      <div style="display:flex; gap:12px; margin-top:8px; flex-wrap:wrap;">
+        <div style="flex:0 0 120px;">
+          <label class="sub-label obrigatorio">Contador</label>
           <select id="unidadeAtual" onchange="atualizarUnidadeDisplay()">
             <option value="">--</option>
             <option value="1">U.01</option>
@@ -1364,8 +1567,8 @@ body {
             <option value="8">U.08</option>
           </select>
         </div>
-        <div style="flex:0 0 110px;">
-          <label style="font-size:13px;">de total</label>
+        <div style="flex:0 0 120px;">
+          <label class="sub-label obrigatorio">de total</label>
           <select id="unidadeTotal" onchange="atualizarUnidadeDisplay()">
             <option value="2" selected>02</option>
             <option value="3">03</option>
@@ -1376,23 +1579,24 @@ body {
             <option value="8">08</option>
           </select>
         </div>
-        <div style="flex:1; min-width:200px;">
-          <label style="font-size:13px;">Descrição da Unidade</label>
+        <div style="flex:1; min-width:240px;">
+          <label class="sub-label obrigatorio">Descrição da Unidade</label>
           <input type="text" id="unidadeDescricao" placeholder="Ex: Tipos de dados: criando uma coleção de máquinas">
+          <span class="obrig-aviso">⚠ Campo obrigatório</span>
         </div>
       </div>
-      <div class="hint" id="unidadeDisplay" style="margin-top:8px; font-weight:600; color:var(--roxo-conviva);">
+      <div class="bloco-display" id="unidadeDisplay">
         Exemplo: U.02/02 - Tipos de dados: criando uma coleção de máquinas
       </div>
     </div>
 
-    <!-- AULA · 3 campos -->
-    <div class="campo" style="background:var(--cinza-suave); padding:16px; border-radius:14px;">
-      <label style="font-size:16px; color:var(--roxo-conviva);">🎯 Aula</label>
+    <!-- AULA · bloco laranja (v04.00 · M4) -->
+    <div class="bloco-etapa bloco-aula">
+      <span class="bloco-titulo">🎯 Aula</span>
 
-      <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-        <div style="flex:0 0 110px;">
-          <label style="font-size:13px;">Contador</label>
+      <div style="display:flex; gap:12px; margin-top:8px; flex-wrap:wrap;">
+        <div style="flex:0 0 120px;">
+          <label class="sub-label obrigatorio">Contador</label>
           <select id="aulaAtual" onchange="atualizarAulaDisplay()">
             <option value="">--</option>
             <option value="1">01</option><option value="2">02</option>
@@ -1402,8 +1606,8 @@ body {
             <option value="9">09</option><option value="10">10</option>
           </select>
         </div>
-        <div style="flex:0 0 110px;">
-          <label style="font-size:13px;">de total</label>
+        <div style="flex:0 0 120px;">
+          <label class="sub-label obrigatorio">de total</label>
           <select id="aulaTotal" onchange="atualizarAulaDisplay()">
             <option value="4">04</option><option value="5">05</option>
             <option value="6">06</option><option value="7">07</option>
@@ -1411,22 +1615,24 @@ body {
             <option value="10">10</option>
           </select>
         </div>
-        <div style="flex:0 0 110px;">
-          <label style="font-size:13px;">Nº geral (XX)</label>
+        <div style="flex:0 0 120px;">
+          <label class="sub-label">Nº geral (XX)</label>
           <input type="number" id="aulaGeral" placeholder="25" min="1" max="999" onchange="atualizarAulaDisplay()">
         </div>
-        <div style="flex:1; min-width:200px;">
-          <label style="font-size:13px;">Descrição da Aula</label>
+        <div style="flex:1; min-width:240px;">
+          <label class="sub-label obrigatorio">Descrição da Aula</label>
           <input type="text" id="aulaDescricao" placeholder="Ex: Sorteando elementos">
+          <span class="obrig-aviso">⚠ Campo obrigatório</span>
         </div>
       </div>
-      <div class="hint" id="aulaDisplay" style="margin-top:8px; font-weight:600; color:var(--roxo-conviva);">
+      <div class="bloco-display" id="aulaDisplay">
         Exemplo: 03/08 (25) - Sorteando elementos
       </div>
     </div>
 
-    <div class="campo">
-      <label>Tipo de projeto · onde você está desenvolvendo?</label>
+    <!-- TIPO DE PROJETO · bloco roxo (v04.00 · M4) -->
+    <div class="bloco-etapa bloco-tipo">
+      <span class="bloco-titulo">🛠️ Tipo de projeto · onde você está desenvolvendo? <span style="color:var(--vermelho-obrig);font-weight:900;">*</span></span>
       <div class="cards-grid">
         <div class="card-opcao selecionado" data-projeto="StartLab" onclick="selecionarProjeto(this)"><span class="emoji">🚀</span>🎯 StartLab</div>
         <div class="card-opcao" data-projeto="Canva" onclick="selecionarProjeto(this)"><span class="emoji">🎨</span>Canva</div>
@@ -1435,32 +1641,33 @@ body {
         <div class="card-opcao" data-projeto="Scratch" onclick="selecionarProjeto(this)"><span class="emoji">🐱</span>Scratch</div>
         <div class="card-opcao" data-projeto="Outro" onclick="selecionarProjeto(this)"><span class="emoji">✏️</span>Outro</div>
       </div>
-      <input type="text" id="projetoOutro" placeholder="Digite qual ferramenta" style="margin-top:10px; display:none;">
+      <input type="text" id="projetoOutro" placeholder="Digite qual ferramenta" style="margin-top:12px; display:none;">
     </div>
 
-    <!-- CARD ESPECÍFICO "Faça como eu fiz" -->
-    <div class="campo" style="background:var(--cinza-suave); padding:16px; border-radius:14px;">
-      <label style="font-size:16px; color:var(--roxo-conviva);">📌 Card "Faça como eu fiz" nesta aula</label>
+    <!-- CARD ESPECÍFICO "Faça como eu fiz" · bloco amarelo (v04.00 · M4) -->
+    <div class="bloco-etapa bloco-card-faca">
+      <span class="bloco-titulo">📌 Card "Faça como eu fiz" nesta aula</span>
 
-      <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-        <div style="flex:0 0 110px;">
-          <label style="font-size:13px;">Nº do card</label>
+      <div style="display:flex; gap:12px; margin-top:8px; flex-wrap:wrap;">
+        <div style="flex:0 0 130px;">
+          <label class="sub-label obrigatorio">Nº do card</label>
           <input type="number" id="cardNumero" placeholder="3" min="1" max="20">
         </div>
-        <div style="flex:1; min-width:200px;">
-          <label style="font-size:13px;">Link no Alura (opcional)</label>
+        <div style="flex:1; min-width:240px;">
+          <label class="sub-label">Link no Alura (opcional)</label>
           <input type="url" id="linkCard" placeholder="https://cursos.alura.com.br/...">
         </div>
       </div>
-      <div class="hint" style="margin-top:8px;">
-        Cada aula tem vários cards · o "Faça como eu fiz" pode estar em posições diferentes
+      <div class="hint" style="margin-top:10px; color:#7A5C0A; font-weight:600;">
+        💡 Cada aula tem vários cards · o "Faça como eu fiz" pode estar em posições diferentes
       </div>
     </div>
 
-    <div class="campo">
-      <label for="conteudoCard">Conteúdo completo do Card "Faça como eu fiz"</label>
+    <!-- CONTEÚDO · bloco branco (v04.00 · M4) -->
+    <div class="bloco-etapa bloco-conteudo">
+      <span class="bloco-titulo">📝 Conteúdo completo do Card "Faça como eu fiz" <span style="color:var(--vermelho-obrig);font-weight:900;">*</span></span>
       <textarea id="conteudoCard" placeholder="Cole aqui TUDO que aparece no Card da Alura: enunciado, instruções, perguntas, exemplos..."></textarea>
-      <div class="hint">Quanto mais completo · melhor o resultado dos 3 textos</div>
+      <span class="obrig-aviso">⚠ Campo obrigatório · quanto mais completo, melhor o resultado</span>
     </div>
 
     <div class="btn-grupo">
@@ -1472,115 +1679,123 @@ body {
   <!-- ═══════════════════════════════════════════════════════ -->
   <!-- TELA 7 · RESULTADO · 2 abas                             -->
   <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 7 · GERAR PROMPT (v04.00 · M7 separada da resposta) -->
+  <!-- ═══════════════════════════════════════════════════════ -->
   <section class="tela" id="tela7">
-    <div class="bv-titulo">📝 Seu resultado</div>
+    <div class="bv-titulo">📝 Seu resultado · 1ª parte · Gerar prompt</div>
+    <div class="bv-subtitulo">Passo 1 de 2 · gere o prompt aqui e leve para a IA</div>
 
-    <div class="abas">
-      <button class="aba ativa" data-aba="prompt" onclick="trocarAba('prompt')">1. Gerar prompt</button>
-      <button class="aba" data-aba="resposta" onclick="trocarAba('resposta')">2. Colar resposta</button>
-    </div>
-
-    <!-- ABA 1: Prompt copiável -->
-    <div class="aba-conteudo ativa" id="abaPrompt">
-      <div class="bv-secao">
-        <div class="bv-secao-titulo">📋 Como continuar</div>
-        <div class="bv-secao-texto">
-          <ol>
-            <li>Clique em "Copiar prompt"</li>
-            <li>Abra uma IA (Claude.ai · ChatGPT ou outra)</li>
-            <li>Cole o prompt e envie</li>
-            <li>Aguarde a resposta com os 3 textos em UM BLOCO copiável</li>
-            <li>Use o botão Copiar da própria IA</li>
-            <li>Volte aqui e vá para a aba "Colar resposta"</li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="prompt-box" id="promptGerado">Preencha todas as telas anteriores para o prompt ser gerado.</div>
-
-      <!-- Linha 1: botão Copiar destacado -->
-      <div class="btn-grupo" style="margin-bottom:8px;">
-        <button class="btn btn-primary" onclick="copiarPrompt()" style="min-width:280px;">📋 Copiar prompt</button>
-      </div>
-
-      <!-- Linha 2: botões de IAs principais + Outros -->
-      <div class="btn-grupo" style="gap:8px;">
-        <button class="btn btn-secondary" onclick="window.open('https://claude.ai', '_blank')">🤖 Claude.ai</button>
-        <button class="btn btn-secondary" onclick="window.open('https://chat.openai.com', '_blank')">🤖 ChatGPT</button>
-        <button class="btn btn-secondary" onclick="toggleMenuOutros()">⚙️ Outros ▾</button>
-      </div>
-
-      <!-- Menu Outros · expansível inline -->
-      <div id="menuOutros" style="display:none; margin-top:14px; background:var(--cinza-suave); border-radius:14px; padding:18px;">
-        <div style="font-weight:700; color:var(--roxo-conviva); margin-bottom:8px; font-size:14px;">🤖 Outras IAs (texto)</div>
-        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
-          <a href="https://gemini.google.com" target="_blank" class="link-outro">🤖 Gemini (Google)</a>
-          <a href="https://copilot.microsoft.com" target="_blank" class="link-outro">🤖 Copilot (Microsoft)</a>
-          <a href="https://www.perplexity.ai" target="_blank" class="link-outro">🤖 Perplexity</a>
-          <a href="https://chat.deepseek.com" target="_blank" class="link-outro">🤖 DeepSeek</a>
-        </div>
-
-        <div style="font-weight:700; color:var(--roxo-conviva); margin-bottom:8px; font-size:14px;">🎨 Gerar imagens (free)</div>
-        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
-          <a href="https://www.bing.com/create" target="_blank" class="link-outro">🎨 Bing Image Creator</a>
-          <a href="https://aitestkitchen.withgoogle.com/tools/image-fx" target="_blank" class="link-outro">🎨 Image FX (Google)</a>
-          <a href="https://leonardo.ai" target="_blank" class="link-outro">🎨 Leonardo.ai</a>
-          <a href="https://www.canva.com/ai-image-generator/" target="_blank" class="link-outro">🎨 Canva AI</a>
-        </div>
-
-        <div style="font-weight:700; color:var(--roxo-conviva); margin-bottom:8px; font-size:14px;">🎬 Storyboard · cena a cena · vídeo</div>
-        <div style="display:flex; flex-wrap:wrap; gap:8px;">
-          <a href="https://www.canva.com/storyboards/" target="_blank" class="link-outro">🎬 Canva Storyboard</a>
-          <a href="https://pictory.ai" target="_blank" class="link-outro">🎬 Pictory (trial)</a>
-          <a href="https://app.simpleshow.com" target="_blank" class="link-outro">🎬 simpleshow (free)</a>
-        </div>
+    <div class="bv-secao">
+      <div class="bv-secao-titulo">📋 Como continuar</div>
+      <div class="bv-secao-texto">
+        <ol>
+          <li>Clique em <strong>"Copiar prompt"</strong></li>
+          <li>Abra uma IA (Claude.ai · ChatGPT ou outra)</li>
+          <li>Cole o prompt e envie</li>
+          <li>Aguarde a resposta com os 3 textos em <strong>UM BLOCO copiável</strong></li>
+          <li>Use o botão Copiar da própria IA</li>
+          <li>Volte aqui e clique em <strong>"Avançar para colar resposta"</strong> no fim desta página</li>
+        </ol>
       </div>
     </div>
 
-    <!-- ABA 2: Colar resposta -->
-    <div class="aba-conteudo" id="abaResposta">
-      <div class="bv-secao">
-        <div class="bv-secao-titulo">📥 Cole a resposta da IA aqui</div>
-        <div class="bv-secao-texto">
-          Cole INTEIRA a resposta que o Claude (ou GPT) gerou. O sistema vai separar e formatar os 3 textos automaticamente.
-        </div>
+    <div class="prompt-box" id="promptGerado">Preencha todas as telas anteriores para o prompt ser gerado.</div>
+
+    <!-- Linha 1: botão Copiar destacado -->
+    <div class="btn-grupo" style="margin-bottom:8px;">
+      <button class="btn btn-primary" onclick="copiarPrompt()" style="min-width:280px;">📋 Copiar prompt</button>
+    </div>
+
+    <!-- Linha 2: botões de IAs principais + Outros -->
+    <div class="btn-grupo" style="gap:8px;">
+      <button class="btn btn-secondary" onclick="window.open('https://claude.ai', '_blank')">🤖 Claude.ai</button>
+      <button class="btn btn-secondary" onclick="window.open('https://chat.openai.com', '_blank')">🤖 ChatGPT</button>
+      <button class="btn btn-secondary" onclick="toggleMenuOutros()">⚙️ Outros ▾</button>
+    </div>
+
+    <!-- Menu Outros · expansível inline -->
+    <div id="menuOutros" style="display:none; margin-top:14px; background:var(--branco); border:2px solid var(--roxo-medio); border-radius:14px; padding:18px;">
+      <div style="font-weight:800; color:var(--roxo-conviva); margin-bottom:10px; font-size:15px;">🤖 Outras IAs (texto)</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
+        <a href="https://gemini.google.com" target="_blank" class="link-outro">🤖 Gemini (Google)</a>
+        <a href="https://copilot.microsoft.com" target="_blank" class="link-outro">🤖 Copilot (Microsoft)</a>
+        <a href="https://www.perplexity.ai" target="_blank" class="link-outro">🤖 Perplexity</a>
+        <a href="https://chat.deepseek.com" target="_blank" class="link-outro">🤖 DeepSeek</a>
       </div>
 
-      <div class="campo">
-        <textarea id="respostaIA" placeholder="Cole aqui a resposta completa da IA · incluindo o cabeçalho compartilhado e os 3 textos (📘 TEXTO 1, 📗 TEXTO 2, 📕 TEXTO 3)"></textarea>
+      <div style="font-weight:800; color:var(--roxo-conviva); margin-bottom:10px; font-size:15px;">🎨 Gerar imagens (free)</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
+        <a href="https://www.bing.com/create" target="_blank" class="link-outro">🎨 Bing Image Creator</a>
+        <a href="https://aitestkitchen.withgoogle.com/tools/image-fx" target="_blank" class="link-outro">🎨 Image FX (Google)</a>
+        <a href="https://leonardo.ai" target="_blank" class="link-outro">🎨 Leonardo.ai</a>
+        <a href="https://www.canva.com/ai-image-generator/" target="_blank" class="link-outro">🎨 Canva AI</a>
       </div>
+
+      <div style="font-weight:800; color:var(--roxo-conviva); margin-bottom:10px; font-size:15px;">🎬 Storyboard · cena a cena · vídeo</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px;">
+        <a href="https://www.canva.com/storyboards/" target="_blank" class="link-outro">🎬 Canva Storyboard</a>
+        <a href="https://pictory.ai" target="_blank" class="link-outro">🎬 Pictory (trial)</a>
+        <a href="https://app.simpleshow.com" target="_blank" class="link-outro">🎬 simpleshow (free)</a>
+      </div>
+    </div>
+
+    <div class="btn-grupo" style="margin-top: 28px;">
+      <button class="btn btn-secondary" onclick="proximaTela(6)">◀ Voltar</button>
+      <button class="btn btn-primary" onclick="proximaTela(8)">Avançar para colar resposta ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 8 · COLAR RESPOSTA (v04.00 · M7 separada do prompt) -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela8">
+    <div class="bv-titulo">📥 Seu resultado · 2ª parte · Colar resposta</div>
+    <div class="bv-subtitulo">Passo 2 de 2 · cole aqui a resposta da IA</div>
+
+    <div class="bv-secao">
+      <div class="bv-secao-titulo">📥 Cole a resposta da IA aqui</div>
+      <div class="bv-secao-texto">
+        Cole <strong>INTEIRA</strong> a resposta que o Claude (ou GPT) gerou. O sistema vai separar e formatar os 3 textos automaticamente.
+      </div>
+    </div>
+
+    <div class="campo">
+      <label class="obrigatorio">Resposta da IA</label>
+      <textarea id="respostaIA" placeholder="Cole aqui a resposta completa da IA · incluindo o cabeçalho compartilhado e os 3 textos (📘 TEXTO 1, 📗 TEXTO 2, 📕 TEXTO 3)"></textarea>
+      <span class="obrig-aviso">⚠ Cole a resposta inteira da IA</span>
+    </div>
+
+    <div class="btn-grupo">
+      <button class="btn btn-primary" onclick="processarResposta()">✨ Processar e formatar</button>
+    </div>
+
+    <!-- 3 textos processados aparecem aqui -->
+    <div id="textosProcessados" style="margin-top: 24px; display: none;">
+      <div id="cabecalhoFinal"></div>
+      <div class="texto-card texto-1">
+        <div class="texto-card-titulo">📘 TEXTO 1 · COMO PROFISSIONAL ADMIRADO</div>
+        <div class="texto-card-corpo" id="conteudoTexto1"></div>
+      </div>
+      <div class="texto-card texto-2">
+        <div class="texto-card-titulo">📗 TEXTO 2 · COMO ESTUDANTE PROTAGONISTA</div>
+        <div class="texto-card-corpo" id="conteudoTexto2"></div>
+      </div>
+      <div class="texto-card texto-3">
+        <div class="texto-card-titulo">📕 TEXTO 3 · INTEGRADO · ESTUDANTE + PROFISSIONAL JUNTOS</div>
+        <div class="texto-card-corpo" id="conteudoTexto3"></div>
+      </div>
+
+      <div class="rodape-fim">═══ FIM ═══</div>
 
       <div class="btn-grupo">
-        <button class="btn btn-primary" onclick="processarResposta()">✨ Processar e formatar</button>
-      </div>
-
-      <!-- 3 textos processados aparecem aqui -->
-      <div id="textosProcessados" style="margin-top: 24px; display: none;">
-        <div id="cabecalhoFinal"></div>
-        <div class="texto-card texto-1">
-          <div class="texto-card-titulo">📘 TEXTO 1 · COMO PROFISSIONAL ADMIRADO</div>
-          <div class="texto-card-corpo" id="conteudoTexto1"></div>
-        </div>
-        <div class="texto-card texto-2">
-          <div class="texto-card-titulo">📗 TEXTO 2 · COMO ESTUDANTE PROTAGONISTA</div>
-          <div class="texto-card-corpo" id="conteudoTexto2"></div>
-        </div>
-        <div class="texto-card texto-3">
-          <div class="texto-card-titulo">📕 TEXTO 3 · INTEGRADO · ESTUDANTE + PROFISSIONAL JUNTOS</div>
-          <div class="texto-card-corpo" id="conteudoTexto3"></div>
-        </div>
-
-        <div class="rodape-fim">═══ FIM ═══</div>
-
-        <div class="btn-grupo">
-          <button class="btn btn-success" onclick="baixarDocx()">📥 Baixar como .docx</button>
-          <button class="btn btn-secondary" onclick="copiarTudo()">📋 Copiar tudo</button>
-        </div>
+        <button class="btn btn-success" onclick="baixarDocx()">📥 Baixar como .docx</button>
+        <button class="btn btn-secondary" onclick="copiarTudo()">📋 Copiar tudo</button>
       </div>
     </div>
 
-    <div class="btn-grupo" style="margin-top: 20px;">
-      <button class="btn btn-secondary" onclick="proximaTela(6)">◀ Voltar</button>
+    <div class="btn-grupo" style="margin-top: 28px;">
+      <button class="btn btn-secondary" onclick="proximaTela(7)">◀ Voltar ao prompt</button>
     </div>
   </section>
 
@@ -2081,16 +2296,34 @@ function renderizarAreas() {
 
 function renderizarTemas() {
   const lista = document.getElementById('temasLista');
-  lista.innerHTML = TEMAS.map(t => `
-    <div class="tema-item ${t.recomendado ? 'recomendado' : ''}" data-letra="${t.letra}" onclick="selecionarTema(this)">
-      <div style="flex:1;">
-        <span class="tema-letra">${t.letra})</span>
-        <span class="tema-emoji">${t.emoji}</span>
-        <span class="tema-nome">${t.nome}</span>
-        ${t.custom ? '' : `<span class="tema-meta">TCT: ${t.tct} · ${t.ods}</span>`}
+  lista.innerHTML = TEMAS.map(t => {
+    // v04.00 · M3 · opção P (custom) recebe classe extra + aviso Sala do Futuro visível
+    if (t.custom) {
+      return `
+        <div class="tema-item opcao-p ${t.recomendado ? 'recomendado' : ''}" data-letra="${t.letra}" onclick="selecionarTema(this)">
+          <div style="flex:1;">
+            <span class="tema-letra">${t.letra})</span>
+            <span class="tema-emoji">${t.emoji}</span>
+            <span class="tema-nome">${t.nome}</span>
+            <div class="aviso-sala-futuro">
+              <span class="aviso-titulo">📢 Atenção · verifique antes de digitar</span>
+              Veja se há <strong>notificação no Sala do Futuro</strong> com a temática ou ação da semana. Se houver, traga essa informação para este campo.
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    return `
+      <div class="tema-item ${t.recomendado ? 'recomendado' : ''}" data-letra="${t.letra}" onclick="selecionarTema(this)">
+        <div style="flex:1;">
+          <span class="tema-letra">${t.letra})</span>
+          <span class="tema-emoji">${t.emoji}</span>
+          <span class="tema-nome">${t.nome}</span>
+          <span class="tema-meta">TCT: ${t.tct} · ${t.ods}</span>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function renderizarCargos(ano) {
@@ -2285,7 +2518,26 @@ function toggleMenuOutros() {
 // ════════════════════════════════════════════════════════
 // SELETORES DE CARDS / OPÇÕES
 // ════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
+// M8 · v04.00 · Detecção de cliques redundantes em cards de seleção
+// ════════════════════════════════════════════════════════
+// Estudantes às vezes clicam várias vezes no mesmo card esperando que
+// algo "abra". Como cards de seleção única apenas marcam, mostramos
+// alerta amigável avisando que basta avançar.
+const _ultimoClique = {}; // chave = grupo (ex 'turma', 'genero'), valor = elemento
+
+function avisarSeRedundante(grupo, el, frase) {
+  if (_ultimoClique[grupo] === el && el.classList.contains('selecionado')) {
+    alert(frase);
+    return true;
+  }
+  _ultimoClique[grupo] = el;
+  return false;
+}
+
 function selecionarGenero(el) {
+  if (avisarSeRedundante('genero', el,
+    'Este card é só de seleção · não abre nada.\n\nVocê já se identificou · pode seguir para o próximo item.')) return;
   document.querySelectorAll('[data-genero]').forEach(c => c.classList.remove('selecionado'));
   el.classList.add('selecionado');
   estado.genero = el.dataset.genero;
@@ -2293,6 +2545,8 @@ function selecionarGenero(el) {
 }
 
 function selecionarTurma(el) {
+  if (avisarSeRedundante('turma', el,
+    'Este card é só de seleção · não abre nada.\n\nVocê já identificou sua turma · pode seguir para o próximo item.')) return;
   document.querySelectorAll('#cardsTurma .card-opcao').forEach(c => c.classList.remove('selecionado'));
   el.classList.add('selecionado');
   estado.turma = el.dataset.turma;
@@ -2309,11 +2563,13 @@ function atualizarFraseTematica() {
 }
 
 function selecionarCargo(el) {
+  // M8 · detectar 2º clique consecutivo no MESMO card (já-selecionado clicado de novo)
+  // ⚠ NÃO aplica a cargos · cargos têm toggle (clicar de novo des-seleciona, é comportamento legítimo).
   el.classList.toggle('selecionado');
   const selecionados = document.querySelectorAll('#cardsCargo .card-opcao.selecionado');
-  if (selecionados.length > 2) {
+  if (selecionados.length > 3) {
     el.classList.remove('selecionado');
-    alert('Máximo de 2 cargos');
+    alert('Máximo de 3 cargos');
     return;
   }
   estado.cargos = Array.from(selecionados).map(c => c.dataset.cargoNome);
@@ -2379,6 +2635,8 @@ function selecionarEixo(el) {
 }
 
 function selecionarArea(el) {
+  if (avisarSeRedundante('area', el,
+    'Este card é só de seleção · não abre nada.\n\nVocê já escolheu a área · agora basta escolher a profissão no menu abaixo.')) return;
   document.querySelectorAll('#areasGrid .area-card').forEach(c => c.classList.remove('selecionado'));
   el.classList.add('selecionado');
   estado.area = el.dataset.area;
@@ -2390,12 +2648,15 @@ function selecionarArea(el) {
 }
 
 function selecionarAnos(el) {
+  if (avisarSeRedundante('anos', el,
+    'Este card é só de seleção · não abre nada.\n\nVocê já escolheu os anos de experiência · pode seguir.')) return;
   document.querySelectorAll('[data-anos]').forEach(c => c.classList.remove('selecionado'));
   el.classList.add('selecionado');
   estado.anos = el.dataset.anos;
 }
 
 function selecionarTema(el) {
+  // Tema NÃO usa avisarSeRedundante porque a opção P abre um campo · re-clicar é válido
   document.querySelectorAll('.tema-item').forEach(t => t.classList.remove('selecionado'));
   el.classList.add('selecionado');
   const letra = el.dataset.letra;
@@ -2416,12 +2677,15 @@ function selecionarTema(el) {
 }
 
 function selecionarBimestre(el) {
+  if (avisarSeRedundante('bimestre', el,
+    'Este card é só de seleção · não abre nada.\n\nVocê já escolheu o bimestre · pode continuar preenchendo a Unidade e a Aula.')) return;
   document.querySelectorAll('[data-bim]').forEach(c => c.classList.remove('selecionado'));
   el.classList.add('selecionado');
   estado.bimestre = el.dataset.bim;
 }
 
 function selecionarProjeto(el) {
+  // Projeto NÃO usa avisarSeRedundante porque "Outro" abre campo de digitação · re-clicar é válido
   document.querySelectorAll('[data-projeto]').forEach(c => c.classList.remove('selecionado'));
   el.classList.add('selecionado');
   estado.tipoProjeto = el.dataset.projeto;
@@ -2567,12 +2831,9 @@ function copiarPrompt() {
   });
 }
 
-function trocarAba(nome) {
-  document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
-  document.querySelectorAll('.aba-conteudo').forEach(a => a.classList.remove('ativa'));
-  document.querySelector(`.aba[data-aba="${nome}"]`).classList.add('ativa');
-  document.getElementById('aba' + nome.charAt(0).toUpperCase() + nome.slice(1)).classList.add('ativa');
-}
+// v04.00 · M7 · função trocarAba removida (Tela 7 dividida em Tela 7 + Tela 8)
+// CSS de .abas e .aba-conteudo permanece no stylesheet sem efeito (limpeza
+// estética pode ser feita em v04.10 se desejado).
 
 // ════════════════════════════════════════════════════════
 // PROCESSAR RESPOSTA · separar 3 textos
