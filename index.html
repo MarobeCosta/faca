@@ -3,43 +3,163 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Faça como eu fiz · StartLab Alura · BMB · 6º ao 9º ano · v04.00</title>
+<title>Faça como eu fiz · StartLab Alura · BMB · 6º ao 9º ano · v05.22</title>
 <!--
-  v04.00 · REFATORAÇÃO VISUAL + ESTRUTURAL (sobre v03.20)
-  Origem: CM-FACA-INTERP_002 CLD-007 · 26/05/2026 · 08:25 BRT
+  v05.11 · PROFISSÃO ANTES DOS CARGOS (sobre v05.10 · CLD-063)
+  Ordem alinhada à ordem dos textos (Texto 1=profissional · Texto 2=protagonista):
+  1 Boas-vindas · 2 Nome+turma+nº · 3 PROFISSÃO (Projeto de Vida) ·
+  4 Cargos · 5 Explicação dos 3 caminhos · 6 Eixos · 7 Tema ·
+  8 Bim+Uni+Aula+Tipo · 9 Card · 10 Prompt · 11 Colar · 12 Auto-aval ·
+  13 Pesquisa · 14 Entrega
+  · Validações, navegação e badge de profissão remapeados
+
+  v05.10 · FIX BOTÃO CARGOS (sobre v05.09 · CLD-062)
+  · selecionarCargo: seletor robusto que captura cards de cargo em qualquer
+    grupo (.card-cargo / .card-opcao dentro de #cardsCargo) · corrige cálculo
+    de estado.cargos após reorganização em 4 grupos
+  · Dica amarela visível na tela de cargos: "escolha pelo menos 1 · se não
+    tem, use Não ocupo cargo formal" · evita confusão de botão travado
+
+  v05.09 · EMOJI MICROBIT (sobre v05.08 · CLD-061)
+  · Monitor de Microbit: bolinha verde 🟢 → carinha 😊 (o Microbit mostra
+    rostos de LED) · diferencia do Líder de Equipe 🤖
+
+  v05.08 · REORGANIZAÇÃO DE TELAS + EIXOS (sobre v05.07 · CLD-060)
+  Estrutura: 13 → 14 telas
+
+  · Tela 3 = CARGOS (protagonismo · veio antes da explicação)
+  · Tela 4 = EXPLICAÇÃO dos 3 caminhos (escada de degraus)
+  · Tela 5 = PERGUNTAS dos 3 eixos (presença → convivência → aprendizagem)
+  · Corrigido bug do botão Voltar (Tela de cargos chamava ela mesma)
+  · Container de cada eixo agora tem FUNDO SUAVE na cor do eixo
+    (verde/azul/laranja claro)
+  · Opção SELECIONADA do eixo fica ESCURA (cor forte + texto branco) como v5.0
+  · Validações e contador remapeados para 14 telas
+
+  v05.07 · ESTADOS VISUAIS DOS CARDS (sobre v05.06 · CLD-059)
+  · HOVER (passar o mouse) = fundo CLARO tonalizado (prévia)
+  · SELECIONADO (após clicar) = fundo ESCURO + texto branco (confirmado)
+  · Aplica-se a cards gerais (turma, área, gênero, tipo, anos, bimestre, cargo, tema)
+  · EIXOS PEI mantêm cor CLARA do eixo (verde/azul/laranja) · decisão CLD-038
+  · Opção P (amarela) mantém texto escuro legível
+
+  v05.06 · EMOJI DA PROFISSÃO + BORDAS (sobre v05.05 · CLD-058)
+  · Indicador da profissão escolhida (com emoji) aparece no contador
+    global a partir da Tela 6 · acompanha o aluno em todas as telas
+  · Borboletas e vagalumes movidos para as faixas laterais (não sobre o card)
+  · Cards de profissões com descrição (M47) reservados para CM-FACA-INTERP_003
+
+  v05.05 · CENÁRIO NAS BORDAS (sobre v05.04 · CLD-057)
+  · Folhas flutuantes restritas às FAIXAS LATERAIS (fora do card central)
+    · como nas telas iniciais do NAV.04/NAV.05
+  · Elementos grandes da cena (robôs/árvore) ocultados em telas estreitas
+    para não invadir a área de conteúdo branca
+
+  v05.04 · MICROAJUSTES (sobre v05.03 · CLD-056)
+  · Rótulo "Nº da aula desta semana" → "Nº da aula utilizadas nesta atividade:"
+  · Card de IAs de Áudio/Podcast (ElevenLabs · TTSMaker · NotebookLM · Suno)
+    adicionado entre Imagens e Vídeo · cor roxa
+
+  v05.03 · CORREÇÃO M42 (sobre v05.02 · CLD-055)
+  Origem: CM-FACA-INTERP_002 · 28/05/2026
+  Estrutura: 12 → 13 telas (+ Tela 3 exclusiva de explicação dos 3 caminhos)
+
+  · Explicação dos 3 caminhos virou TELA EXCLUSIVA (Tela 3) · não mais
+    embutida no topo da tela de perguntas
+  · Perguntas REORDENADAS na ordem da explicação:
+    1º PRESENÇA (frequência) → 2º CONVIVÊNCIA → 3º APRENDIZAGEM
+  · Linguagem das opções simplificada (sem "MEDIAR/eixo" cru · agora
+    "ficar no meio" · numeração 1️⃣2️⃣3️⃣ batendo com a escada de degraus)
+  · Validações e contador remapeados para 13 telas
+
+  v05.02 · AJUSTES PEDAGÓGICOS + LGPD + ENTREGA (sobre v05.01)
+  Origem: CM-FACA-INTERP_002 CLD-052 · 28/05/2026
+  Estrutura: 11 → 12 telas (+ Tela 12 de entrega)
+
+  · Bug título "eu fiz" branco → colorido por palavra com ciclo de cores
+  · M36 · Tela 6 vocabulário amigável (Contador → "Esta semana a unidade é"
+          · "Nº da aula desta semana" · "Descrição/Nome da Unidade")
+  · M37 · Textarea/inputs dos blocos ocupam largura total · aviso obrigatório abaixo
+  · M38 · Blocos da Tela 1 com cores suaves diferentes (azul/verde/laranja)
+  · M39 · Detecção de gênero por nome (banco + terminação) validada
+  · M40 · Corretor conservador de digitação de nome (Levenshtein dist=1 · opcional)
+  · M41 · Cargos em 4 grupos temáticos (Escola geral · Turma · Tec/Rob · Outros)
+          + cargo "outro não listado" com campo livre
+  · M42 · Bloco explicativo dos 3 caminhos (presença→convivência→aprendizagem)
+          em linguagem incentivadora para o aluno
+  · M43 · Prompt· não abreviar Tec/Rob · Professor Marcos (MAROBE) de Tecnologia
+          + professora de Robótica nomeada (7º+)
+  · M44 · Prompt· "eixo", TCT, ODS, PEI proibidos no corpo do texto do aluno
+  · M45 · Prompt· dinâmicas EXPLICADAS (como funciona + ações + objetivo)
+          · limite por texto subiu para 900-2000 caracteres
+  · M48 · Campo número de chamada (LGPD-safe · aparece ao escolher turma)
+          · sem lista de nomes no HTML · professor cruza com planilha privada
+  · M49 · Tela 12 de entrega (Sala do Futuro · Classroom · espaço Form)
+          + checklist antes de entregar
+  · M51 · Banco de nomes ampliado (~100 americanizados/aportuguesados + regra terminação)
+  · Textos usam os 2 PRIMEIROS NOMES do aluno (não só o primeiro)
+
+  DECISÃO LGPD (CLD-043 a CLD-049):
+  · Lista de nomes reais de alunos NUNCA vai no HTML público
+  · Detecção de sexo usa banco GENÉRICO (não lista da turma)
+  · Número de chamada é a ponte para o professor identificar (planilha privada)
+  · HTML estático não registra participação nem acumula dados digitados
+
+  MIGRADO PARA CM-FACA-INTERP_003 (sucessor · pacotes pesados):
+  · M47 · 136 cards de profissões com descrição
+  · M21-completo · cards de Unidade/Aula via Escopo BMB
+  · M50 · upload de lista por número (aguarda teste de equipamentos)
+  · M46 · 3 textos separados em 3 colagens
+
+  v05.01 · AJUSTE CROMÁTICO (sobre v05.00 · CLD-038)
+  · Cards selecionados voltam ao padrão CLARO TONALIZADO (Tela 6)
+    em vez de gradient escuro com texto branco · feedback Marcos
+  · Aplicado em: cards globais, áreas, temas A-O, eixos PEI,
+    cargos, auto-avaliação · padrão visual uniforme nas 11 telas
+  · Opção P (Tela 5) corrigida · texto sempre escuro sobre amarelo
+    (bug de cascata CSS quando selecionada)
+
+  v05.00 · REFATORAÇÃO ESTRUTURAL + IDENTIDADE VISUAL (sobre v04.00)
+  Origem: CM-FACA-INTERP_002 CLD-026 · 27/05/2026 · noite
   Escola: E.E. Dr. Benedito Martins Barbosa - BMB
+  Estrutura: 8 → 9 telas (Tela 6 dividida em 6A+6B)
 
-  CHANGELOG v03.20 → v04.00 (8 grupos · refatoração visual+estrutural):
-  · M1 · Tela 3 · cargos limite 2 → 3 (alert atualizado)
-  · M2 · Tela 4 · cards de área + select de profissão + cards de anos
-         com fundo branco, bordas roxas visíveis e sombra (contraste sobre fundo lilás)
-  · M3 · Tela 5 · cards de tema com mesmo padrão de contraste
-         + opção P "Outro tema" destacada (bloco amarelo + 📢 + texto fixo)
-         orientando estudante a conferir Sala do Futuro ANTES de digitar
-  · M4 · Tela 6 · variação de cor por etapa:
-         Bimestre azul · Unidade verde · Aula laranja
-         Tipo de projeto roxo · Card Faça amarelo · Conteúdo branco
-  · M5 · Global · font-size base 18px → 19px · labels 15px → 17px
-         · hints com cinza-forte (mais legível) · paleta com tons "medio"
-  · M6 · Sistema de obrigatoriedade Google-Forms-like:
-         label.obrigatorio (* vermelho) + span.obrig-aviso (texto vermelho abaixo)
-         aplicado em Tela 6 (Unidade · Aula · Conteúdo) e Tela 8 (Resposta IA)
-  · M7 · Tela 7 dividida em 2 telas:
-         Tela 7 = Gerar prompt (com botão "Avançar para colar resposta ▶")
-         Tela 8 = Colar resposta (com "◀ Voltar ao prompt")
-         Substitui sistema de abas que forçava rolar e voltar ao topo
-  · M8 · Cards de seleção única detectam clique redundante:
-         aplicado em Gênero, Turma, Área, Anos, Bimestre
-         (NÃO em Cargos·tem toggle · NÃO em Tema·custom abre campo · NÃO em Projeto·idem)
-         alerta amigável "este card é só de seleção, pode seguir"
+  CHANGELOG v04.00 → v05.00 (17 grupos · refatoração estrutural):
+  · M9  · Cards single-select com gradient roxo escuro + texto branco + sombra forte
+         (turma, gênero, bimestre, área, anos, tipo de projeto, temas A-O)
+  · M10 · Contador BMB-style (badge [02] canto sup. esq. de cada tela)
+  · M11 · Barra de progresso NAV.05-style (gradient verde→azul + bolinhas)
+         "Tela X de 9" no topo + bolinhas atual=dourada/passou=verde/futura=cinza
+  · M13 · Monitor de Software → 4 sub-cards inline (StartLab, Atividades Prof, Outros, Microbit)
+  · M14 · Texto descritivo pequeno sob título de cada um dos 13 cargos
+  · M15 · Novo cargo "Logística" (juntar carteiras/cadeiras + desmontar fim de aula)
+  · M16 · Botão Continuar verde em todas as telas 1→7 (auditado)
+  · M17 · Novas profissões: Perito Criminal (Segurança Pública) + Perito Forense (Ciências e Pesquisa)
+  · M18 · Select de profissão · contraste nativo preservado (option:checked azul)
+  · M19 · Eixos PEI · opção selecionada na cor do eixo
+         (Aprendizagem verde escuro · Convivência azul escuro · Frequência laranja escuro)
+  · M20 · Aviso Sala do Futuro · acrescido instruções Ctrl+A / Ctrl+C / Ctrl+V
+  · M21-curto · Tela 6A com vocabulário amigável + fontes maiores
+         "Contador" → "Unidade desta semana" · "de total" → "Total no bimestre"
+  · M22 · Tela 6 dividida em Tela 6 (Bimestre+Unidade+Aula+Tipo) e Tela 7 (Card+Conteúdo)
+         Telas 7-8 antigas (Gerar prompt / Colar resposta) renumeradas para 8-9
+  · M23+M28 · Prompt· 700-1200 caracteres por texto + instrução defensiva contra corte da IA
+  · M24 · 3 cards inline na Tela 8 sempre visíveis (Texto/Imagens/Storyboard) · "Outros ▾" removido
+  · M25 · Estrutura dos 3 textos refinada no prompt:
+         Texto 1 (profissional): nome do estudante
+         Texto 2 (estudante): nome do estudante
+         Texto 3 (integrado): IA inventa nome do profissional do mesmo gênero do estudante,
+                              estudante entra como AJUDANTE/AUXILIAR
+  · M26 · Botão Tela 8 · "Avançar para colar a resposta da IA ▶"
+  · M29 · Alerta "Tudo copiado" mais explícito (Docs/Word/Bloco de Notas)
+  · Botão placeholder "Ver descrições das profissões" (v05.10) · desabilitado
 
-  PENDÊNCIAS PRÓXIMA VERSÃO (v04.10 · trabalho textual):
-  · Estrutura do prompt · revisão da produção textual
-  · Diferenciação entre textos por profissão (estudantes notaram repetição)
-  · Listas oficiais Unidades/Aulas do Guia (quando vier)
-  · Export .docx funcional (ainda placeholder)
-  · Cenário dinâmico por TEMA (ainda fixo Paz Digital)
-  · Limpeza do CSS .abas/.aba-conteudo agora sem uso
+  PENDÊNCIAS PRÓXIMA VERSÃO (v05.10):
+  · Cards de Unidade/Aula vindos do Escopo BMB (depende de Marcos subir lista oficial)
+  · Página de descrições das 135 profissões (cards detalhados)
+  · Estrutura textual do prompt · diferenciação por profissão
+  · Export .docx funcional
+  · Cenário dinâmico por TEMA
 -->
 <style>
 :root {
@@ -69,6 +189,22 @@
   --amarelo-destaque: #FFF3CD;
   --amarelo-aviso: #FFEAA7;       /* v04.00 · M3 fundo aviso Sala do Futuro */
   --amarelo-borda: #E8B923;       /* v04.00 · M3 borda aviso Sala do Futuro */
+  /* v05.00 · M9 · gradient roxo escuro para cards selecionados */
+  --roxo-escuro-1: #6B4B9C;       /* topo do gradient · igual roxo-conviva */
+  --roxo-escuro-2: #4A2E78;       /* base do gradient · mais profundo */
+  --roxo-escuro-borda: #3D2563;   /* borda forte */
+  /* v05.00 · M19 · tons escuros dos eixos PEI quando selecionado */
+  --verde-escuro: #2D6B26;        /* aprendizagem selecionada */
+  --azul-escuro: #1F4570;         /* convivência selecionada */
+  --laranja-escuro: #B85C15;      /* frequência selecionada */
+  /* v05.00 · M11 · contador BMB · cores específicas */
+  --badge-bg: #2E2E2E;            /* fundo escuro do badge BMB-style */
+  --badge-num: #FFFFFF;           /* número branco no badge */
+  --barra-fill-1: #4A8C3F;        /* gradient verde→azul da barra de progresso */
+  --barra-fill-2: #2E5C8A;
+  --barra-marcador-passou: #4A8C3F;
+  --barra-marcador-atual: #FFD700;     /* dourado · igual NAV.05 */
+  --barra-marcador-futuro: #D1D5DB;    /* cinza claro */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -154,6 +290,16 @@ body {
 }
 
 .elemento { position: absolute; pointer-events: none; }
+
+/* v05.05 · em telas estreitas (card ocupa quase tudo), some com elementos
+   que invadiriam o conteúdo · mantém só moldura discreta */
+@media (max-width: 1100px) {
+  .mini-robo, .robo-paz { opacity: 0.35; }
+}
+@media (max-width: 920px) {
+  .mini-robo, .robo-paz, .arvore { display: none; }
+  .sol-circuito { opacity: 0.4; }
+}
 
 .robo-paz {
   bottom: 100px;
@@ -427,6 +573,109 @@ body {
 .tela.ativa { display: block; animation: fadeIn 0.5s ease-out; }
 
 /* ════════════════════════════════════════════════════════════════
+   CONTADOR DE PÁGINAS · v05.00 · M10+M11 (BMB-style + NAV05-style)
+   ──────────────────────────────────────────────────────────────── */
+.pagina-contador-global {
+  margin-bottom: 18px;
+}
+.pagina-contador {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 0;
+}
+.pagina-contador .badge-num {
+  background: var(--badge-bg);
+  color: var(--badge-num);
+  font-size: 22px;
+  font-weight: 900;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-family: 'Segoe UI', sans-serif;
+  letter-spacing: 1px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+  line-height: 1;
+}
+.pagina-contador .badge-info {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--roxo-conviva);
+  background: var(--roxo-claro);
+  padding: 6px 14px;
+  border-radius: 16px;
+}
+/* v05.06 · indicador de profissão escolhida · acompanha todas as telas */
+.pagina-contador .badge-profissao {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--verde-vida);
+  background: var(--verde-claro);
+  border: 1.5px solid var(--verde-medio);
+  padding: 6px 14px;
+  border-radius: 16px;
+  align-items: center;
+  gap: 4px;
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.barra-progresso-faca {
+  background: rgba(255,255,255,0.55);
+  height: 14px;
+  border-radius: 7px;
+  margin-bottom: 22px;
+  position: relative;
+  overflow: visible;
+  box-shadow: 0 1px 4px rgba(107, 75, 156, 0.12);
+}
+.barra-fill-faca {
+  height: 100%;
+  background: linear-gradient(90deg, var(--barra-fill-1), var(--barra-fill-2));
+  width: 11%;  /* default · tela 1/9 ≈ 11% · JS atualiza */
+  transition: width 0.5s ease-out;
+  border-radius: 7px;
+  box-shadow: 0 0 12px rgba(74, 140, 63, 0.4);
+}
+.barra-marcadores-faca {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  padding: 0 2px;
+}
+.barra-marcador-faca {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--barra-marcador-futuro);
+  border: 1.5px solid rgba(107, 75, 156, 0.3);
+  transition: all 0.3s;
+}
+.barra-marcador-faca.passou {
+  background: var(--barra-marcador-passou);
+  border-color: var(--branco);
+  transform: scale(1.15);
+}
+.barra-marcador-faca.atual {
+  background: var(--barra-marcador-atual);
+  border-color: var(--branco);
+  transform: scale(1.35);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.65);
+}
+@media (max-width: 480px) {
+  .pagina-contador .badge-num { font-size: 18px; padding: 5px 10px; }
+  .pagina-contador .badge-info { font-size: 13px; padding: 5px 10px; }
+  .barra-progresso-faca { height: 10px; }
+  .barra-marcador-faca { width: 8px; height: 8px; }
+}
+
+/* ════════════════════════════════════════════════════════════════
    TELA 1 · BOAS-VINDAS
    ──────────────────────────────────────────────────────────────── */
 .bv-titulo {
@@ -478,6 +727,272 @@ body {
   margin-bottom: 4px;
 }
 
+/* v05.00 · M30 · Bloco de Objetivos · destaque visual (amarelo borda dourada) */
+.bv-secao.bv-objetivos {
+  background: linear-gradient(135deg, var(--amarelo-aviso) 0%, var(--amarelo-destaque) 100%);
+  border: 3px solid var(--amarelo-borda);
+  box-shadow: 0 6px 22px rgba(232, 185, 35, 0.32);
+  margin-bottom: 24px;
+}
+.bv-secao.bv-objetivos .bv-secao-titulo {
+  color: #8B6914;
+  font-size: 20px;
+}
+.bv-secao.bv-objetivos .bv-secao-texto {
+  color: var(--cinza-texto);
+  font-size: 16px;
+  font-weight: 500;
+}
+.bv-secao.bv-objetivos .lista-objetivos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.bv-secao.bv-objetivos .lista-objetivos li {
+  padding: 8px 0 8px 30px;
+  position: relative;
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(139, 105, 20, 0.18);
+}
+.bv-secao.bv-objetivos .lista-objetivos li:last-child {
+  border-bottom: none;
+}
+.bv-secao.bv-objetivos .lista-objetivos li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--verde-vida);
+}
+.bv-secao.bv-objetivos .lista-objetivos li strong {
+  color: #8B6914;
+}
+
+/* v05.02 · M38 · cores suaves diferentes para os blocos da Tela 1 */
+.bv-secao.bv-cor-azul {
+  background: var(--azul-claro);
+  border-left: 6px solid var(--azul-paz);
+}
+.bv-secao.bv-cor-azul .bv-secao-titulo { color: var(--azul-paz); }
+
+.bv-secao.bv-cor-verde {
+  background: var(--verde-claro);
+  border-left: 6px solid var(--verde-vida);
+}
+.bv-secao.bv-cor-verde .bv-secao-titulo { color: var(--verde-vida); }
+
+.bv-secao.bv-cor-laranja {
+  background: var(--laranja-claro);
+  border-left: 6px solid var(--laranja-energia);
+}
+.bv-secao.bv-cor-laranja .bv-secao-titulo { color: var(--laranja-energia); }
+
+/* v05.02 · M40 · botões de sugestão de correção de nome */
+.btn-sugestao-sim, .btn-sugestao-nao {
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 2px solid;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-sugestao-sim {
+  background: var(--verde-vida);
+  color: var(--branco);
+  border-color: var(--verde-vida);
+}
+.btn-sugestao-sim:hover { background: var(--verde-escuro); }
+.btn-sugestao-nao {
+  background: var(--branco);
+  color: var(--cinza-forte);
+  border-color: var(--roxo-medio);
+}
+.btn-sugestao-nao:hover { background: var(--cinza-suave); }
+
+/* v05.02 · M41 · grupos temáticos de cargo */
+.grupo-cargo {
+  margin-bottom: 20px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 2px solid;
+}
+.grupo-cargo-titulo {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  letter-spacing: 0.2px;
+}
+.grupo-cargo-azul { background: var(--azul-claro); border-color: var(--azul-medio); }
+.grupo-cargo-azul .grupo-cargo-titulo { color: var(--azul-paz); }
+.grupo-cargo-verde { background: var(--verde-claro); border-color: var(--verde-medio); }
+.grupo-cargo-verde .grupo-cargo-titulo { color: var(--verde-vida); }
+.grupo-cargo-laranja { background: var(--laranja-claro); border-color: var(--laranja-medio); }
+.grupo-cargo-laranja .grupo-cargo-titulo { color: var(--laranja-energia); }
+.grupo-cargo-roxo { background: var(--roxo-claro); border-color: var(--roxo-medio); }
+.grupo-cargo-roxo .grupo-cargo-titulo { color: var(--roxo-conviva); }
+
+/* v05.02 · M42 · bloco explicativo dos 3 caminhos (eixos) */
+.explica-eixos {
+  background: linear-gradient(135deg, var(--amarelo-aviso) 0%, var(--amarelo-destaque) 100%);
+  border: 3px solid var(--amarelo-borda);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(232, 185, 35, 0.25);
+}
+.explica-eixos-titulo {
+  font-size: 17px;
+  font-weight: 800;
+  color: #8B6914;
+  margin-bottom: 12px;
+}
+.explica-eixos-texto {
+  font-size: 15px;
+  color: var(--cinza-texto);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.explica-degrau {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  background: var(--branco);
+}
+.explica-degrau-num {
+  font-size: 22px;
+  font-weight: 900;
+  min-width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--branco);
+  flex-shrink: 0;
+}
+.explica-degrau-3 { border-left: 6px solid var(--laranja-energia); }
+.explica-degrau-3 .explica-degrau-num { background: var(--laranja-energia); }
+.explica-degrau-2 { border-left: 6px solid var(--azul-paz); }
+.explica-degrau-2 .explica-degrau-num { background: var(--azul-paz); }
+.explica-degrau-1 { border-left: 6px solid var(--verde-vida); }
+.explica-degrau-1 .explica-degrau-num { background: var(--verde-vida); }
+.explica-degrau strong { color: var(--cinza-texto); font-size: 16px; }
+.explica-degrau-desc {
+  font-size: 14px;
+  color: var(--cinza-forte);
+  line-height: 1.5;
+}
+.explica-eixos-fecho {
+  margin-top: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #8B6914;
+  text-align: center;
+}
+
+/* v05.02 · M49 · cards de entrega (Tela 12) */
+.entrega-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+.entrega-card {
+  background: var(--branco);
+  border: 2px solid var(--roxo-medio);
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 3px 12px rgba(107, 75, 156, 0.12);
+}
+.entrega-card-titulo {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--roxo-conviva);
+  margin-bottom: 8px;
+}
+.entrega-card-desc {
+  font-size: 14px;
+  color: var(--cinza-forte);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.entrega-sala { border-top: 5px solid var(--verde-vida); }
+.entrega-classroom { border-top: 5px solid var(--azul-paz); }
+.entrega-form { border-top: 5px solid var(--laranja-energia); }
+
+/* v05.20 · CLD-072 · passo a passo Google (Tela 12) */
+.passo-google {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 18px 0;
+}
+.passo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--branco);
+  border: 2px solid var(--azul-medio);
+  border-left: 6px solid var(--azul-paz);
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px rgba(46, 92, 138, 0.12);
+}
+.passo-num {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--azul-paz);
+  color: var(--branco);
+  font-size: 18px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.passo-texto {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--cinza-texto);
+  padding-top: 4px;
+}
+.passo-item.passo-final {
+  border-left-color: var(--verde-vida);
+  border-color: var(--verde-medio);
+  background: var(--verde-claro);
+}
+.passo-item.passo-final .passo-num {
+  background: var(--verde-vida);
+}
+
+/* v05.22 · CLD-075 · texto para leitura nas telas de pesquisa por texto */
+.texto-titulo-ia {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--roxo-conviva);
+  margin: 10px 0 4px;
+  text-align: center;
+}
+.texto-leitura {
+  background: var(--branco);
+  border: 2px solid var(--roxo-medio);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin: 14px 0 20px;
+  max-height: 340px;
+  overflow-y: auto;
+  box-shadow: inset 0 2px 8px rgba(107, 75, 156, 0.08);
+}
+
 /* ════════════════════════════════════════════════════════════════
    BOTÕES · sistema padrão
    ──────────────────────────────────────────────────────────────── */
@@ -502,6 +1017,14 @@ body {
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(107, 75, 156, 0.5);
+}
+/* v05.13 · feedback de cópia · botão fica verde com "Prompt copiado" */
+.btn.btn-copiado {
+  background: linear-gradient(135deg, var(--verde-vida) 0%, var(--verde-escuro) 100%) !important;
+  color: var(--branco) !important;
+  box-shadow: 0 6px 22px rgba(45, 107, 38, 0.45) !important;
+  transform: scale(1.03);
+  transition: all 0.2s ease;
 }
 .btn-secondary {
   background: var(--branco);
@@ -549,6 +1072,44 @@ body {
   font-weight: 700;
   color: var(--vermelho-obrig);
   margin-top: 4px;
+  letter-spacing: 0.2px;
+}
+/* v05.02 · M37 · inputs/textarea/selects dentro dos blocos de etapa ocupam largura total */
+.bloco-etapa input[type="text"],
+.bloco-etapa input[type="url"],
+.bloco-etapa input[type="number"],
+.bloco-etapa select,
+.bloco-etapa textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--cinza-texto);
+  background: var(--branco);
+  border: 2px solid var(--roxo-medio);
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(107, 75, 156, 0.08);
+}
+.bloco-etapa textarea {
+  resize: vertical;
+  line-height: 1.55;
+}
+.bloco-etapa textarea:focus,
+.bloco-etapa input:focus,
+.bloco-etapa select:focus {
+  outline: none;
+  border-color: var(--roxo-conviva);
+  box-shadow: 0 4px 14px rgba(107, 75, 156, 0.22);
+}
+/* M37 · aviso obrigatório SEMPRE em bloco próprio abaixo do campo (nunca ao lado) */
+.bloco-etapa .obrig-aviso {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--vermelho-obrig);
+  margin-top: 8px;
   letter-spacing: 0.2px;
 }
 .campo input[type="text"],
@@ -624,16 +1185,57 @@ body {
   box-shadow: 0 6px 18px rgba(107, 75, 156, 0.28);
 }
 .card-opcao.selecionado {
-  background: var(--roxo-claro);
-  border-color: var(--roxo-conviva);
-  border-width: 3px;                      /* v04.00 · borda mais grossa quando ativo */
-  color: var(--roxo-conviva);
-  box-shadow: 0 4px 16px rgba(107, 75, 156, 0.35);
+  /* v05.07 · selecionado ESCURO (texto branco) · hover continua claro */
+  background: linear-gradient(135deg, var(--roxo-escuro-1) 0%, var(--roxo-escuro-2) 100%);
+  border-color: var(--roxo-escuro-borda);
+  border-width: 3px;
+  color: var(--branco);
+  box-shadow: 0 6px 22px rgba(74, 46, 120, 0.50), inset 0 1px 0 rgba(255,255,255,0.15);
+  transform: translateY(-1px);
+}
+.card-opcao.selecionado .emoji {
+  filter: brightness(1.15) drop-shadow(0 1px 2px rgba(0,0,0,0.3));
 }
 .card-opcao .emoji {
   display: block;
   font-size: 32px;
   margin-bottom: 4px;
+}
+
+/* v05.00 · M14 · Cards de CARGO com descrição sob título */
+.card-cargo {
+  padding: 14px 12px 12px !important;
+  min-height: 120px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+.card-cargo .cargo-nome {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cinza-texto);
+  margin-bottom: 6px;
+  line-height: 1.25;
+}
+.card-cargo .cargo-desc {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--cinza-forte);
+  line-height: 1.35;
+  margin-top: auto;
+  padding-top: 4px;
+}
+.card-cargo.selecionado .cargo-nome {
+  color: var(--branco);
+  font-weight: 800;
+}
+.card-cargo.selecionado .cargo-desc {
+  color: rgba(255,255,255,0.92);
+}
+@media (min-width: 700px) {
+  .card-cargo .cargo-desc { font-size: 12px; }
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -662,10 +1264,19 @@ body {
   box-shadow: 0 6px 18px rgba(107, 75, 156, 0.28);
 }
 .area-card.selecionado {
-  background: var(--roxo-claro);
-  border-color: var(--roxo-conviva);
+  /* v05.07 · selecionado ESCURO */
+  background: linear-gradient(135deg, var(--roxo-escuro-1) 0%, var(--roxo-escuro-2) 100%);
+  border-color: var(--roxo-escuro-borda);
   border-width: 3px;
-  box-shadow: 0 4px 16px rgba(107, 75, 156, 0.35);
+  box-shadow: 0 6px 22px rgba(74, 46, 120, 0.50), inset 0 1px 0 rgba(255,255,255,0.15);
+  transform: translateY(-1px);
+}
+.area-card.selecionado .area-nome {
+  color: var(--branco);
+  font-weight: 800;
+}
+.area-card.selecionado .area-emoji {
+  filter: brightness(1.15) drop-shadow(0 1px 2px rgba(0,0,0,0.3));
 }
 .area-card .area-emoji {
   font-size: 28px;
@@ -705,11 +1316,17 @@ body {
   box-shadow: 0 4px 14px rgba(107, 75, 156, 0.22);
 }
 .tema-item.selecionado {
-  background: var(--roxo-claro);
-  border-color: var(--roxo-conviva);
+  /* v05.07 · selecionado ESCURO (opção P amarela tem regra !important própria) */
+  background: linear-gradient(135deg, var(--roxo-escuro-1) 0%, var(--roxo-escuro-2) 100%);
+  border-color: var(--roxo-escuro-borda);
   border-width: 3px;
-  box-shadow: 0 4px 16px rgba(107, 75, 156, 0.35);
+  box-shadow: 0 6px 22px rgba(74, 46, 120, 0.50), inset 0 1px 0 rgba(255,255,255,0.15);
+  transform: translateY(-1px);
 }
+.tema-item.selecionado .tema-letra { color: #FFE680; font-weight: 900; }
+.tema-item.selecionado .tema-nome { color: var(--branco); font-weight: 800; }
+.tema-item.selecionado .tema-meta { color: rgba(255,255,255,0.85); }
+.tema-item.selecionado .tema-emoji { filter: brightness(1.15) drop-shadow(0 1px 2px rgba(0,0,0,0.3)); }
 .tema-item.recomendado::before {
   content: "🎯";
   font-size: 22px;
@@ -755,10 +1372,23 @@ body {
   box-shadow: 0 6px 20px rgba(232, 185, 35, 0.45);
 }
 .tema-item.opcao-p.selecionado {
-  background: var(--amarelo-destaque);
-  border-color: var(--laranja-energia);
-  border-width: 3px;
+  /* v05.01 · corrige bug Imagem 3 · força texto escuro sobre fundo amarelo */
+  background: var(--amarelo-destaque) !important;
+  border-color: var(--laranja-energia) !important;
+  border-width: 3px !important;
+  box-shadow: 0 6px 20px rgba(232, 185, 35, 0.55) !important;
+  transform: translateY(-1px);
 }
+.tema-item.opcao-p.selecionado .tema-letra,
+.tema-item.opcao-p.selecionado .tema-nome {
+  color: #8B6914 !important;     /* marrom escuro · legível sobre amarelo */
+  font-weight: 900 !important;
+}
+.tema-item.opcao-p.selecionado .aviso-sala-futuro,
+.tema-item.opcao-p.selecionado .aviso-titulo {
+  color: var(--cinza-texto) !important;
+}
+.tema-item.opcao-p.selecionado .aviso-titulo { color: var(--laranja-energia) !important; }
 .aviso-sala-futuro {
   margin-top: 14px;
   background: var(--amarelo-aviso);
@@ -876,9 +1506,9 @@ body {
   margin-bottom: 14px;
   box-shadow: 0 2px 10px rgba(107, 75, 156, 0.12);
 }
-.eixo-bloco.aprendizagem { border-left: 6px solid var(--verde-vida); }
-.eixo-bloco.convivencia { border-left: 6px solid var(--azul-paz); }
-.eixo-bloco.frequencia { border-left: 6px solid var(--laranja-energia); }
+.eixo-bloco.aprendizagem { border-left: 6px solid var(--verde-vida); background: var(--verde-claro); }
+.eixo-bloco.convivencia { border-left: 6px solid var(--azul-paz); background: var(--azul-claro); }
+.eixo-bloco.frequencia { border-left: 6px solid var(--laranja-energia); background: var(--laranja-claro); }
 .eixo-titulo {
   font-size: 17px;                   /* v04.00 · era 16px */
   font-weight: 800;
@@ -891,22 +1521,63 @@ body {
   gap: 6px;
 }
 .eixo-opcao {
-  padding: 10px 14px;
+  padding: 12px 16px;
   background: var(--branco);
-  border: 2px solid transparent;
+  border: 2px solid var(--roxo-medio);  /* v05.00 · era transparent · visível antes de hover */
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 14px;
+  font-size: 15px;                       /* v05.00 · era 14px */
+  margin-bottom: 6px;
+  box-shadow: 0 1px 4px rgba(107, 75, 156, 0.08);
 }
 .eixo-opcao:hover {
   background: var(--roxo-claro);
-}
-.eixo-opcao.selecionado {
-  background: var(--roxo-claro);
   border-color: var(--roxo-conviva);
-  font-weight: 600;
+  transform: translateY(-1px);
 }
+/* v05.08 · opção selecionada ESCURA (cor forte do eixo · texto branco) · container fica claro */
+.eixo-bloco.aprendizagem .eixo-opcao.selecionado {
+  background: linear-gradient(135deg, var(--verde-vida) 0%, var(--verde-escuro) 100%);
+  border-color: var(--verde-escuro);
+  border-width: 3px;
+  color: var(--branco);
+  font-weight: 800;
+  box-shadow: 0 6px 18px rgba(45, 107, 38, 0.45);
+  transform: translateY(-1px);
+}
+.eixo-bloco.aprendizagem .eixo-opcao.selecionado strong { color: #FFE680; }
+
+.eixo-bloco.convivencia .eixo-opcao.selecionado {
+  background: linear-gradient(135deg, var(--azul-paz) 0%, var(--azul-escuro) 100%);
+  border-color: var(--azul-escuro);
+  border-width: 3px;
+  color: var(--branco);
+  font-weight: 800;
+  box-shadow: 0 6px 18px rgba(31, 69, 112, 0.45);
+  transform: translateY(-1px);
+}
+.eixo-bloco.convivencia .eixo-opcao.selecionado strong { color: #FFE680; }
+
+.eixo-bloco.frequencia .eixo-opcao.selecionado {
+  background: linear-gradient(135deg, var(--laranja-energia) 0%, var(--laranja-escuro) 100%);
+  border-color: var(--laranja-escuro);
+  border-width: 3px;
+  color: var(--branco);
+  font-weight: 800;
+  box-shadow: 0 6px 18px rgba(184, 92, 21, 0.45);
+  transform: translateY(-1px);
+}
+.eixo-bloco.frequencia .eixo-opcao.selecionado strong { color: #FFE680; }
+
+/* Fallback genérico (sem classe de eixo) */
+.eixo-opcao.selecionado {
+  background: linear-gradient(135deg, var(--roxo-escuro-1) 0%, var(--roxo-escuro-2) 100%);
+  border-color: var(--roxo-escuro-borda);
+  color: var(--branco);
+  font-weight: 800;
+}
+.eixo-opcao.selecionado strong { color: #FFE680; }
 
 /* ════════════════════════════════════════════════════════════════
    TELA 7 · RESULTADO · 2 abas
@@ -1034,6 +1705,191 @@ body {
   border-color: var(--roxo-conviva);
   transform: translateY(-1px);
 }
+
+/* ════════════════════════════════════════════════════════════════
+   v05.00 · M24 · 3 cards de IAs por temática (sem menu "Outros ▾")
+   ──────────────────────────────────────────────────────────────── */
+.cards-ias-tematica {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+.card-ia-tematica {
+  background: var(--branco);
+  border: 2px solid var(--roxo-medio);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 3px 12px rgba(107, 75, 156, 0.12);
+}
+.card-ia-tematica .card-ia-titulo {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--roxo-conviva);
+  margin-bottom: 12px;
+  letter-spacing: 0.2px;
+}
+.card-ia-tematica .card-ia-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.card-ia-texto   { border-left: 6px solid var(--azul-paz); }
+.card-ia-imagem  { border-left: 6px solid var(--laranja-energia); }
+.card-ia-audio   { border-left: 6px solid var(--roxo-conviva); }
+.card-ia-video   { border-left: 6px solid var(--verde-vida); }
+.card-ia-texto   .card-ia-titulo { color: var(--azul-paz); }
+.card-ia-imagem  .card-ia-titulo { color: var(--laranja-energia); }
+.card-ia-audio   .card-ia-titulo { color: var(--roxo-conviva); }
+.card-ia-video   .card-ia-titulo { color: var(--verde-vida); }
+
+/* ════════════════════════════════════════════════════════════════
+   v05.00 · M31 · Auto-avaliação dos objetivos
+   ──────────────────────────────────────────────────────────────── */
+.auto-aval {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+.auto-aval-item {
+  background: var(--branco);
+  border: 2px solid var(--roxo-medio);
+  border-radius: 12px;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cinza-texto);
+  box-shadow: 0 2px 8px rgba(107, 75, 156, 0.10);
+}
+.auto-aval-item:hover {
+  background: var(--verde-claro);
+  border-color: var(--verde-vida);
+  transform: translateY(-1px);
+}
+.auto-aval-item.alcancado {
+  /* v05.01 · padrão claro · igual aos demais cards selecionados */
+  background: var(--verde-claro);
+  border-color: var(--verde-vida);
+  border-width: 3px;
+  color: var(--verde-vida);
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(74, 140, 63, 0.30);
+  transform: translateY(-1px);
+}
+.auto-aval-check {
+  font-size: 26px;
+  font-weight: 900;
+  min-width: 30px;
+  text-align: center;
+}
+.auto-aval-item.alcancado .auto-aval-check { color: var(--verde-vida); }
+.auto-aval-texto {
+  flex: 1;
+  line-height: 1.4;
+}
+.auto-aval-resumo {
+  margin-top: 16px;
+  padding: 14px 18px;
+  background: var(--amarelo-aviso);
+  border: 2px solid var(--amarelo-borda);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cinza-texto);
+  text-align: center;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   v05.00 · M34 · Card "Próxima atividade" (placeholder)
+   ──────────────────────────────────────────────────────────────── */
+.card-proxima-atividade {
+  background: linear-gradient(135deg, var(--roxo-claro) 0%, var(--azul-claro) 100%);
+  border: 3px solid var(--roxo-conviva);
+  border-radius: 18px;
+  padding: 22px 24px;
+  margin-top: 28px;
+  box-shadow: 0 6px 22px rgba(107, 75, 156, 0.22);
+}
+.card-prox-titulo {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--roxo-conviva);
+  margin-bottom: 4px;
+}
+.card-prox-subtitulo {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--azul-paz);
+  margin-bottom: 14px;
+}
+.card-prox-lista {
+  list-style: none;
+  margin: 0 0 16px 0;
+  padding: 0;
+}
+.card-prox-lista li {
+  padding: 6px 0 6px 28px;
+  position: relative;
+  font-size: 14px;
+  color: var(--cinza-texto);
+  border-bottom: 1px solid rgba(107, 75, 156, 0.18);
+}
+.card-prox-lista li:last-child { border-bottom: none; }
+.card-prox-lista li::before {
+  content: "▸";
+  position: absolute;
+  left: 6px;
+  color: var(--roxo-conviva);
+  font-weight: 900;
+}
+.btn-em-breve {
+  background: var(--cinza-medio) !important;
+  color: var(--branco) !important;
+  cursor: not-allowed !important;
+  opacity: 0.75;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+}
+.btn-em-breve:hover { background: var(--cinza-medio) !important; transform: none !important; }
+
+/* ════════════════════════════════════════════════════════════════
+   v05.00 · M33 · Parágrafos numerados nos 3 textos (Tela 9)
+   ──────────────────────────────────────────────────────────────── */
+.par-num {
+  margin: 12px 0;
+  padding-left: 70px;
+  position: relative;
+  line-height: 1.6;
+  font-size: 16px;
+  color: var(--cinza-texto);
+}
+.par-num .par-tag {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  background: var(--roxo-claro);
+  color: var(--roxo-conviva);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
+  border: 1px solid var(--roxo-medio);
+  font-family: 'Consolas', 'Courier New', monospace;
+}
+.texto-1 .par-num .par-tag { background: var(--azul-claro); color: var(--azul-paz); border-color: var(--azul-medio); }
+.texto-2 .par-num .par-tag { background: var(--verde-claro); color: var(--verde-vida); border-color: var(--verde-medio); }
+.texto-3 .par-num .par-tag { background: var(--amarelo-aviso); color: #8B6914; border-color: var(--amarelo-borda); }
 
 /* ════════════════════════════════════════════════════════════════
    PROGRESSO · indicador entre telas
@@ -1251,18 +2107,18 @@ body {
 <!-- Folhas caindo · geradas via JS -->
 <div class="folhas-container" id="folhasContainer"></div>
 
-<!-- 3 borboletas em alturas diferentes -->
-<div class="detalhe-borboleta" style="top: 18vh; animation-delay: 0s;">🦋</div>
-<div class="detalhe-borboleta" style="top: 42vh; animation-delay: 7s;">🦋</div>
-<div class="detalhe-borboleta" style="top: 65vh; animation-delay: 13s;">🦋</div>
+<!-- 3 borboletas em alturas diferentes · nas laterais (v05.06) -->
+<div class="detalhe-borboleta" style="top: 18vh; left: 4vw; animation-delay: 0s;">🦋</div>
+<div class="detalhe-borboleta" style="top: 42vh; right: 4vw; left: auto; animation-delay: 7s;">🦋</div>
+<div class="detalhe-borboleta" style="top: 65vh; left: 3vw; animation-delay: 13s;">🦋</div>
 
-<!-- 6 vagalumes espalhados -->
-<div class="detalhe-vagalume" style="top: 15vh; left: 22vw; animation-delay: 0s;"></div>
-<div class="detalhe-vagalume" style="top: 38vh; left: 78vw; animation-delay: 0.5s;"></div>
-<div class="detalhe-vagalume" style="top: 60vh; left: 12vw; animation-delay: 1.2s;"></div>
-<div class="detalhe-vagalume" style="top: 25vh; left: 55vw; animation-delay: 1.8s;"></div>
-<div class="detalhe-vagalume" style="top: 75vh; left: 88vw; animation-delay: 2.3s;"></div>
-<div class="detalhe-vagalume" style="top: 50vh; left: 35vw; animation-delay: 2.8s;"></div>
+<!-- 6 vagalumes espalhados · nas laterais (v05.06) -->
+<div class="detalhe-vagalume" style="top: 15vh; left: 6vw; animation-delay: 0s;"></div>
+<div class="detalhe-vagalume" style="top: 38vh; left: 93vw; animation-delay: 0.5s;"></div>
+<div class="detalhe-vagalume" style="top: 60vh; left: 4vw; animation-delay: 1.2s;"></div>
+<div class="detalhe-vagalume" style="top: 25vh; left: 95vw; animation-delay: 1.8s;"></div>
+<div class="detalhe-vagalume" style="top: 75vh; left: 90vw; animation-delay: 2.3s;"></div>
+<div class="detalhe-vagalume" style="top: 50vh; left: 7vw; animation-delay: 2.8s;"></div>
 
 <!-- Bolhas flutuantes (subindo do chão) -->
 <div class="detalhe-bolha" style="left: 10vw; animation-delay: 0s;"></div>
@@ -1273,31 +2129,70 @@ body {
 <!-- Container principal -->
 <div class="app">
 
-  <!-- Indicador de progresso (aparece nas telas 2-6) -->
-  <div class="progresso" id="progresso" style="display: none;">
-    <div class="progresso-bola" data-passo="2"></div>
-    <div class="progresso-bola" data-passo="3"></div>
-    <div class="progresso-bola" data-passo="4"></div>
-    <div class="progresso-bola" data-passo="5"></div>
-    <div class="progresso-bola" data-passo="6"></div>
+  <!-- v05.00 · M10+M11 · Contador BMB+NAV05 GLOBAL · aparece em todas as telas exceto Tela 1 (boas-vindas) -->
+  <div class="pagina-contador-global" id="contadorGlobal" style="display:none;">
+    <div class="pagina-contador">
+      <span class="badge-num">01</span>
+      <span class="badge-info">Tela 1 de 18</span>
+      <span class="badge-profissao" id="badgeProfissao" style="display:none;"></span>
+    </div>
+    <div class="barra-progresso-faca">
+      <div class="barra-fill-faca"></div>
+      <div class="barra-marcadores-faca">
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+        <span class="barra-marcador-faca"></span>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════ -->
   <!-- TELA 1 · BOAS-VINDAS                                    -->
   <!-- ═══════════════════════════════════════════════════════ -->
-  <section class="tela ativa" id="tela1">
+  <section class="tela ativa" id="tela1" data-secao="S1">
     <div class="bv-titulo">🚀 Faça como eu fiz</div>
     <div class="bv-subtitulo">StartLab Alura · BMB · 6º ao 9º ano · 2026</div>
     <div class="bv-faixa-tema">Sua atividade da semana · 3 textos personalizados</div>
 
-    <div class="bv-secao">
+    <!-- v05.00 · M30 · Bloco de Objetivos em destaque -->
+    <div class="bv-secao bv-objetivos">
+      <div class="bv-secao-titulo">🎯 Objetivos desta atividade</div>
+      <div class="bv-secao-texto">
+        <ul class="lista-objetivos">
+          <li><strong>Refletir</strong> sobre uma profissão que você admira</li>
+          <li><strong>Saber qual aula está estudando</strong> · Unidade · Aula · Card Faça</li>
+          <li><strong>Conectar</strong> conteúdos da aula com sua vida e seu protagonismo</li>
+          <li><strong>Compreender o Faça como eu fiz</strong> aplicando novas ideias e ações temáticas da semana</li>
+          <li><strong>Produzir</strong> 3 textos integrados (Profissional · Estudante · Cooperação)</li>
+          <li><strong>Praticar</strong> uso de IA como ferramenta de escrita</li>
+          <li><strong>Salvar</strong> o resultado em documento para portfólio</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bv-secao bv-cor-azul">
       <div class="bv-secao-titulo">🎯 O que você vai fazer</div>
       <div class="bv-secao-texto">
         Você vai responder algumas perguntas sobre você, sua turma, a profissão que admira e o tema da semana. No final, vai receber 3 textos personalizados que respondem ao Card "Faça como eu fiz" do Alura.
       </div>
     </div>
 
-    <div class="bv-secao">
+    <div class="bv-secao bv-cor-verde">
       <div class="bv-secao-titulo">📋 Como funciona</div>
       <div class="bv-secao-texto">
         <ol>
@@ -1311,7 +2206,7 @@ body {
       </div>
     </div>
 
-    <div class="bv-secao">
+    <div class="bv-secao bv-cor-laranja">
       <div class="bv-secao-titulo">📄 Os 3 textos</div>
       <div class="bv-secao-texto">
         <ul>
@@ -1323,14 +2218,14 @@ body {
     </div>
 
     <div class="btn-grupo">
-      <button class="btn btn-primary" onclick="proximaTela(2)">▶ Começar</button>
+      <button class="btn btn-success" onclick="proximaTela(2)">▶ Começar</button>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════ -->
   <!-- TELA 2 · IDENTIFICAÇÃO 1 · Nome + (Gênero se necessário) + Turma -->
   <!-- ═══════════════════════════════════════════════════════ -->
-  <section class="tela" id="tela2">
+  <section class="tela" id="tela2" data-secao="S2">
     <div class="bv-titulo">👤 Identificação</div>
     <div class="bv-subtitulo">Comece com seu nome e sua turma</div>
 
@@ -1339,6 +2234,14 @@ body {
       <input type="text" id="nomeCompleto" placeholder="Ex: Maria Silva Santos" autocomplete="off">
       <div id="avisoGenero" style="display:none; margin-top:8px; padding:8px 12px; background:var(--amarelo-destaque); border-radius:8px; font-size:13px; color:var(--cinza-texto);">
         ⚠️ Nome não reconhecido · escolha abaixo
+      </div>
+      <!-- v05.02 · M40 · sugestão de correção de digitação (conservadora · opcional) -->
+      <div id="sugestaoNome" style="display:none; margin-top:8px; padding:10px 14px; background:var(--azul-claro); border:2px solid var(--azul-medio); border-radius:10px; font-size:14px; color:var(--cinza-texto);">
+        <span id="sugestaoNomeTexto"></span>
+        <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn-sugestao-sim" onclick="aceitarSugestaoNome()">✓ Sim, corrigir</button>
+          <button type="button" class="btn-sugestao-nao" onclick="recusarSugestaoNome()">✗ Não, está certo</button>
+        </div>
       </div>
     </div>
 
@@ -1367,23 +2270,72 @@ body {
       </div>
     </div>
 
+    <!-- v05.02 · M48 · número de chamada (LGPD-safe · só código · sem lista de nomes no HTML) -->
+    <div class="campo" id="campoNumeroChamada" style="display:none;">
+      <label class="obrigatorio" for="numeroChamada">Seu número de chamada</label>
+      <input type="number" id="numeroChamada" placeholder="Ex: 23" min="1" max="60" style="max-width:180px;">
+      <div class="hint">💡 É o número da lista de chamada da sua turma · ajuda o professor a identificar sua entrega</div>
+    </div>
+
     <div class="btn-grupo">
       <button class="btn btn-secondary" onclick="proximaTela(1)">◀ Voltar</button>
-      <button class="btn btn-primary" onclick="proximaTela(3)">Continuar ▶</button>
+      <button class="btn btn-success" onclick="proximaTela(3)">Continuar ▶</button>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- TELA 3 · IDENTIFICAÇÃO 2 · Cargo(s) + Perfil PEI        -->
+  <!-- TELA 3 · PROFISSÃO ADMIRADA (Projeto de Vida · antes dos cargos) -->
   <!-- ═══════════════════════════════════════════════════════ -->
-  <section class="tela" id="tela3">
-    <div class="bv-titulo">🏷️ Seu protagonismo</div>
-    <div class="bv-subtitulo">Cargo(s) na BMB em 2026 e seu perfil nos 3 eixos PEI</div>
+  <section class="tela" id="tela3" data-secao="S3">
+    <div class="bv-titulo">💼 Seu Projeto de Vida</div>
+    <div class="bv-subtitulo">Qual profissão você admira? Escolha a área primeiro, depois a profissão.</div>
 
     <div class="campo">
-      <label>Cargo(s) protagonista (escolha até 3)</label>
-      <div class="cards-grid" id="cardsCargo">
-        <!-- preenchido dinamicamente pelo JS conforme o ano -->
+      <label>Área da profissão</label>
+      <div class="areas-grid" id="areasGrid">
+        <!-- 11 áreas preenchidas via JS -->
+      </div>
+    </div>
+
+    <div class="campo">
+      <label for="selectProfissao">Profissão dentro da área escolhida</label>
+      <select id="selectProfissao" disabled>
+        <option value="">Selecione uma área primeiro</option>
+      </select>
+      <div class="hint">Ou digite uma profissão que não esteja na lista no campo abaixo</div>
+      <input type="text" id="profissaoOutra" placeholder="(Opcional) Outra profissão não listada" style="margin-top: 10px;">
+    </div>
+
+    <div class="campo">
+      <label>Anos de experiência do profissional admirado</label>
+      <div class="cards-grid">
+        <div class="card-opcao" data-anos="5" onclick="selecionarAnos(this)">5 anos<br><small>(iniciante)</small></div>
+        <div class="card-opcao selecionado" data-anos="10" onclick="selecionarAnos(this)">🎯 10 anos<br><small>(intermediário)</small></div>
+        <div class="card-opcao" data-anos="15" onclick="selecionarAnos(this)">15 anos<br><small>(experiente)</small></div>
+        <div class="card-opcao" data-anos="20+" onclick="selecionarAnos(this)">20+ anos<br><small>(sênior)</small></div>
+      </div>
+    </div>
+
+    <div class="btn-grupo">
+      <button class="btn btn-secondary" onclick="proximaTela(2)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(4)">Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 3 · EXPLICAÇÃO DOS 3 CAMINHOS (v05.03 · M42 exclusiva) -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela4" data-secao="S4">
+    <div class="bv-titulo">🏷️ Seu protagonismo</div>
+    <div class="bv-subtitulo">Quais cargos você ocupa na BMB em 2026? (escolha até 5)</div>
+
+    <div class="campo">
+      <label>Cargo(s) protagonista <span style="font-weight:500; color:var(--cinza-medio); font-size:14px;">(escolha até 5)</span></label>
+      <div style="background:var(--amarelo-aviso); border:2px solid var(--amarelo-borda); border-radius:10px; padding:10px 14px; font-size:14px; margin-bottom:12px; color:var(--cinza-texto); font-weight:600;">
+        👉 Você precisa escolher pelo menos 1 cargo para continuar. Se não tem cargo, escolha <strong>"Não ocupo cargo formal"</strong> no grupo Outros.
+      </div>
+      <div class="cards-grid" id="cardsCargo" style="grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));">
+        <!-- preenchido dinamicamente pelo JS conforme o ano · v05.00 · M13/M14/M15 -->
       </div>
     </div>
 
@@ -1419,96 +2371,122 @@ body {
       <input type="text" id="formaturaOutro" placeholder="Digite sua função na comissão" style="margin-top:10px; display:none;">
     </div>
 
-    <!-- EIXO APRENDIZAGEM · 4 opções com negritos -->
-    <div class="campo">
-      <label>📚 APRENDIZAGEM · Como você atua nesse eixo?</label>
-      <div class="eixo-bloco aprendizagem">
-        <div class="eixo-opcoes">
-          <div class="eixo-opcao" data-eixo="apr" data-valor="A" onclick="selecionarEixo(this)">A · Costumo <strong>AJUDAR</strong> colegas com dificuldade nos conteúdos</div>
-          <div class="eixo-opcao" data-eixo="apr" data-valor="B" onclick="selecionarEixo(this)">B · Costumo <strong>PEDIR</strong> ajuda para entender melhor</div>
-          <div class="eixo-opcao" data-eixo="apr" data-valor="C" onclick="selecionarEixo(this)">C · Tanto ajudo quanto peço · depende da matéria</div>
-          <div class="eixo-opcao" data-eixo="apr" data-valor="D" onclick="selecionarEixo(this)">D · Costumo <strong>resolver SOZINHO</strong> · sem pedir nem oferecer ajuda · prefiro estudar e pensar por conta própria</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- EIXO CONVIVÊNCIA · 4 opções refatoradas com explicação MEDIAR -->
-    <div class="campo">
-      <label>🤝 CONVIVÊNCIA · Como você atua nesse eixo?</label>
-      <div style="background:var(--amarelo-destaque); padding:10px 14px; border-radius:10px; font-size:14px; margin-bottom:8px; color:var(--cinza-texto);">
-        <strong>MEDIAR</strong> significa estar no meio · ouvir os dois lados · ajudar a achar uma saída sem tomar partido · sem agredir com palavra ou ato.
-      </div>
-      <div class="eixo-bloco convivencia">
-        <div class="eixo-opcoes">
-          <div class="eixo-opcao" data-eixo="con" data-valor="A" onclick="selecionarEixo(this)">A · Costumo <strong>MEDIAR</strong> · ouço os dois lados e ajudo a turma a resolver pacificamente</div>
-          <div class="eixo-opcao" data-eixo="con" data-valor="B" onclick="selecionarEixo(this)">B · Já me envolvi em conflitos <strong>tomando partido</strong> (defendendo · respondendo na hora · às vezes verbal ou fisicamente) · estou aprendendo a parar antes</div>
-          <div class="eixo-opcao" data-eixo="con" data-valor="C" onclick="selecionarEixo(this)">C · <strong>Evito conflitos</strong> · observo de longe · não me envolvo nem para ajudar</div>
-          <div class="eixo-opcao" data-eixo="con" data-valor="D" onclick="selecionarEixo(this)">D · Às vezes acabo <strong>provocando ou alimentando</strong> conflitos (mesmo sem perceber) · estou aprendendo a reconhecer</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- EIXO FREQUÊNCIA · 3 opções -->
-    <div class="campo">
-      <label>📅 FREQUÊNCIA · Como você atua nesse eixo?</label>
-      <div class="eixo-bloco frequencia">
-        <div class="eixo-opcoes">
-          <div class="eixo-opcao" data-eixo="freq" data-valor="A" onclick="selecionarEixo(this)">A · <strong>Frequência ALTA</strong> · raramente falto</div>
-          <div class="eixo-opcao" data-eixo="freq" data-valor="B" onclick="selecionarEixo(this)">B · Falto às vezes · <strong>tento recuperar</strong></div>
-          <div class="eixo-opcao" data-eixo="freq" data-valor="C" onclick="selecionarEixo(this)">C · Tenho <strong>dificuldade</strong> de manter frequência regular</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="btn-grupo">
-      <button class="btn btn-secondary" onclick="proximaTela(2)">◀ Voltar</button>
-      <button class="btn btn-primary" onclick="proximaTela(4)">Continuar ▶</button>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- TELA 4 · PROFISSÃO ADMIRADA + Anos de experiência       -->
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <section class="tela" id="tela4">
-    <div class="bv-titulo">💼 Seu Projeto de Vida</div>
-    <div class="bv-subtitulo">Qual profissão você admira? Escolha a área primeiro, depois a profissão.</div>
-
-    <div class="campo">
-      <label>Área da profissão</label>
-      <div class="areas-grid" id="areasGrid">
-        <!-- 11 áreas preenchidas via JS -->
-      </div>
-    </div>
-
-    <div class="campo">
-      <label for="selectProfissao">Profissão dentro da área escolhida</label>
-      <select id="selectProfissao" disabled>
-        <option value="">Selecione uma área primeiro</option>
-      </select>
-      <div class="hint">Ou digite uma profissão que não esteja na lista no campo abaixo</div>
-      <input type="text" id="profissaoOutra" placeholder="(Opcional) Outra profissão não listada" style="margin-top: 10px;">
-    </div>
-
-    <div class="campo">
-      <label>Anos de experiência do profissional admirado</label>
-      <div class="cards-grid">
-        <div class="card-opcao" data-anos="5" onclick="selecionarAnos(this)">5 anos<br><small>(iniciante)</small></div>
-        <div class="card-opcao selecionado" data-anos="10" onclick="selecionarAnos(this)">🎯 10 anos<br><small>(intermediário)</small></div>
-        <div class="card-opcao" data-anos="15" onclick="selecionarAnos(this)">15 anos<br><small>(experiente)</small></div>
-        <div class="card-opcao" data-anos="20+" onclick="selecionarAnos(this)">20+ anos<br><small>(sênior)</small></div>
+    <!-- Cascata Projeto Ciências (aparece se selecionar Ciências) · v05.15 -->
+    <div class="campo" id="cascataCiencias" style="display:none; background:var(--roxo-claro); padding:16px; border-radius:14px;">
+      <label>🔬 Você é do Projeto "+Ciências na Escola" · qual é a sua função?</label>
+      <div class="cards-grid" id="cardsCiencias">
+        <div class="card-opcao" data-cienciafuncao="Bolsista" onclick="selecionarCiencias(this)"><span class="emoji">🎓</span>Bolsista</div>
+        <div class="card-opcao" data-cienciafuncao="Voluntário(a)" onclick="selecionarCiencias(this)"><span class="emoji">🤝</span>Voluntário(a)</div>
       </div>
     </div>
 
     <div class="btn-grupo">
       <button class="btn btn-secondary" onclick="proximaTela(3)">◀ Voltar</button>
-      <button class="btn btn-primary" onclick="proximaTela(5)">Continuar ▶</button>
+      <button class="btn btn-success" onclick="proximaTela(5)">Continuar ▶</button>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- TELA 5 · TEMA DA SEMANA                                 -->
+  <!-- TELA 5 · EXPLICAÇÃO DOS 3 CAMINHOS (v05.08)              -->
   <!-- ═══════════════════════════════════════════════════════ -->
-  <section class="tela" id="tela5">
+  <section class="tela" id="tela5" data-secao="S5">
+    <div class="bv-titulo">🌟 Os 3 caminhos do seu jeito de ser na escola</div>
+    <div class="bv-subtitulo">Entenda antes de responder · uma escada de 3 degraus onde um ajuda o outro</div>
+
+    <div class="explica-eixos">
+      <div class="explica-eixos-texto">
+        Pense na sua vida escolar como uma <strong>escada de 3 degraus</strong>. Você sobe um de cada vez · e cada degrau deixa o próximo mais fácil:
+      </div>
+      <div class="explica-degrau explica-degrau-3">
+        <span class="explica-degrau-num">1º</span>
+        <div>
+          <strong>Estar presente</strong> · vir para a escola.<br>
+          <span class="explica-degrau-desc">Quem falta muito perde o fio da história · quem vem faz falta quando some. Sua presença importa para você e para a turma. É o primeiro degrau · sem ele os outros não acontecem.</span>
+        </div>
+      </div>
+      <div class="explica-degrau explica-degrau-2">
+        <span class="explica-degrau-num">2º</span>
+        <div>
+          <strong>Conviver bem</strong> · se dar bem com os colegas.<br>
+          <span class="explica-degrau-desc">Quando o clima é bom, fica mais fácil aprender. Brigas e bagunça atrapalham todo mundo. Quem aprende a resolver com calma ajuda a turma inteira · seja quem briga, quem provoca ou quem fica de fora.</span>
+        </div>
+      </div>
+      <div class="explica-degrau explica-degrau-1">
+        <span class="explica-degrau-num">3º</span>
+        <div>
+          <strong>Aprender</strong> · entender as matérias e os projetos.<br>
+          <span class="explica-degrau-desc">Com presença e bom convívio, aprender fica bem mais leve. Aqui você pode ajudar colegas, pedir ajuda, ou os dois · cada jeito é válido.</span>
+        </div>
+      </div>
+      <div class="explica-eixos-fecho">
+        👉 Na próxima tela você responde como você é em cada um desses 3 caminhos · não existe certo ou errado · seja sincero(a)!
+      </div>
+    </div>
+
+    <div class="btn-grupo">
+      <button class="btn btn-secondary" onclick="proximaTela(4)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(6)">Entendi · Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 6 · PERGUNTAS DOS 3 CAMINHOS (v05.08)               -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela6" data-secao="S6">
+    <div class="bv-titulo">📝 Como você é em cada caminho?</div>
+    <div class="bv-subtitulo">Responda os 3 · na ordem presença → convivência → aprendizagem</div>
+
+    <!-- 1º PRESENÇA -->
+    <div class="campo">
+      <label>1️⃣ 📅 PRESENÇA · Você vem para a escola?</label>
+      <div class="eixo-bloco frequencia">
+        <div class="eixo-opcoes">
+          <div class="eixo-opcao" data-eixo="freq" data-valor="A" onclick="selecionarEixo(this)">A · <strong>Venho quase sempre</strong> · raramente falto</div>
+          <div class="eixo-opcao" data-eixo="freq" data-valor="B" onclick="selecionarEixo(this)">B · Falto às vezes · <strong>tento recuperar</strong></div>
+          <div class="eixo-opcao" data-eixo="freq" data-valor="C" onclick="selecionarEixo(this)">C · Tenho <strong>dificuldade</strong> de vir com regularidade</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2º CONVIVÊNCIA -->
+    <div class="campo">
+      <label>2️⃣ 🤝 CONVIVÊNCIA · Como você se dá com os colegas?</label>
+      <div style="background:var(--amarelo-destaque); padding:10px 14px; border-radius:10px; font-size:14px; margin-bottom:8px; color:var(--cinza-texto);">
+        <strong>Ficar no meio</strong> significa ouvir os dois lados e ajudar a achar uma saída sem tomar partido · sem brigar com palavra ou ato.
+      </div>
+      <div class="eixo-bloco convivencia">
+        <div class="eixo-opcoes">
+          <div class="eixo-opcao" data-eixo="con" data-valor="A" onclick="selecionarEixo(this)">A · Costumo <strong>ficar no meio</strong> · ouço os dois lados e ajudo a turma a resolver na paz</div>
+          <div class="eixo-opcao" data-eixo="con" data-valor="B" onclick="selecionarEixo(this)">B · Já me envolvi em brigas <strong>tomando partido</strong> (defendendo · respondendo na hora · às vezes com palavra ou empurrão) · estou aprendendo a parar antes</div>
+          <div class="eixo-opcao" data-eixo="con" data-valor="C" onclick="selecionarEixo(this)">C · <strong>Evito confusão</strong> · observo de longe · não me meto nem para ajudar</div>
+          <div class="eixo-opcao" data-eixo="con" data-valor="D" onclick="selecionarEixo(this)">D · Às vezes acabo <strong>provocando ou esquentando</strong> a briga (mesmo sem querer) · estou aprendendo a perceber</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3º APRENDIZAGEM -->
+    <div class="campo">
+      <label>3️⃣ 📚 APRENDIZAGEM · Como você lida com as matérias e projetos?</label>
+      <div class="eixo-bloco aprendizagem">
+        <div class="eixo-opcoes">
+          <div class="eixo-opcao" data-eixo="apr" data-valor="A" onclick="selecionarEixo(this)">A · Costumo <strong>AJUDAR</strong> colegas com dificuldade</div>
+          <div class="eixo-opcao" data-eixo="apr" data-valor="B" onclick="selecionarEixo(this)">B · Costumo <strong>PEDIR</strong> ajuda para entender melhor</div>
+          <div class="eixo-opcao" data-eixo="apr" data-valor="C" onclick="selecionarEixo(this)">C · Tanto ajudo quanto peço · depende da matéria</div>
+          <div class="eixo-opcao" data-eixo="apr" data-valor="D" onclick="selecionarEixo(this)">D · Costumo <strong>resolver SOZINHO</strong> · prefiro estudar e pensar por conta própria</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-grupo">
+      <button class="btn btn-secondary" onclick="proximaTela(5)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(7)">Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 7 · TEMA DA SEMANA                                 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela7" data-secao="S7">
     <div class="bv-titulo">🎯 Tema da semana</div>
     <div class="bv-subtitulo">Qual tema transversal ou data comemorativa está ativa esta semana?</div>
 
@@ -1525,15 +2503,15 @@ body {
     </div>
 
     <div class="btn-grupo">
-      <button class="btn btn-secondary" onclick="proximaTela(4)">◀ Voltar</button>
-      <button class="btn btn-primary" onclick="proximaTela(6)">Continuar ▶</button>
+      <button class="btn btn-secondary" onclick="proximaTela(6)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(8)">Continuar ▶</button>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════ -->
   <!-- TELA 6 · CARD ALURA "Faça como eu fiz" (v03.20 cascata) -->
   <!-- ═══════════════════════════════════════════════════════ -->
-  <section class="tela" id="tela6">
+  <section class="tela" id="tela8" data-secao="S8">
     <div class="bv-titulo">📄 Card "Faça como eu fiz"</div>
     <div class="bv-subtitulo">Identifique o bimestre, a unidade, a aula e o card específico</div>
 
@@ -1553,8 +2531,8 @@ body {
       <span class="bloco-titulo">📚 Unidade</span>
 
       <div style="display:flex; gap:12px; margin-top:8px; flex-wrap:wrap;">
-        <div style="flex:0 0 120px;">
-          <label class="sub-label obrigatorio">Contador</label>
+        <div style="flex:0 0 150px;">
+          <label class="sub-label obrigatorio">Esta semana a unidade é</label>
           <select id="unidadeAtual" onchange="atualizarUnidadeDisplay()">
             <option value="">--</option>
             <option value="1">U.01</option>
@@ -1567,8 +2545,8 @@ body {
             <option value="8">U.08</option>
           </select>
         </div>
-        <div style="flex:0 0 120px;">
-          <label class="sub-label obrigatorio">de total</label>
+        <div style="flex:0 0 150px;">
+          <label class="sub-label obrigatorio">Total de unidades neste bimestre</label>
           <select id="unidadeTotal" onchange="atualizarUnidadeDisplay()">
             <option value="2" selected>02</option>
             <option value="3">03</option>
@@ -1580,7 +2558,7 @@ body {
           </select>
         </div>
         <div style="flex:1; min-width:240px;">
-          <label class="sub-label obrigatorio">Descrição da Unidade</label>
+          <label class="sub-label obrigatorio">Descrição / Nome da Unidade</label>
           <input type="text" id="unidadeDescricao" placeholder="Ex: Tipos de dados: criando uma coleção de máquinas">
           <span class="obrig-aviso">⚠ Campo obrigatório</span>
         </div>
@@ -1595,8 +2573,8 @@ body {
       <span class="bloco-titulo">🎯 Aula</span>
 
       <div style="display:flex; gap:12px; margin-top:8px; flex-wrap:wrap;">
-        <div style="flex:0 0 120px;">
-          <label class="sub-label obrigatorio">Contador</label>
+        <div style="flex:0 0 150px;">
+          <label class="sub-label obrigatorio">Nº da aula utilizadas nesta atividade:</label>
           <select id="aulaAtual" onchange="atualizarAulaDisplay()">
             <option value="">--</option>
             <option value="1">01</option><option value="2">02</option>
@@ -1606,8 +2584,8 @@ body {
             <option value="9">09</option><option value="10">10</option>
           </select>
         </div>
-        <div style="flex:0 0 120px;">
-          <label class="sub-label obrigatorio">de total</label>
+        <div style="flex:0 0 150px;">
+          <label class="sub-label obrigatorio">Total de aulas nesta unidade</label>
           <select id="aulaTotal" onchange="atualizarAulaDisplay()">
             <option value="4">04</option><option value="5">05</option>
             <option value="6">06</option><option value="7">07</option>
@@ -1615,12 +2593,12 @@ body {
             <option value="10">10</option>
           </select>
         </div>
-        <div style="flex:0 0 120px;">
-          <label class="sub-label">Nº geral (XX)</label>
+        <div style="flex:0 0 130px;">
+          <label class="sub-label">Nº geral da aula</label>
           <input type="number" id="aulaGeral" placeholder="25" min="1" max="999" onchange="atualizarAulaDisplay()">
         </div>
         <div style="flex:1; min-width:240px;">
-          <label class="sub-label obrigatorio">Descrição da Aula</label>
+          <label class="sub-label obrigatorio">Descrição / Nome da Aula</label>
           <input type="text" id="aulaDescricao" placeholder="Ex: Sorteando elementos">
           <span class="obrig-aviso">⚠ Campo obrigatório</span>
         </div>
@@ -1644,6 +2622,19 @@ body {
       <input type="text" id="projetoOutro" placeholder="Digite qual ferramenta" style="margin-top:12px; display:none;">
     </div>
 
+    <div class="btn-grupo">
+      <button class="btn btn-secondary" onclick="proximaTela(7)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(9)">Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 7 · CARD ESPECÍFICO + CONTEÚDO (v05.00 · M22)       -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela9" data-secao="S9">
+    <div class="bv-titulo">📌 O Card "Faça como eu fiz"</div>
+    <div class="bv-subtitulo">Identifique o card específico e cole o conteúdo</div>
+
     <!-- CARD ESPECÍFICO "Faça como eu fiz" · bloco amarelo (v04.00 · M4) -->
     <div class="bloco-etapa bloco-card-faca">
       <span class="bloco-titulo">📌 Card "Faça como eu fiz" nesta aula</span>
@@ -1666,13 +2657,13 @@ body {
     <!-- CONTEÚDO · bloco branco (v04.00 · M4) -->
     <div class="bloco-etapa bloco-conteudo">
       <span class="bloco-titulo">📝 Conteúdo completo do Card "Faça como eu fiz" <span style="color:var(--vermelho-obrig);font-weight:900;">*</span></span>
-      <textarea id="conteudoCard" placeholder="Cole aqui TUDO que aparece no Card da Alura: enunciado, instruções, perguntas, exemplos..."></textarea>
+      <textarea id="conteudoCard" placeholder="Cole aqui TUDO que aparece no Card da Alura: enunciado, instruções, perguntas, exemplos..." style="min-height:280px;"></textarea>
       <span class="obrig-aviso">⚠ Campo obrigatório · quanto mais completo, melhor o resultado</span>
     </div>
 
     <div class="btn-grupo">
-      <button class="btn btn-secondary" onclick="proximaTela(5)">◀ Voltar</button>
-      <button class="btn btn-primary" onclick="proximaTela(7)">Gerar resultado ▶</button>
+      <button class="btn btn-secondary" onclick="proximaTela(8)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(10)">Gerar resultado ▶</button>
     </div>
   </section>
 
@@ -1680,9 +2671,9 @@ body {
   <!-- TELA 7 · RESULTADO · 2 abas                             -->
   <!-- ═══════════════════════════════════════════════════════ -->
   <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- TELA 7 · GERAR PROMPT (v04.00 · M7 separada da resposta) -->
+  <!-- TELA 8 · GERAR PROMPT (v05.00 · M22 renumerada · M24 inline · M26 botão) -->
   <!-- ═══════════════════════════════════════════════════════ -->
-  <section class="tela" id="tela7">
+  <section class="tela" id="tela10" data-secao="S10">
     <div class="bv-titulo">📝 Seu resultado · 1ª parte · Gerar prompt</div>
     <div class="bv-subtitulo">Passo 1 de 2 · gere o prompt aqui e leve para a IA</div>
 
@@ -1691,11 +2682,11 @@ body {
       <div class="bv-secao-texto">
         <ol>
           <li>Clique em <strong>"Copiar prompt"</strong></li>
-          <li>Abra uma IA (Claude.ai · ChatGPT ou outra)</li>
-          <li>Cole o prompt e envie</li>
+          <li>Abra uma IA · escolha nos cards abaixo (Claude.ai · ChatGPT · ou outra)</li>
+          <li>Cole o prompt na IA e envie</li>
           <li>Aguarde a resposta com os 3 textos em <strong>UM BLOCO copiável</strong></li>
           <li>Use o botão Copiar da própria IA</li>
-          <li>Volte aqui e clique em <strong>"Avançar para colar resposta"</strong> no fim desta página</li>
+          <li>Volte aqui e clique em <strong>"Avançar para colar a resposta da IA"</strong> no fim desta página</li>
         </ol>
       </div>
     </div>
@@ -1703,53 +2694,65 @@ body {
     <div class="prompt-box" id="promptGerado">Preencha todas as telas anteriores para o prompt ser gerado.</div>
 
     <!-- Linha 1: botão Copiar destacado -->
-    <div class="btn-grupo" style="margin-bottom:8px;">
+    <div class="btn-grupo" style="margin-bottom:14px;">
       <button class="btn btn-primary" onclick="copiarPrompt()" style="min-width:280px;">📋 Copiar prompt</button>
     </div>
 
-    <!-- Linha 2: botões de IAs principais + Outros -->
+    <!-- Linha 2: botões de IAs principais -->
     <div class="btn-grupo" style="gap:8px;">
       <button class="btn btn-secondary" onclick="window.open('https://claude.ai', '_blank')">🤖 Claude.ai</button>
       <button class="btn btn-secondary" onclick="window.open('https://chat.openai.com', '_blank')">🤖 ChatGPT</button>
-      <button class="btn btn-secondary" onclick="toggleMenuOutros()">⚙️ Outros ▾</button>
     </div>
 
-    <!-- Menu Outros · expansível inline -->
-    <div id="menuOutros" style="display:none; margin-top:14px; background:var(--branco); border:2px solid var(--roxo-medio); border-radius:14px; padding:18px;">
-      <div style="font-weight:800; color:var(--roxo-conviva); margin-bottom:10px; font-size:15px;">🤖 Outras IAs (texto)</div>
-      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
-        <a href="https://gemini.google.com" target="_blank" class="link-outro">🤖 Gemini (Google)</a>
-        <a href="https://copilot.microsoft.com" target="_blank" class="link-outro">🤖 Copilot (Microsoft)</a>
-        <a href="https://www.perplexity.ai" target="_blank" class="link-outro">🤖 Perplexity</a>
-        <a href="https://chat.deepseek.com" target="_blank" class="link-outro">🤖 DeepSeek</a>
+    <!-- v05.00 · M24 · 3 cards inline por temática (sem 'Outros ▾') -->
+    <div class="cards-ias-tematica">
+      <div class="card-ia-tematica card-ia-texto">
+        <div class="card-ia-titulo">🤖 Outras IAs de Texto</div>
+        <div class="card-ia-links">
+          <a href="https://gemini.google.com" target="_blank" class="link-outro">Gemini (Google)</a>
+          <a href="https://copilot.microsoft.com" target="_blank" class="link-outro">Copilot (Microsoft)</a>
+          <a href="https://www.perplexity.ai" target="_blank" class="link-outro">Perplexity</a>
+          <a href="https://chat.deepseek.com" target="_blank" class="link-outro">DeepSeek</a>
+        </div>
       </div>
-
-      <div style="font-weight:800; color:var(--roxo-conviva); margin-bottom:10px; font-size:15px;">🎨 Gerar imagens (free)</div>
-      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
-        <a href="https://www.bing.com/create" target="_blank" class="link-outro">🎨 Bing Image Creator</a>
-        <a href="https://aitestkitchen.withgoogle.com/tools/image-fx" target="_blank" class="link-outro">🎨 Image FX (Google)</a>
-        <a href="https://leonardo.ai" target="_blank" class="link-outro">🎨 Leonardo.ai</a>
-        <a href="https://www.canva.com/ai-image-generator/" target="_blank" class="link-outro">🎨 Canva AI</a>
+      <div class="card-ia-tematica card-ia-imagem">
+        <div class="card-ia-titulo">🎨 Gerar Imagens (free)</div>
+        <div class="card-ia-links">
+          <a href="https://www.bing.com/create" target="_blank" class="link-outro">Bing Image Creator</a>
+          <a href="https://aitestkitchen.withgoogle.com/tools/image-fx" target="_blank" class="link-outro">Image FX (Google)</a>
+          <a href="https://leonardo.ai" target="_blank" class="link-outro">Leonardo.ai</a>
+          <a href="https://www.canva.com/ai-image-generator/" target="_blank" class="link-outro">Canva AI</a>
+        </div>
       </div>
-
-      <div style="font-weight:800; color:var(--roxo-conviva); margin-bottom:10px; font-size:15px;">🎬 Storyboard · cena a cena · vídeo</div>
-      <div style="display:flex; flex-wrap:wrap; gap:8px;">
-        <a href="https://www.canva.com/storyboards/" target="_blank" class="link-outro">🎬 Canva Storyboard</a>
-        <a href="https://pictory.ai" target="_blank" class="link-outro">🎬 Pictory (trial)</a>
-        <a href="https://app.simpleshow.com" target="_blank" class="link-outro">🎬 simpleshow (free)</a>
+      <div class="card-ia-tematica card-ia-audio">
+        <div class="card-ia-titulo">🎙️ Áudio / Podcast (free)</div>
+        <div class="card-ia-links">
+          <a href="https://elevenlabs.io" target="_blank" class="link-outro">ElevenLabs (voz)</a>
+          <a href="https://ttsmaker.com/pt" target="_blank" class="link-outro">TTSMaker (voz grátis)</a>
+          <a href="https://notebooklm.google.com" target="_blank" class="link-outro">NotebookLM (podcast)</a>
+          <a href="https://suno.com" target="_blank" class="link-outro">Suno (música)</a>
+        </div>
+      </div>
+      <div class="card-ia-tematica card-ia-video">
+        <div class="card-ia-titulo">🎬 Storyboard / Vídeo</div>
+        <div class="card-ia-links">
+          <a href="https://www.canva.com/storyboards/" target="_blank" class="link-outro">Canva Storyboard</a>
+          <a href="https://pictory.ai" target="_blank" class="link-outro">Pictory (trial)</a>
+          <a href="https://app.simpleshow.com" target="_blank" class="link-outro">simpleshow (free)</a>
+        </div>
       </div>
     </div>
 
     <div class="btn-grupo" style="margin-top: 28px;">
-      <button class="btn btn-secondary" onclick="proximaTela(6)">◀ Voltar</button>
-      <button class="btn btn-primary" onclick="proximaTela(8)">Avançar para colar resposta ▶</button>
+      <button class="btn btn-secondary" onclick="proximaTela(9)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(11)">Avançar para colar a resposta da IA ▶</button>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- TELA 8 · COLAR RESPOSTA (v04.00 · M7 separada do prompt) -->
+  <!-- TELA 9 · COLAR RESPOSTA (v05.00 · renumerada de 8 → 9)    -->
   <!-- ═══════════════════════════════════════════════════════ -->
-  <section class="tela" id="tela8">
+  <section class="tela" id="tela11" data-secao="S11">
     <div class="bv-titulo">📥 Seu resultado · 2ª parte · Colar resposta</div>
     <div class="bv-subtitulo">Passo 2 de 2 · cole aqui a resposta da IA</div>
 
@@ -1789,13 +2792,306 @@ body {
       <div class="rodape-fim">═══ FIM ═══</div>
 
       <div class="btn-grupo">
-        <button class="btn btn-success" onclick="baixarDocx()">📥 Baixar como .docx</button>
-        <button class="btn btn-secondary" onclick="copiarTudo()">📋 Copiar tudo</button>
+        <button class="btn btn-primary" onclick="baixarDocx()">📥 Baixar como .docx</button>
+        <button class="btn btn-success" onclick="copiarTudo()">📋 Copiar tudo</button>
       </div>
     </div>
 
     <div class="btn-grupo" style="margin-top: 28px;">
-      <button class="btn btn-secondary" onclick="proximaTela(7)">◀ Voltar ao prompt</button>
+      <button class="btn btn-secondary" onclick="proximaTela(10)">◀ Voltar ao prompt</button>
+      <button class="btn btn-success" onclick="proximaTela(12)">Avançar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 12 · ORIENTAÇÕES GOOGLE · salvar no Docs (v05.20)   -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela12" data-secao="S12">
+    <div class="bv-titulo">💾 Como salvar seu trabalho no Google Docs</div>
+    <div class="bv-subtitulo">Siga o passo a passo · você já copiou os 3 textos, agora é só colar e salvar</div>
+
+    <div class="passo-google">
+      <div class="passo-item">
+        <span class="passo-num">1</span>
+        <div class="passo-texto"><strong>Abra uma nova guia</strong> no navegador (toque no + ou abra outra aba).</div>
+      </div>
+      <div class="passo-item">
+        <span class="passo-num">2</span>
+        <div class="passo-texto"><strong>Entre na sua conta do Google</strong> com o e-mail institucional que termina em <strong>@al.educacao.sp.gov.br</strong> (o e-mail "@al").</div>
+      </div>
+      <div class="passo-item">
+        <span class="passo-num">3</span>
+        <div class="passo-texto">Toque nos <strong>9 pontinhos</strong> (o quadradinho de aplicativos do Google, no canto superior direito).</div>
+      </div>
+      <div class="passo-item">
+        <span class="passo-num">4</span>
+        <div class="passo-texto">Clique no ícone <strong>"Documentos Google"</strong> (Google Docs).</div>
+      </div>
+      <div class="passo-item">
+        <span class="passo-num">5</span>
+        <div class="passo-texto">Clique no <strong>"+"</strong> · <strong>Documento em branco</strong>.</div>
+      </div>
+      <div class="passo-item">
+        <span class="passo-num">6</span>
+        <div class="passo-texto"><strong>Cole os textos copiados</strong> (toque e segure → Colar, ou <strong>Ctrl + V</strong>).</div>
+      </div>
+      <div class="passo-item">
+        <span class="passo-num">7</span>
+        <div class="passo-texto">Vá no canto <strong>superior esquerdo</strong>, onde está escrito <strong>"Documento sem título"</strong>.</div>
+      </div>
+      <div class="passo-item">
+        <span class="passo-num">8</span>
+        <div class="passo-texto"><strong>Renomeie</strong> para <strong>"Faça da aula XX"</strong> (troque XX pelo número da aula).</div>
+      </div>
+      <div class="passo-item">
+        <span class="passo-num">9</span>
+        <div class="passo-texto">Dê <strong>Enter</strong> para salvar · o Google Docs guarda sozinho.</div>
+      </div>
+      <div class="passo-item passo-final">
+        <span class="passo-num">↩</span>
+        <div class="passo-texto"><strong>Volte aqui nesta página</strong> para continuar a atividade.</div>
+      </div>
+    </div>
+
+    <div class="bv-secao bv-cor-azul">
+      <div class="bv-secao-titulo">🔗 Atalhos úteis</div>
+      <div class="bv-secao-texto">
+        <a href="https://docs.google.com" target="_blank" class="link-outro">Abrir Google Docs</a>
+        <a href="https://accounts.google.com" target="_blank" class="link-outro">Entrar na conta Google</a>
+      </div>
+    </div>
+
+    <div class="btn-grupo" style="margin-top: 28px;">
+      <button class="btn btn-secondary" onclick="proximaTela(11)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(13)">Já salvei · Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 13 · AUTO-AVALIAÇÃO (v05.00 · M31)                  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela13" data-secao="S13">
+    <div class="bv-titulo">✅ Você alcançou os objetivos?</div>
+    <div class="bv-subtitulo">Marque os objetivos que você sente que conseguiu cumprir nesta atividade</div>
+
+    <div class="auto-aval">
+      <div class="auto-aval-item" data-obj="1">
+        <span class="auto-aval-check">☐</span>
+        <span class="auto-aval-texto">Refleti sobre uma profissão que admiro</span>
+      </div>
+      <div class="auto-aval-item" data-obj="2">
+        <span class="auto-aval-check">☐</span>
+        <span class="auto-aval-texto">Sei qual aula estou estudando (Unidade, Aula e Card)</span>
+      </div>
+      <div class="auto-aval-item" data-obj="3">
+        <span class="auto-aval-check">☐</span>
+        <span class="auto-aval-texto">Conectei o conteúdo da aula com a minha vida</span>
+      </div>
+      <div class="auto-aval-item" data-obj="4">
+        <span class="auto-aval-check">☐</span>
+        <span class="auto-aval-texto">Apliquei ideias novas ao Faça como eu fiz, ligadas ao tema da semana</span>
+      </div>
+      <div class="auto-aval-item" data-obj="5">
+        <span class="auto-aval-check">☐</span>
+        <span class="auto-aval-texto">Produzi os 3 textos integrados</span>
+      </div>
+      <div class="auto-aval-item" data-obj="6">
+        <span class="auto-aval-check">☐</span>
+        <span class="auto-aval-texto">Pratiquei o uso de IA como ferramenta de escrita</span>
+      </div>
+      <div class="auto-aval-item" data-obj="7">
+        <span class="auto-aval-check">☐</span>
+        <span class="auto-aval-texto">Salvei o resultado em documento (.docx)</span>
+      </div>
+    </div>
+
+    <div class="auto-aval-resumo" id="autoAvalResumo">Marque os objetivos acima para ver o resumo aqui.</div>
+
+    <div class="btn-grupo" style="margin-top: 28px;">
+      <button class="btn btn-secondary" onclick="proximaTela(12)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(14)">Avançar para a pesquisa ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 14 · PESQUISA TEXTO 1 (v05.22 · CLD-075)            -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela14" data-secao="S14">
+    <div class="bv-titulo">📘 Texto 1 · Como Profissional</div>
+    <div class="bv-subtitulo" id="resumoTexto1Pesq">Você se imagina já formado, exercendo a profissão que admira.</div>
+    <div class="texto-titulo-ia" id="tituloTexto1Pesq"></div>
+    <div class="texto-leitura" id="leituraTexto1"></div>
+    <div class="campo">
+      <label class="obrigatorio" style="font-size:16px;">1 · Qual trecho deste texto você mais gostou?</label>
+      <div class="hint" style="margin-bottom:8px;">Copie e cole o trecho · pode ser um parágrafo ou só uma frase.</div>
+      <textarea id="pesq1Trecho" placeholder="Cole aqui o trecho que mais te marcou" style="min-height:120px;"></textarea>
+    </div>
+    <div class="campo">
+      <label style="font-size:16px;">2 · Ficou com dúvida em alguma parte deste texto?</label>
+      <div class="hint" style="margin-bottom:8px;">Se sim, diga o número do parágrafo (ex: T1·§2) e descreva. Se não, deixe em branco.</div>
+      <textarea id="pesq1Duvida" placeholder="Ex: 'Em T1·§2 não entendi...' · ou deixe vazio" style="min-height:100px;"></textarea>
+    </div>
+    <div class="btn-grupo" style="margin-top: 28px;">
+      <button class="btn btn-secondary" onclick="proximaTela(13)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(15)">Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 15 · PESQUISA TEXTO 2 (v05.22 · CLD-075)            -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela15" data-secao="S15">
+    <div class="bv-titulo">📗 Texto 2 · Como Estudante</div>
+    <div class="bv-subtitulo" id="resumoTexto2Pesq">Você, hoje, como estudante que faz a diferença na escola.</div>
+    <div class="texto-titulo-ia" id="tituloTexto2Pesq"></div>
+    <div class="texto-leitura" id="leituraTexto2"></div>
+    <div class="campo">
+      <label class="obrigatorio" style="font-size:16px;">1 · Qual trecho deste texto você mais gostou?</label>
+      <div class="hint" style="margin-bottom:8px;">Copie e cole o trecho · pode ser um parágrafo ou só uma frase.</div>
+      <textarea id="pesq2Trecho" placeholder="Cole aqui o trecho que mais te marcou" style="min-height:120px;"></textarea>
+    </div>
+    <div class="campo">
+      <label style="font-size:16px;">2 · Ficou com dúvida em alguma parte deste texto?</label>
+      <div class="hint" style="margin-bottom:8px;">Se sim, diga o número do parágrafo (ex: T2·§2) e descreva. Se não, deixe em branco.</div>
+      <textarea id="pesq2Duvida" placeholder="Ex: 'Em T2·§2 não entendi...' · ou deixe vazio" style="min-height:100px;"></textarea>
+    </div>
+    <div class="btn-grupo" style="margin-top: 28px;">
+      <button class="btn btn-secondary" onclick="proximaTela(14)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(16)">Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 16 · PESQUISA TEXTO 3 (v05.22 · CLD-075)            -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela16" data-secao="S16">
+    <div class="bv-titulo">📕 Texto 3 · Integrado</div>
+    <div class="bv-subtitulo" id="resumoTexto3Pesq">Você e um profissional convidado trabalham juntos numa ação.</div>
+    <div class="texto-titulo-ia" id="tituloTexto3Pesq"></div>
+    <div class="texto-leitura" id="leituraTexto3"></div>
+    <div class="campo">
+      <label class="obrigatorio" style="font-size:16px;">1 · Qual trecho deste texto você mais gostou?</label>
+      <div class="hint" style="margin-bottom:8px;">Copie e cole o trecho · pode ser um parágrafo ou só uma frase.</div>
+      <textarea id="pesq3Trecho" placeholder="Cole aqui o trecho que mais te marcou" style="min-height:120px;"></textarea>
+    </div>
+    <div class="campo">
+      <label style="font-size:16px;">2 · Ficou com dúvida em alguma parte deste texto?</label>
+      <div class="hint" style="margin-bottom:8px;">Se sim, diga o número do parágrafo (ex: T3·§2) e descreva. Se não, deixe em branco.</div>
+      <textarea id="pesq3Duvida" placeholder="Ex: 'Em T3·§2 não entendi...' · ou deixe vazio" style="min-height:100px;"></textarea>
+    </div>
+    <div class="btn-grupo" style="margin-top: 28px;">
+      <button class="btn btn-secondary" onclick="proximaTela(15)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="proximaTela(17)">Continuar ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 17 · PESQUISA FINAL · escolha do texto preferido     -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela17" data-secao="S17">
+    <div class="bv-titulo">📝 Pesquisa final</div>
+    <div class="bv-subtitulo">Sua opinião ajuda a melhorar a atividade · 3 perguntas curtas</div>
+
+    <!-- Pergunta 1 -->
+    <div class="campo">
+      <label class="obrigatorio" style="font-size:17px;">1 · Qual texto você mais gostou?</label>
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top:10px;">
+        <div class="card-opcao" data-pesq-texto="T1" onclick="selecionarPesqTexto(this)">
+          <span class="emoji">📘</span>
+          Texto 1 · Como Profissional
+        </div>
+        <div class="card-opcao" data-pesq-texto="T2" onclick="selecionarPesqTexto(this)">
+          <span class="emoji">📗</span>
+          Texto 2 · Como Estudante
+        </div>
+        <div class="card-opcao" data-pesq-texto="T3" onclick="selecionarPesqTexto(this)">
+          <span class="emoji">📕</span>
+          Texto 3 · Integrado
+        </div>
+      </div>
+    </div>
+
+    <!-- Pergunta 2 -->
+    <div class="campo">
+      <label class="obrigatorio" style="font-size:17px;">2 · Qual trecho do texto escolhido você mais gostou?</label>
+      <div class="hint" style="margin-bottom:8px;">Copie e cole o trecho aqui · pode ser parágrafo inteiro ou só uma frase</div>
+      <textarea id="pesqTrecho" placeholder="Cole aqui o trecho que mais te marcou" style="min-height:140px;"></textarea>
+    </div>
+
+    <!-- Pergunta 3 -->
+    <div class="campo">
+      <label style="font-size:17px;">3 · Você ficou em dúvida em alguma parte?</label>
+      <div class="hint" style="margin-bottom:8px;">Se sim, faça referência ao código da seção (ex: S3.2) ou ao número do parágrafo (ex: T1·§2) e descreva sua dúvida. Se não, deixe em branco.</div>
+      <textarea id="pesqDuvida" placeholder="Ex: 'Em T2·§3 não entendi o que significa...' · ou deixe vazio se não houve dúvida" style="min-height:140px;"></textarea>
+    </div>
+
+    <!-- v05.00 · M34 · Card "Próxima atividade" (placeholder) -->
+    <div class="card-proxima-atividade">
+      <div class="card-prox-titulo">🚀 Próxima atividade</div>
+      <div class="card-prox-subtitulo">Agora é hora de produzir!</div>
+      <ul class="card-prox-lista">
+        <li>Produção principal do Faça como eu fiz</li>
+        <li>Aplicar suas reflexões em criação concreta</li>
+        <li><strong>6º e 7º</strong> · programação no StartLab</li>
+        <li><strong>8º e 9º</strong> · produção em ferramentas (Canva · Google Docs · PowerPoint)</li>
+        <li>Entrega final no Sala do Futuro</li>
+      </ul>
+      <button class="btn btn-em-breve" disabled title="Em breve · CM-FACA-PRODUC_001">
+        🔗 Abrir próxima atividade · em breve
+      </button>
+    </div>
+
+    <div class="btn-grupo" style="margin-top: 28px;">
+      <button class="btn btn-secondary" onclick="proximaTela(16)">◀ Voltar</button>
+      <button class="btn btn-success" onclick="finalizarPesquisa(); proximaTela(18);">✅ Finalizar e ir para entrega ▶</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TELA 12 · ENTREGA DA ATIVIDADE (v05.02 · M49)            -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="tela" id="tela18" data-secao="S18">
+    <div class="bv-titulo">🎓 Entregar a atividade</div>
+    <div class="bv-subtitulo">Último passo · você precisa entregar para o professor receber</div>
+
+    <div class="bv-secao bv-cor-verde">
+      <div class="bv-secao-titulo">✅ Antes de entregar, confira</div>
+      <div class="bv-secao-texto">
+        <ul>
+          <li>Salvei o documento com os 3 textos (.docx)?</li>
+          <li>Coloquei meu <strong>nome completo e número de chamada</strong>?</li>
+          <li>Respondi a pesquisa final?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="entrega-cards">
+      <div class="entrega-card entrega-sala">
+        <div class="entrega-card-titulo">🏫 Sala do Futuro</div>
+        <div class="entrega-card-desc">Entregue sua atividade na plataforma oficial.</div>
+        <a href="https://saladofuturo.educacao.sp.gov.br" target="_blank" class="btn btn-success" style="text-decoration:none; display:inline-block; margin-top:8px;">Abrir Sala do Futuro ▶</a>
+      </div>
+      <div class="entrega-card entrega-classroom">
+        <div class="entrega-card-titulo">📚 Google Sala de Aula</div>
+        <div class="entrega-card-desc">Se a entrega for pelo Classroom, acesse aqui.</div>
+        <a href="https://classroom.google.com" target="_blank" class="btn btn-secondary" style="text-decoration:none; display:inline-block; margin-top:8px;">Abrir Classroom ▶</a>
+      </div>
+      <div class="entrega-card entrega-form">
+        <div class="entrega-card-titulo">📝 Confirmar conclusão</div>
+        <div class="entrega-card-desc">Se o professor pedir, confirme aqui que você terminou (link em breve).</div>
+        <button class="btn btn-em-breve" disabled title="Em breve" style="margin-top:8px;">Formulário · em breve</button>
+      </div>
+    </div>
+
+    <div class="bv-secao bv-cor-azul" style="margin-top:22px;">
+      <div class="bv-secao-titulo">🎉 Você concluiu!</div>
+      <div class="bv-secao-texto">
+        Parabéns por completar a atividade interpretativa do Faça como eu fiz. Não esqueça de entregar acima · só assim o professor recebe seu trabalho.
+      </div>
+    </div>
+
+    <div class="btn-grupo" style="margin-top: 28px;">
+      <button class="btn btn-secondary" onclick="proximaTela(17)">◀ Voltar</button>
     </div>
   </section>
 
@@ -1821,6 +3117,7 @@ const estado = {
   cargos: [],
   gremioCargo: '',
   formaturaCargo: '',
+  cienciaFuncao: '',
   perfil: { apr: null, con: null, freq: null },
   area: '',
   profissao: '',
@@ -1889,7 +3186,7 @@ const PROFISSOES = {
     '💉 Cirurgião(ã) Plástico(a)', '🦷 Dentista', '🩺 Enfermeiro(a)',
     '💊 Farmacêutico(a)', '🤸 Fisioterapeuta', '🏃‍♂️ Fisioterapeuta esportiva',
     '👄 Fonoaudiólogo(a)', '👨‍⚕️ Médico(a)', '🔪 Médico(a) cirurgião(ã)',
-    '🧠 Médico(a) neurologista', '👶 Médico(a) pediatra', '🥗 Nutricionista',
+    '🧠 Médico(a) neurologista', '👶 Médico(a) pediatra', '🎗️ Médico(a) oncologista', '🥗 Nutricionista',
     '👶 Pediatra', '📷 Radiologista', '🐾 Veterinário(a)', '🐬 Veterinário(a) Marinho(a)'
   ],
   'corpo-movimento': [
@@ -1918,6 +3215,7 @@ const PROFISSOES = {
     '🌾 Agrônomo(a)', '🌌 Astrofísico(a)', '🔭 Astrônomo(a)',
     '👨‍🚀 Astronauta', '🧬 Biólogo(a)', '🐠 Biólogo(a) Marinho(a)',
     '⚛️ Físico(a)', '🪨 Geólogo(a)', '🦖 Paleontólogo(a)',
+    '🔬 Perito(a) Forense',
     '⚗️ Químico(a)', '🚜 Técnico(a) Agropecuário(a)'
   ],
   'engenharia': [
@@ -1928,11 +3226,12 @@ const PROFISSOES = {
   'direito': [
     '⚖️ Advogado(a)', '⚖️ Advogado(a) Criminalista', '🛡️ Defensor(a) público(a)',
     '⚖️ Juiz(a)', '⚖️ Juiz(a) Criminalista', '🤝 Mediador(a) jurídico(a)',
-    '🔍 Perito(a) Criminal', '⚖️ Promotor(a)'
+    '⚖️ Promotor(a)'
   ],
   'seguranca': [
     '🚒 Bombeiro(a)', '👮 Delegado(a)', '🔍 Detetive',
     '👮 Guarda Municipal', '🔍 Investigador(a)', '🪖 Militar / Exército / Marinha',
+    '🕵️ Perito(a) Criminal',
     '🔐 Perito(a) cibernético(a)', '👮 Policial (Civil/Militar)',
     '🌳 Policial Ambiental', '🔐 Policial cibernético(a)'
   ],
@@ -1970,32 +3269,59 @@ const PROFISSOES = {
 // "Não ocupo cargo formal" SEMPRE por ÚLTIMO
 // ════════════════════════════════════════════════════════
 const CARGOS_COMUNS = [
-  { id: 'acolhedor',    emoji: '🤝', nome: 'Acolhedor(a)' },
-  { id: 'lider',        emoji: '⭐', nome: 'Líder de Turma' },
-  { id: 'vice-lider',   emoji: '✨', nome: 'Vice-Líder de Turma' },
-  { id: 'lider-clube',  emoji: '🎯', nome: 'Líder de Clube' },
-  { id: 'mon-hardware', emoji: '🔧', nome: 'Monitor(a) de Hardware' },
-  { id: 'mon-software', emoji: '💻', nome: 'Monitor(a) de Software' },
-  { id: 'lider-equipe', emoji: '🤖', nome: 'Líder de Equipe (Tec/Rob)' }
+  { id: 'acolhedor',    emoji: '🤝', nome: 'Acolhedor(a)',
+    desc: 'Recebe colegas novos · ajuda quem chegou depois · facilita integração' },
+  { id: 'lider',        emoji: '⭐', nome: 'Líder de Turma',
+    desc: 'Representa a turma em decisões · leva demandas ao professor' },
+  { id: 'vice-lider',   emoji: '✨', nome: 'Vice-Líder de Turma',
+    desc: 'Apoia a liderança · substitui em ausências' },
+  { id: 'lider-clube',  emoji: '🎯', nome: 'Líder de Clube',
+    desc: 'Coordena clube/grupo temático · organiza encontros' },
+  { id: 'mon-hardware', emoji: '🔧', nome: 'Monitor(a) de Hardware',
+    desc: 'Entrega/recolhe equipamentos · coloca para carregar · cuida de mouse/teclado/mousepad · orienta funções das teclas' },
+  // v05.00 · M13 · Monitor de Software dividido em 4 sub-cargos
+  { id: 'mon-sw-startlab',  emoji: '🚀', nome: 'Monitor(a) Software · StartLab',
+    desc: 'Ajuda colegas com erros no StartLab · orienta uso da plataforma' },
+  { id: 'mon-sw-prof',      emoji: '📚', nome: 'Monitor(a) Software · Atividades Prof.',
+    desc: 'Apoia em atividades digitais do professor · Sala do Futuro · plataformas escolares' },
+  { id: 'mon-sw-apps',      emoji: '🎨', nome: 'Monitor(a) Software · Outros Apps',
+    desc: 'Apoia em apps como Canva · Google Docs · PowerPoint' },
+  { id: 'mon-sw-microbit',  emoji: '😊', nome: 'Monitor(a) de Microbit',
+    desc: 'Apoia colegas com placa Microbit · programação por blocos da Microsoft' },
+  { id: 'lider-equipe', emoji: '🤖', nome: 'Líder de Equipe (Tec/Rob)',
+    desc: 'Coordena equipe de competição Tec/Rob · alinha atividades' },
+  // v05.00 · M15 · novo cargo Logística
+  { id: 'logistica',    emoji: '📦', nome: 'Logística',
+    desc: 'Ajuda a juntar carteiras/cadeiras para formar grupos · devolve ao lugar no fim da aula' },
+  // v05.15 · CLD-067 · Projeto CNPq "+Ciências na Escola" (7º/8º/9º) · 1 card + cascata (Bolsista/Voluntário)
+  { id: 'ciencias', emoji: '🔬', nome: 'Projeto · +Ciências na Escola',
+    desc: 'Iniciação científica (CNPq) · escolha sua função ao selecionar', anos: ['7','8','9'] }
 ];
 
 const CARGOS_9ANO = [
-  { id: 'jap',       emoji: '🏛️', nome: 'JAP (Jovens em Ação)' },
-  { id: 'gremio',    emoji: '🗳️', nome: 'Gremista' },
-  { id: 'formatura', emoji: '🎓', nome: 'Comissão de Formatura' },
-  { id: 'vendas-5a', emoji: '🍬', nome: 'Vendas na 5ª feira' }
+  { id: 'jap',       emoji: '🏛️', nome: 'JAP (Jovens em Ação)',
+    desc: 'Participa do JAP · ações sociais e protagonismo juvenil' },
+  { id: 'gremio',    emoji: '🗳️', nome: 'Gremista',
+    desc: 'Membro do Grêmio Estudantil · representa estudantes em decisões da escola' },
+  { id: 'formatura', emoji: '🎓', nome: 'Comissão de Formatura',
+    desc: 'Organiza a formatura do 9º ano · cerimônia · lembranças · eventos' },
+  { id: 'vendas-5a', emoji: '🍬', nome: 'Vendas na 5ª feira',
+    desc: 'Vende lanches/doces às quintas para arrecadar fundos da formatura' }
 ];
 
 // Cards de IC · só aparecem em MODO ADMIN (ocultos para alunos até listas oficiais chegarem)
 const CARGOS_IC_9ANO = [
-  { id: 'bolsista-ic', emoji: '🔬', nome: 'Bolsista IC', admin: true }
+  { id: 'bolsista-ic', emoji: '🔬', nome: 'Bolsista IC', admin: true,
+    desc: 'Bolsista de Iniciação Científica · projeto de pesquisa com orientação' }
 ];
 const CARGOS_IC_8ANO = [
-  { id: 'voluntario-ic', emoji: '🌱', nome: 'Voluntário IC', admin: true }
+  { id: 'voluntario-ic', emoji: '🌱', nome: 'Voluntário IC', admin: true,
+    desc: 'Voluntário em Iniciação Científica · apoia projetos de pesquisa' }
 ];
 
 // Cargo "Não ocupo" SEMPRE último
-const CARGO_SEM = { id: 'sem-cargo', emoji: '👤', nome: 'Não ocupo cargo formal' };
+const CARGO_SEM = { id: 'sem-cargo', emoji: '👤', nome: 'Não ocupo cargo formal',
+  desc: 'Atuo sem cargo oficial · contribuo de outras formas' };
 
 // Cascata Comissão de Formatura · funções tradicionais
 const FUNCOES_FORMATURA = [
@@ -2068,13 +3394,17 @@ function toggleModoAdmin() {
 // Título letra por letra colorida + relógio de Brasília
 // ════════════════════════════════════════════════════════
 function inicializarBarra() {
-  // Renderiza título letra por letra para a animação de cor pulsante funcionar
+  // v05.02 · colore por PALAVRA com ciclo de cores · corrige "eu fiz" branco
   const titulo = '🚀 Faça como eu fiz';
+  const cores = ['#FFD56B', '#FF9F6B', '#FF7B7B', '#C0E08E', '#7BCFE0', '#B8A0D8'];
   const el = document.getElementById('barraTitulo');
   if (el) {
-    el.innerHTML = titulo.split('').map(c =>
-      c === ' ' ? '<span>&nbsp;</span>' : `<span>${c}</span>`
-    ).join('');
+    let ci = 0;
+    el.innerHTML = titulo.split(' ').map(palavra => {
+      const cor = cores[ci % cores.length];
+      ci++;
+      return `<span class="palavra-titulo" style="color:${cor};">${palavra}</span>`;
+    }).join('<span>&nbsp;</span>');
   }
   atualizarRelogio();
   setInterval(atualizarRelogio, 1000);
@@ -2138,6 +3468,17 @@ const NOMES_BR = {
   'robson': 'M', 'rogerio': 'M', 'romero': 'M', 'samir': 'M', 'sebastiao': 'M',
   'simao': 'M', 'tadeu': 'M', 'thomas': 'M', 'valdir': 'M', 'vicente': 'M',
   'vinicius': 'M', 'walter': 'M', 'jhonatan': 'M', 'jhow': 'M', 'jhoe': 'M',
+  // ═══ v05.02 · M51 · masculinos americanizados/aportuguesados comuns no Brasil ═══
+  'wellington': 'M', 'jhonny': 'M', 'johnny': 'M', 'jhon': 'M', 'john': 'M',
+  'maycon': 'M', 'maicon': 'M', 'brayan': 'M', 'bryan': 'M', 'jefferson': 'M',
+  'wanderson': 'M', 'cleiton': 'M', 'kleber': 'M', 'deivid': 'M', 'deividson': 'M',
+  'washington': 'M', 'emerson': 'M', 'edison': 'M', 'wendel': 'M', 'wendell': 'M',
+  'cristopher': 'M', 'christopher': 'M', 'richard': 'M', 'michael': 'M', 'maicol': 'M',
+  'steve': 'M', 'steven': 'M', 'kevyn': 'M', 'kewin': 'M', 'jackson': 'M',
+  'wilson': 'M', 'nilson': 'M', 'gerson': 'M', 'jhonatas': 'M', 'jonathan': 'M',
+  'jonatha': 'M', 'cleberson': 'M', 'wesley': 'M', 'weslley': 'M', 'wallisson': 'M',
+  'allison': 'M', 'alisson': 'M', 'dayvid': 'M', 'maykon': 'M', 'thauan': 'M',
+  'mike': 'M', 'tony': 'M', 'denilson': 'M', 'gilson': 'M', 'adilson': 'M',
   // ═══ FEMININOS ═══
   'maria': 'F', 'ana': 'F', 'beatriz': 'F', 'julia': 'F', 'julia': 'F',
   'isabela': 'F', 'isabella': 'F', 'sofia': 'F', 'sophia': 'F', 'helena': 'F',
@@ -2170,8 +3511,23 @@ const NOMES_BR = {
   'leila': 'F', 'lorena': 'F', 'maitê': 'F', 'maite': 'F', 'malu': 'F',
   'milena': 'F', 'mirela': 'F', 'naomi': 'F', 'pamela': 'F', 'penelope': 'F',
   'safira': 'F', 'stefany': 'F', 'tais': 'F', 'thais': 'F', 'valentina': 'F',
-  'wilkenya': 'F', 'zara': 'F'
+  'wilkenya': 'F', 'zara': 'F',
+  // ═══ v05.02 · M51 · femininos americanizados/aportuguesados comuns no Brasil ═══
+  'jennifer': 'F', 'jenifer': 'F', 'jheniffer': 'F', 'jhennyfer': 'F', 'dayane': 'F',
+  'dayana': 'F', 'mayara': 'F', 'maiara': 'F', 'tainara': 'F', 'thainara': 'F',
+  'sammya': 'F', 'karen': 'F', 'karem': 'F', 'kethellyn': 'F', 'ketellyn': 'F',
+  'mikaela': 'F', 'mickaela': 'F', 'sharon': 'F', 'wkellen': 'F', 'tamires': 'F',
+  'thamires': 'F', 'camily': 'F', 'emily': 'F', 'emilly': 'F', 'kimberly': 'F',
+  'kimberlly': 'F', 'mayke': 'F', 'mayra': 'F', 'thaynara': 'F', 'dayanne': 'F',
+  'geovanna': 'F', 'jhenyfer': 'F', 'kethlyn': 'F', 'ketlyn': 'F', 'ketlin': 'F',
+  'evellyn': 'F', 'evelin': 'F', 'rayssa': 'F', 'raissa': 'F', 'thayna': 'F',
+  'tayna': 'F', 'mirella': 'F', 'jhulia': 'F', 'cristiane': 'F', 'wany': 'F',
+  'shirley': 'F', 'gleice': 'F', 'gleicy': 'F', 'mayane': 'F', 'taynara': 'F'
 };
+
+// v05.02 · M51 · regra de terminação extra para nomes americanizados (fallback)
+const TERM_AMERICANIZADO_M = ['son', 'ton', 'ssan', 'der', 'mer', 'ney'];
+const TERM_AMERICANIZADO_F = ['elly', 'ely', 'illy', 'ily', 'yn', 'lyn', 'anne'];
 
 // Nomes verdadeiramente neutros · sempre cair no manual
 const NOMES_NEUTROS = new Set([
@@ -2180,6 +3536,42 @@ const NOMES_NEUTROS = new Set([
 
 function normalizar(s) {
   return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+// ════════════════════════════════════════════════════════
+// v05.02 · M40 · Corretor conservador de digitação do nome
+// Só sugere se o nome digitado estiver a 1 letra de distância
+// de um nome MUITO comum do banco · nunca bloqueia · sempre opcional.
+// ════════════════════════════════════════════════════════
+function distanciaLevenshtein(a, b) {
+  const m = a.length, n = b.length;
+  const d = Array.from({length: m+1}, (_, i) => [i, ...Array(n).fill(0)]);
+  for (let j = 0; j <= n; j++) d[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      const custo = a[i-1] === b[j-1] ? 0 : 1;
+      d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + custo);
+    }
+  }
+  return d[m][n];
+}
+
+function sugerirCorrecaoNome(primeiroDigitado) {
+  const p = normalizar(primeiroDigitado);
+  if (p.length < 4) return null;          // muito curto · não arrisca
+  if (NOMES_BR[p]) return null;           // já é nome conhecido · não sugere
+  let melhor = null, melhorDist = 99;
+  for (const nome in NOMES_BR) {
+    if (Math.abs(nome.length - p.length) > 1) continue;  // só comprimentos próximos
+    const dist = distanciaLevenshtein(p, nome);
+    if (dist < melhorDist) { melhorDist = dist; melhor = nome; }
+  }
+  // Conservador · só sugere se distância exatamente 1 (1 letra trocada/faltando/sobrando)
+  if (melhorDist === 1 && melhor) {
+    // Capitaliza a sugestão
+    return melhor.charAt(0).toUpperCase() + melhor.slice(1);
+  }
+  return null;
 }
 
 function detectarGenero(nomeCompleto) {
@@ -2206,6 +3598,14 @@ function detectarGenero(nomeCompleto) {
   // Terminação em S · maioria masculina (Lucas, Mateus, Carlos, mas Iris/Ines = F)
   if (ultima === 's') return 'M';
 
+  // v05.02 · M51 · terminações americanizadas (fallback antes do manual)
+  for (const t of TERM_AMERICANIZADO_F) {
+    if (primeiro.endsWith(t)) return 'F';
+  }
+  for (const t of TERM_AMERICANIZADO_M) {
+    if (primeiro.endsWith(t)) return 'M';
+  }
+
   // Ambíguo · cai no manual
   return null;
 }
@@ -2225,10 +3625,31 @@ function gerarFolhas() {
   const container = document.getElementById('folhasContainer');
   if (!container) return;
   const totalFolhas = 18;
+
+  // v05.05 · folhas só nas FAIXAS LATERAIS (fora do card central)
+  // card tem max-width 880px centralizado · calcula a margem livre de cada lado
+  function posicaoLateral() {
+    const larguraTela = window.innerWidth;
+    const larguraCard = Math.min(880, larguraTela - 24);
+    const margemLivre = (larguraTela - larguraCard) / 2;
+    // Se a tela é estreita (margem pequena), espalha pouco nas bordas extremas
+    if (margemLivre < 60) {
+      // tela estreita · folhas só nos 6% de cada extremo
+      return Math.random() < 0.5
+        ? Math.random() * 6
+        : 94 + Math.random() * 6;
+    }
+    // tela larga · folhas dentro das margens laterais (em vw)
+    const margemVw = (margemLivre / larguraTela) * 100;
+    return Math.random() < 0.5
+      ? Math.random() * margemVw
+      : (100 - margemVw) + Math.random() * margemVw;
+  }
+
   for (let i = 0; i < totalFolhas; i++) {
     const folha = document.createElement('div');
     folha.className = 'folha';
-    folha.style.left = (Math.random() * 100) + 'vw';
+    folha.style.left = posicaoLateral() + 'vw';
     folha.style.animationDuration = (10 + Math.random() * 12) + 's';
     folha.style.animationDelay = (Math.random() * 15) + 's';
     folha.innerHTML = FOLHAS_SVG[Math.floor(Math.random() * FOLHAS_SVG.length)];
@@ -2244,6 +3665,7 @@ document.addEventListener('DOMContentLoaded', function() {
   renderizarAreas();
   renderizarTemas();
   gerarFolhas();
+  inicializarAutoAval();  // v05.00 · M31
 
   // Listener do campo nome · detecção em tempo real
   const inputNome = document.getElementById('nomeCompleto');
@@ -2281,8 +3703,43 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
     });
+
+    // v05.02 · M40 · ao terminar de digitar (blur), checa erro de digitação
+    inputNome.addEventListener('blur', function() {
+      const nome = this.value.trim();
+      if (!nome || nome.length < 4) return;
+      const primeiro = nome.split(/\s+/)[0];
+      const sugestao = sugerirCorrecaoNome(primeiro);
+      const box = document.getElementById('sugestaoNome');
+      const txt = document.getElementById('sugestaoNomeTexto');
+      if (sugestao && normalizar(sugestao) !== normalizar(primeiro)) {
+        estado._sugestaoNome = sugestao;
+        estado._nomeOriginal = primeiro;
+        txt.innerHTML = `Você digitou <strong>${primeiro}</strong>. Você quis dizer <strong>${sugestao}</strong>?`;
+        box.style.display = 'block';
+      } else {
+        box.style.display = 'none';
+      }
+    });
   }
 });
+
+// v05.02 · M40 · aceitar/recusar sugestão de correção de nome
+function aceitarSugestaoNome() {
+  const input = document.getElementById('nomeCompleto');
+  if (input && estado._sugestaoNome && estado._nomeOriginal) {
+    // Substitui só o primeiro nome, preserva sobrenomes
+    const partes = input.value.trim().split(/\s+/);
+    partes[0] = estado._sugestaoNome;
+    input.value = partes.join(' ');
+    input.dispatchEvent(new Event('input'));
+  }
+  document.getElementById('sugestaoNome').style.display = 'none';
+}
+
+function recusarSugestaoNome() {
+  document.getElementById('sugestaoNome').style.display = 'none';
+}
 
 function renderizarAreas() {
   const grid = document.getElementById('areasGrid');
@@ -2307,7 +3764,12 @@ function renderizarTemas() {
             <span class="tema-nome">${t.nome}</span>
             <div class="aviso-sala-futuro">
               <span class="aviso-titulo">📢 Atenção · verifique antes de digitar</span>
-              Veja se há <strong>notificação no Sala do Futuro</strong> com a temática ou ação da semana. Se houver, traga essa informação para este campo.
+              Veja se há <strong>notificação no Sala do Futuro</strong> com a temática ou ação da semana. Se houver, copie a informação assim:
+              <ul style="margin:8px 0 4px 18px; padding:0; font-size:14px; line-height:1.7;">
+                <li>Selecionar o texto: <strong>Ctrl + A</strong></li>
+                <li>Copiar: <strong>Ctrl + C</strong></li>
+                <li>Colar no campo abaixo: <strong>Ctrl + V</strong></li>
+              </ul>
             </div>
           </div>
         </div>
@@ -2328,60 +3790,147 @@ function renderizarTemas() {
 
 function renderizarCargos(ano) {
   const grid = document.getElementById('cardsCargo');
-  let lista = [...CARGOS_COMUNS];
 
-  // Cargos exclusivos de 9º ano
-  if (ano === '9') {
-    lista = lista.concat(CARGOS_9ANO);
-    if (estado.modoAdmin) lista = lista.concat(CARGOS_IC_9ANO);
+  // v05.02 · M41 · cargos organizados em 4 grupos temáticos
+  // Mapa de cargos por id (a partir dos arrays existentes)
+  const todos = {};
+  [...CARGOS_COMUNS, ...CARGOS_9ANO, ...CARGOS_IC_9ANO, ...CARGOS_IC_8ANO, CARGO_SEM]
+    .forEach(c => { todos[c.id] = c; });
+
+  // Grupo 1 · Escola geral (+ Projeto Ciências CNPq para 7/8/9)
+  const g1 = ['acolhedor', 'jap', 'gremista', 'lider-clube', 'ciencias'];
+  // Grupo 2 · Turma
+  const g2 = ['lider', 'vice-lider', 'formatura', 'vendas-5a'];
+  // Grupo 3 · Aula de Tec/Rob (ordem definida por Marcos)
+  const g3 = ['logistica', 'lider-equipe', 'mon-hardware', 'mon-sw-startlab', 'mon-sw-microbit', 'mon-sw-prof', 'mon-sw-apps'];
+  // Grupo 4 · Outros (cargo não listado + sem cargo)
+
+  // IDs reais podem divergir · normalizo: 9ano usa 'gremio'/'formatura'/'vendas-5a'/'jap'
+  const alias = { 'gremista': 'gremio' };
+  const pega = id => todos[id] || todos[alias[id]];
+
+  function cardsDoGrupo(ids) {
+    return ids.map(id => {
+      const c = pega(id);
+      if (!c) return '';
+      // Filtra cargos que só existem em certos anos
+      if ((id === 'jap' || id === 'gremista' || id === 'formatura' || id === 'vendas-5a') && ano !== '9') return '';
+      // v05.14 · filtro genérico por campo "anos" (ex: Projeto Ciências = 7/8/9)
+      if (Array.isArray(c.anos) && !c.anos.includes(String(ano))) return '';
+      return `
+        <div class="card-opcao card-cargo${c.admin ? ' card-admin' : ''}" data-cargo="${c.id}" data-cargo-nome="${c.nome}" onclick="selecionarCargo(this)">
+          <span class="emoji">${c.emoji}</span>
+          <div class="cargo-nome">${c.nome}</div>
+          ${c.desc ? `<div class="cargo-desc">${c.desc}</div>` : ''}
+        </div>`;
+    }).join('');
   }
-  // IC voluntário só 8º
-  if (ano === '8' && estado.modoAdmin) {
-    lista = lista.concat(CARGOS_IC_8ANO);
-  }
 
-  // "Não ocupo cargo formal" SEMPRE como último item
-  lista.push(CARGO_SEM);
+  const grupoHTML = (titulo, cor, ids) => {
+    const cards = cardsDoGrupo(ids);
+    if (!cards.trim()) return '';
+    return `
+      <div class="grupo-cargo grupo-cargo-${cor}">
+        <div class="grupo-cargo-titulo">${titulo}</div>
+        <div class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">${cards}</div>
+      </div>`;
+  };
 
-  grid.innerHTML = lista.map(c => `
-    <div class="card-opcao${c.admin ? ' card-admin' : ''}" data-cargo="${c.id}" data-cargo-nome="${c.nome}" onclick="selecionarCargo(this)">
-      <span class="emoji">${c.emoji}</span>
-      ${c.nome}${c.admin ? ' <small style="display:block;font-size:10px;opacity:0.6;">(admin)</small>' : ''}
-    </div>
-  `).join('');
+  let html = '';
+  html += grupoHTML('🏫 Cargos na escola (geral)', 'azul', g1);
+  html += grupoHTML('👥 Cargos na turma', 'verde', g2);
+  html += grupoHTML('🛠️ Cargos na aula de Tecnologia / Robótica', 'laranja', g3);
+
+  // Grupo 4 · Outros + sem cargo + campo livre
+  const semCargo = CARGO_SEM;
+  html += `
+    <div class="grupo-cargo grupo-cargo-roxo">
+      <div class="grupo-cargo-titulo">🔖 Outros</div>
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
+        <div class="card-opcao card-cargo" data-cargo="${semCargo.id}" data-cargo-nome="${semCargo.nome}" onclick="selecionarCargo(this)">
+          <span class="emoji">${semCargo.emoji}</span>
+          <div class="cargo-nome">${semCargo.nome}</div>
+          <div class="cargo-desc">${semCargo.desc}</div>
+        </div>
+        <div class="card-opcao card-cargo" data-cargo="outro-cargo" data-cargo-nome="Outro cargo" onclick="selecionarCargo(this)">
+          <span class="emoji">✏️</span>
+          <div class="cargo-nome">Outro cargo não listado</div>
+          <div class="cargo-desc">Tenho um cargo que não está na lista · descrevo abaixo</div>
+        </div>
+      </div>
+      <input type="text" id="cargoOutro" placeholder="Descreva seu cargo não listado" style="margin-top:10px; display:none;" oninput="estado.cargoOutroTexto = this.value.trim();">
+    </div>`;
+
+  grid.innerHTML = html;
+
+  if (ano === '9' && estado.modoAdmin) { /* IC tratado em versão futura */ }
 }
 
 // ════════════════════════════════════════════════════════
 // NAVEGAÇÃO ENTRE TELAS
 // ════════════════════════════════════════════════════════
 function proximaTela(numero) {
-  // Validações por tela
-  if (numero === 3 && !validarTela2()) return;
-  if (numero === 4 && !validarTela3()) return;
-  if (numero === 5 && !validarTela4()) return;
-  if (numero === 6 && !validarTela5()) return;
-  if (numero === 7) {
-    if (!validarTela6()) return;
+  // v05.11 · ordem: 2=nome · 3=profissão · 4=cargos · 5=explicação · 6=eixos
+  //                 7=tema · 8=Bim+Uni+Aula+Tipo · 9=Card+Conteúdo
+  if (numero === 3 && !validarTela2()) return;        // sai do nome/turma/nº
+  if (numero === 4 && !validarTela4()) return;        // sai da PROFISSÃO (validarTela4 = profissão)
+  if (numero === 5 && !validarTela3()) return;        // sai dos CARGOS (validarTela3 = cargos)
+  // numero === 6 (explicação → eixos): sem validação
+  if (numero === 7 && !validarEixos()) return;        // sai dos EIXOS
+  if (numero === 8 && !validarTela5()) return;        // sai do tema
+  if (numero === 9 && !validarTela6Novo()) return;    // sai de Bim+Uni+Aula+Tipo
+  if (numero === 10) {
+    if (!validarTela7Novo()) return;                  // sai de Card+Conteúdo
     gerarPrompt();
   }
 
   document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
   document.getElementById('tela' + numero).classList.add('ativa');
 
-  const progresso = document.getElementById('progresso');
-  if (numero >= 2 && numero <= 6) {
-    progresso.style.display = 'flex';
-    progresso.querySelectorAll('.progresso-bola').forEach(b => {
-      const passo = parseInt(b.dataset.passo);
-      b.classList.remove('ativa', 'completa');
-      if (passo < numero) b.classList.add('completa');
-      if (passo === numero) b.classList.add('ativa');
-    });
-  } else {
-    progresso.style.display = 'none';
-  }
+  // v05.00 · M10+M11 · atualizar contador de páginas
+  atualizarContadorPagina(numero);
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// v05.00 · M10+M11 · contador BMB+NAV05 atualizado por tela (global · esconde na Tela 1)
+function atualizarContadorPagina(numero) {
+  const TOTAL_TELAS = 18;
+  const contadorGlobal = document.getElementById('contadorGlobal');
+  if (contadorGlobal) {
+    contadorGlobal.style.display = (numero === 1) ? 'none' : 'block';
+  }
+  // Badge num + info text
+  document.querySelectorAll('.pagina-contador').forEach(p => {
+    const num = p.querySelector('.badge-num');
+    const info = p.querySelector('.badge-info');
+    if (num)  num.textContent = String(numero).padStart(2, '0');
+    if (info) info.textContent = 'Tela ' + numero + ' de ' + TOTAL_TELAS;
+  });
+  // Barra de preenchimento
+  document.querySelectorAll('.barra-fill-faca').forEach(b => {
+    b.style.width = ((numero / TOTAL_TELAS) * 100).toFixed(1) + '%';
+  });
+  // Bolinhas
+  document.querySelectorAll('.barra-marcadores-faca').forEach(grupo => {
+    grupo.querySelectorAll('.barra-marcador-faca').forEach((m, idx) => {
+      const passo = idx + 1;
+      m.classList.remove('passou', 'atual');
+      if (passo < numero) m.classList.add('passou');
+      if (passo === numero) m.classList.add('atual');
+    });
+  });
+
+  // v05.06 · indicador de profissão · aparece a partir da Tela 6 (depois de escolher na Tela 5)
+  const badgeProf = document.getElementById('badgeProfissao');
+  if (badgeProf) {
+    if (estado.profissao && numero >= 4) {
+      badgeProf.textContent = estado.profissao;
+      badgeProf.style.display = 'inline-flex';
+    } else {
+      badgeProf.style.display = 'none';
+    }
+  }
 }
 
 // ════════════════════════════════════════════════════════
@@ -2410,25 +3959,57 @@ function validarTela2() {
   }
 
   if (!estado.turma) { alert('Selecione sua turma'); return false; }
+
+  // v05.02 · M48 · número de chamada
+  const numCh = document.getElementById('numeroChamada').value.trim();
+  if (!numCh) { alert('Digite seu número de chamada'); return false; }
+  estado.numeroChamada = numCh;
+
   estado.nome = nome;
+  // v05.02 · dois primeiros nomes para uso nos textos
+  const partes = nome.split(/\s+/);
+  estado.doisPrimeirosNomes = partes.slice(0, 2).join(' ');
   return true;
 }
 
 function validarTela3() {
+  // v05.16 · recalcula cargos direto do DOM para garantir consistência
+  const grid = document.getElementById('cardsCargo');
+  if (grid) {
+    const sel = grid.querySelectorAll('.card-cargo.selecionado, .card-opcao.selecionado');
+    estado.cargos = Array.from(sel).map(c => c.dataset.cargoNome || c.dataset.cargo || '');
+  }
   if (estado.cargos.length === 0) {
     alert('Selecione pelo menos um cargo (ou "Não ocupo cargo formal")');
     return false;
   }
-  if (estado.cargos.includes('Gremista') && !estado.gremioCargo) {
+  const temGremio = estado.cargos.some(c => c.toLowerCase().includes('gremista') || c.toLowerCase().includes('gremio'));
+  if (temGremio && !estado.gremioCargo) {
     alert('Você selecionou Gremista · escolha qual é o seu cargo no grêmio');
     return false;
   }
-  if (estado.cargos.includes('Comissão de Formatura') && !estado.formaturaCargo) {
+  const temFormatura = estado.cargos.some(c => c.toLowerCase().includes('formatura'));
+  if (temFormatura && !estado.formaturaCargo) {
     alert('Você selecionou Comissão de Formatura · escolha qual é a sua função');
     return false;
   }
+  // Ciências · checa também se a função foi marcada no DOM (mais robusto)
+  const temCiencias = estado.cargos.some(c => c.toLowerCase().includes('ciência') || c.toLowerCase().includes('ciencia'));
+  if (temCiencias) {
+    const funcSel = document.querySelector('#cardsCiencias .card-opcao.selecionado');
+    if (funcSel) estado.cienciaFuncao = funcSel.dataset.cienciafuncao;
+    if (!estado.cienciaFuncao) {
+      alert('Você selecionou o Projeto de Ciências · escolha se é Bolsista ou Voluntário(a)');
+      return false;
+    }
+  }
+  return true;
+}
+
+// v05.08 · validação dos 3 eixos (Tela 5)
+function validarEixos() {
   if (!estado.perfil.apr || !estado.perfil.con || !estado.perfil.freq) {
-    alert('Responda os 3 eixos PEI');
+    alert('Responda os 3 caminhos: presença, convivência e aprendizagem');
     return false;
   }
   return true;
@@ -2452,11 +4033,10 @@ function validarTela5() {
   return true;
 }
 
-function validarTela6() {
+// v05.00 · M22 · validações divididas
+// Tela 6 (Bimestre + Unidade + Aula + Tipo de projeto)
+function validarTela6Novo() {
   const desc = document.getElementById('aulaDescricao').value.trim();
-  estado.conteudoCard = document.getElementById('conteudoCard').value.trim();
-  estado.linkCard = document.getElementById('linkCard').value.trim();
-  estado.cardNumero = document.getElementById('cardNumero').value.trim();
 
   // Compor Unidade completa
   const uAtual = document.getElementById('unidadeAtual').value;
@@ -2481,11 +4061,29 @@ function validarTela6() {
     estado.nomeAula = desc;
   }
 
-  if (!desc || !estado.conteudoCard) {
-    alert('Preencha pelo menos a descrição da aula e o conteúdo do Card');
+  if (!desc) {
+    alert('Preencha pelo menos a descrição da aula');
     return false;
   }
   return true;
+}
+
+// Tela 7 (Card específico + Conteúdo completo)
+function validarTela7Novo() {
+  estado.conteudoCard = document.getElementById('conteudoCard').value.trim();
+  estado.linkCard = document.getElementById('linkCard').value.trim();
+  estado.cardNumero = document.getElementById('cardNumero').value.trim();
+
+  if (!estado.conteudoCard) {
+    alert('Cole o conteúdo do Card "Faça como eu fiz"');
+    return false;
+  }
+  return true;
+}
+
+// Mantém função antiga como alias para compatibilidade
+function validarTela6() {
+  return validarTela6Novo() && validarTela7Novo();
 }
 
 function atualizarUnidadeDisplay() {
@@ -2552,6 +4150,9 @@ function selecionarTurma(el) {
   estado.turma = el.dataset.turma;
   estado.ano = el.dataset.ano;
   estado.componente = el.dataset.comp;
+  // v05.02 · M48 · mostra campo número de chamada
+  const campoNum = document.getElementById('campoNumeroChamada');
+  if (campoNum) campoNum.style.display = 'block';
   renderizarCargos(estado.ano);
   atualizarFraseTematica();
   atualizarSubtituloBarra();
@@ -2563,21 +4164,24 @@ function atualizarFraseTematica() {
 }
 
 function selecionarCargo(el) {
-  // M8 · detectar 2º clique consecutivo no MESMO card (já-selecionado clicado de novo)
-  // ⚠ NÃO aplica a cargos · cargos têm toggle (clicar de novo des-seleciona, é comportamento legítimo).
   el.classList.toggle('selecionado');
-  const selecionados = document.querySelectorAll('#cardsCargo .card-opcao.selecionado');
-  if (selecionados.length > 3) {
+  // v05.10 · seletor robusto · pega cards de cargo em qualquer grupo dentro de #cardsCargo
+  const grid = document.getElementById('cardsCargo');
+  const selecionados = grid.querySelectorAll('.card-cargo.selecionado, .card-opcao.selecionado');
+  if (selecionados.length > 5) {
     el.classList.remove('selecionado');
-    alert('Máximo de 3 cargos');
+    alert('Máximo de 5 cargos');
     return;
   }
-  estado.cargos = Array.from(selecionados).map(c => c.dataset.cargoNome);
+  estado.cargos = Array.from(selecionados).map(c => c.dataset.cargoNome || c.dataset.cargo || '');
 
   // Cascata Grêmio
-  const temGremio = estado.cargos.some(c => c.toLowerCase().includes('gremista'));
-  document.getElementById('cascataGremio').style.display = temGremio ? 'block' : 'none';
-  if (!temGremio) estado.gremioCargo = '';
+  const temGremio = estado.cargos.some(c => c.toLowerCase().includes('gremista') || c.toLowerCase().includes('gremio'));
+  const cascGremio = document.getElementById('cascataGremio');
+  if (cascGremio) {
+    cascGremio.style.display = temGremio ? 'block' : 'none';
+    if (!temGremio) estado.gremioCargo = '';
+  }
 
   // Cascata Comissão de Formatura
   const temFormatura = estado.cargos.some(c => c.toLowerCase().includes('formatura'));
@@ -2586,6 +4190,28 @@ function selecionarCargo(el) {
     cascFormatura.style.display = temFormatura ? 'block' : 'none';
     if (!temFormatura) estado.formaturaCargo = '';
   }
+
+  // v05.15 · Cascata Projeto Ciências
+  const temCiencias = estado.cargos.some(c => c.toLowerCase().includes('ciências') || c.toLowerCase().includes('ciencias'));
+  const cascCiencias = document.getElementById('cascataCiencias');
+  if (cascCiencias) {
+    cascCiencias.style.display = temCiencias ? 'block' : 'none';
+    if (!temCiencias) estado.cienciaFuncao = '';
+  }
+
+  // v05.02 · M41 · cargo "outro não listado" mostra campo de texto
+  const inputOutroCargo = document.getElementById('cargoOutro');
+  if (inputOutroCargo) {
+    const aindaTemOutro = Array.from(selecionados).some(c => c.dataset.cargo === 'outro-cargo');
+    inputOutroCargo.style.display = aindaTemOutro ? 'block' : 'none';
+  }
+}
+
+// v05.15 · seleção da função no Projeto Ciências (exclusiva · Bolsista OU Voluntário)
+function selecionarCiencias(el) {
+  document.querySelectorAll('#cardsCiencias .card-opcao').forEach(c => c.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.cienciaFuncao = el.dataset.cienciafuncao;
 }
 
 function selecionarFormatura(el) {
@@ -2709,7 +4335,7 @@ function selecionarProjeto(el) {
 // ════════════════════════════════════════════════════════
 function gerarPrompt() {
   const data = new Date().toLocaleDateString('pt-BR');
-  const primeiroNome = estado.nome.split(' ')[0];
+  const primeiroNome = estado.doisPrimeirosNomes || estado.nome.split(' ').slice(0,2).join(' ');
   const generoTxt = estado.genero === 'F'
     ? 'FEMININO (flexão de verbos · adjetivos · particípios no feminino · ex: "atenta", "decidida")'
     : 'MASCULINO (flexão de verbos · adjetivos · particípios no masculino · ex: "atento", "decidido")';
@@ -2717,21 +4343,75 @@ function gerarPrompt() {
   let cargosCompleto = estado.cargos.join(' + ');
   if (estado.gremioCargo) cargosCompleto += ` (Gremista · cargo: ${estado.gremioCargo})`;
   if (estado.formaturaCargo) cargosCompleto += ` (Comissão de Formatura · função: ${estado.formaturaCargo})`;
+  if (estado.cienciaFuncao) cargosCompleto += ` (Projeto +Ciências na Escola · função: ${estado.cienciaFuncao})`;
 
   const prompt = `Olá! Vou gerar 3 textos para o Card "Faça como eu fiz" do Alura na E.E. Dr. Benedito Martins Barbosa - BMB.
 
 INSTRUÇÃO DE FORMATAÇÃO CRÍTICA (obrigatória):
 Sua resposta INTEIRA deve estar dentro de UM ÚNICO bloco de código (usando três crases antes e depois). Não escreva nada FORA do bloco · isso permite ao aluno usar o botão "Copiar" nativo da plataforma e colar tudo de uma vez no Google Docs. Dentro do bloco use TEXTO CORRIDO sem markdown extra (sem **negrito** · sem # títulos · sem - bullets). Use separadores === para dividir os 3 textos visualmente.
 
+═══════════════════════════════════════════════
+INSTRUÇÃO DEFENSIVA · NÃO CORTE A RESPOSTA (v05.00 · M28)
+═══════════════════════════════════════════════
+Esta resposta tem 3 textos · cada um entre 900 e 2000 caracteres.
+Total estimado: 3.500 a 6.500 caracteres + cabeçalho.
+Se você sentir que o limite de tokens da sua janela vai estourar:
+- NÃO encerre com "..." ou "(continua)"
+- NÃO peça para o aluno pedir continuação
+- AJUSTE os textos para ficar mais próximo do MÍNIMO (900 caracteres cada)
+- NUNCA deixe um texto incompleto
+- O bloco SEMPRE deve terminar com "=== FIM ===" antes do fechamento das três crases
+═══════════════════════════════════════════════
+
+═══════════════════════════════════════════════
+LINGUAGEM E TOM (REGRA OBRIGATÓRIA · v05.00 · M35)
+═══════════════════════════════════════════════
+PÚBLICO LEITOR · estudante de 10 anos · escola pública
+
+REGRAS DE ESCRITA (aplicar nos 3 textos):
+1. NUNCA usar siglas sem explicar (não escrever "TCT", "ODS", "PEI", "AAIM";
+   se for essencial mencionar, traduza: "Tema Transversal" · "Objetivo da ONU")
+2. NUNCA usar termos pedagógicos no corpo do texto:
+   "habilidades", "competências", "metodologia", "componente curricular",
+   "tessitura", "protagonismo estudantil", "socioemocional", "eixo",
+   "TCT", "ODS", "PEI" (essas siglas e termos são internos do professor,
+   o aluno não escreveria isso na própria redação)
+3. NUNCA usar abreviações ("etc", "ex.", "p.ex.", "i.e."). Escrever por extenso.
+4. NUNCA escrever como professor explicando para outro professor.
+   Escrever como personagem vivendo a situação.
+5. Frases curtas (até 20 palavras) · 1 ideia por frase · pode ter diálogo
+   curto · pode fazer pergunta direta para o leitor.
+6. PODE manter criatividade · metáforas · histórias · cenas · diálogos.
+   Criatividade NÃO é jargão.
+7. Teste mental antes de cada palavra: "Uma criança de 10 anos entende isso?"
+   Se não · troque por palavra do cotidiano.
+
+EXEMPLOS DO QUE EVITAR · COMO REESCREVER:
+ERRADO: "Como profissional, atuo desenvolvendo competências socioemocionais"
+CERTO:  "No meu trabalho eu ajudo as pessoas a entenderem o que sentem"
+
+ERRADO: "A TCT de Educação Financeira propõe..."
+CERTO:  "Aprender a cuidar do dinheiro é importante porque..."
+
+ERRADO: "Aplico metodologia investigativa para mediar conflitos"
+CERTO:  "Quando aparece briga eu paro, escuto os dois lados e ajudo a resolver com calma"
+
+ERRADO: "Em consonância com os ODS, etc."
+CERTO:  "Eu acredito que a gente pode mudar o mundo aos poucos"
+
+ESSÊNCIA · um colega de 10 anos consegue ler em voz alta e entender sem perguntar "o que isso significa?"
+═══════════════════════════════════════════════
+
 DADOS DO ESTUDANTE:
 - Nome completo: ${estado.nome}
-- Primeiro nome (usar dentro dos textos): ${primeiroNome}
+- Número de chamada: ${estado.numeroChamada || '—'}
+- Nome para usar dentro dos textos (2 primeiros): ${primeiroNome}
 - Gênero para flexão textual: ${generoTxt}
 - Turma: ${estado.turma} (${estado.componente})
 - Cargo(s) protagonista 2026: ${cargosCompleto}
 - Perfil PEI: APR-${estado.perfil.apr} · CON-${estado.perfil.con} · FREQ-${estado.perfil.freq}
 - Projeto de Vida (profissão admirada): ${estado.profissao} (${estado.anos} anos de experiência)
-- Tema da semana: ${estado.tema} · TCT: ${estado.temaTCT} · ${estado.temaODS}
+- Tema da semana: ${estado.tema} · Tema Transversal: ${estado.temaTCT} · ${estado.temaODS}
 - Bimestre: ${estado.bimestre}
 - Unidade: ${estado.nomeUnidade || '(não informado)'}
 - Aula: ${estado.nomeAula}
@@ -2747,39 +4427,55 @@ INSTRUÇÕES DE GERAÇÃO:
 
 Gere EXATAMENTE 3 textos na ordem abaixo · TUDO dentro de UM ÚNICO bloco de código.
 
+REGRA DE NOMES (v05.00 · M25):
+- TEXTO 1 (Profissional): use ${primeiroNome} como nome do profissional (o estudante se imagina exercendo a profissão)
+- TEXTO 2 (Estudante): use ${primeiroNome} como nome do estudante
+- TEXTO 3 (Integrado): INVENTE um nome para o profissional · DIFERENTE de ${primeiroNome} · do MESMO gênero (${estado.genero === 'F' ? 'feminino' : 'masculino'}) · ${primeiroNome} entra como AJUDANTE/AUXILIAR do profissional inventado
+
+TAMANHO DE CADA TEXTO (v05.02 · M23+M45):
+- Mínimo: 900 caracteres (incluindo espaços)
+- Máximo: 2000 caracteres (incluindo espaços)
+- Use o espaço extra para EXPLICAR as dinâmicas (como funciona + ações + objetivo)
+- Os 3 textos devem ter tamanhos parecidos entre si (diferença máxima 400 caracteres entre o menor e o maior)
+
 ESTRUTURA EXATA DO BLOCO ÚNICO COPIÁVEL:
 
 \`\`\`
 ═══════════════════════════════════════
 👤 Nome: ${estado.nome}
+🔢 Nº de chamada: ${estado.numeroChamada || '—'}
 🎓 Turma: ${estado.turma} · ${estado.componente}
 💼 PV: ${estado.profissao} (${estado.anos} anos)
 🏷️ Cargo(s): ${cargosCompleto}
 💭 Perfil PEI: APR-${estado.perfil.apr} · CON-${estado.perfil.con} · FREQ-${estado.perfil.freq}
-🎯 Tema: ${estado.tema} · TCT: ${estado.temaTCT} · ${estado.temaODS}
+🎯 Tema: ${estado.tema} · Tema Transversal: ${estado.temaTCT} · ${estado.temaODS}
 📄 Card "Faça como eu fiz" nº ${estado.cardNumero || '?'} · ${estado.bimestre} · ${estado.nomeUnidade} · ${estado.nomeAula} · Tipo: ${estado.tipoProjeto}
 🏫 Escola: E.E. Dr. Benedito Martins Barbosa - BMB
 📅 Data: ${data}
 ═══════════════════════════════════════
 
 📘 TEXTO 1 · COMO PROFISSIONAL ADMIRADO
+TÍTULO: [crie um título curto e criativo para este texto · máx 8 palavras]
+RESUMO: [1 linha resumindo do que trata este texto · máx 20 palavras · linguagem de criança]
 
-[Profissional ${estado.profissao} com nome fictício · narra em 1ª pessoa · faz "Atuação solidária" (NUNCA usar "voluntário") na BMB · resolve o Card incluindo concurso (3-4 itens reais + 1 inventado · pelo menos 1 nascido da expertise da profissão) · tem 3 ações antes/durante + 3 ações depois (cada uma com dinâmica lúdica nomeada · etiqueta Preventiva/Remediativa · Plugada/Desplugada · eixo PEI) · parceria fixa com Prof Tec + Prof Rob (use Camila Tec / Roberto Rob como default) · sutilmente menciona as 4 missões do profissional (pessoa/profissional/gerador de recursos/replicador) · fechamento como bilhete curto não palestra.]
+[${primeiroNome} narra em 1ª pessoa como profissional ${estado.profissao} · faz "atuação solidária" (NUNCA usar "voluntário") na BMB · resolve o Card incluindo concurso (3-4 itens reais + 1 inventado · pelo menos 1 nascido da expertise da profissão) · tem 3 ações antes/durante + 3 ações depois (cada uma com dinâmica lúdica nomeada · etiqueta Preventiva/Remediativa · Plugada/Desplugada · eixo aprendizagem/convivência/frequência) · parceria fixa com Professor de Tecnologia + Professor de Robótica (use Camila Tec / Roberto Rob como default) · fechamento como bilhete curto não palestra · 900 a 2000 caracteres · linguagem para criança de 10 anos.]
 
 ═══════════════════════════════════════
 
 📗 TEXTO 2 · COMO ESTUDANTE PROTAGONISTA
+TÍTULO: [crie um título curto e criativo para este texto · máx 8 palavras]
+RESUMO: [1 linha resumindo do que trata este texto · máx 20 palavras · linguagem de criança]
 
-[Estudante ${primeiroNome} (${generoTxt}) · do ${estado.turma} · narra em 1ª pessoa · protagoniza dentro da escola conforme cargo(s) ${cargosCompleto} e perfil APR-${estado.perfil.apr}/CON-${estado.perfil.con}/FREQ-${estado.perfil.freq} · com 3 ações presentes + 3 futuras · todas com dinâmica lúdica · etiqueta · eixo PEI · fechamento como carta ao próprio futuro.
+[Estudante ${primeiroNome} (${generoTxt}) · do ${estado.turma} · narra em 1ª pessoa · protagoniza dentro da escola conforme cargo(s) ${cargosCompleto} e perfil APR-${estado.perfil.apr}/CON-${estado.perfil.con}/FREQ-${estado.perfil.freq} · com 3 ações presentes + 3 futuras · todas com dinâmica lúdica · etiqueta · eixo PEI · fechamento como carta ao próprio futuro · 900 a 2000 caracteres · linguagem para criança de 10 anos.
 
-Use o perfil PEI para guiar o jeito de protagonizar:
+Use o perfil para guiar o jeito de protagonizar:
 - APR-A: monitoria ativa de pares
 - APR-B: pedir/organizar tutoria
-- APR-C: mix
+- APR-C: mistura entre ajudar e pedir
 - APR-D: estudo individual + compartilhar resultado depois (sem deixar de contribuir)
-- CON-A: mediação imparcial
+- CON-A: ajuda a resolver brigas com calma
 - CON-B: aprendendo a parar antes do conflito escalar
-- CON-C: aproximação gradual
+- CON-C: aproximação aos poucos
 - CON-D: reconhecer quando provoca e propor reparação
 - FREQ-A: campanha de presença para a turma
 - FREQ-B: sistema de recuperação
@@ -2788,8 +4484,10 @@ Use o perfil PEI para guiar o jeito de protagonizar:
 ═══════════════════════════════════════
 
 📕 TEXTO 3 · INTEGRADO · ESTUDANTE + PROFISSIONAL JUNTOS
+TÍTULO: [crie um título curto e criativo para este texto · máx 8 palavras]
+RESUMO: [1 linha resumindo do que trata este texto · máx 20 palavras · linguagem de criança]
 
-[Estudante ${primeiroNome} recebe profissional ${estado.profissao} com nome fictício DIFERENTE do TEXTO 1 · atuam juntos no Card. Estudante apresenta a escola e o conflito que viveu · profissional traz expertise técnica. 3 ações compartilhadas presentes + 3 futuras (1 do profissional · 1 do estudante · 1 conectada). Fechamento com 2 bilhetes curtos trocados entre os dois sobre as 4 missões.]
+[Estudante ${primeiroNome} recebe um(a) profissional ${estado.profissao} com nome inventado DIFERENTE de ${primeiroNome} e do mesmo gênero (${estado.genero === 'F' ? 'feminino · ex: Helena, Beatriz, Camila' : 'masculino · ex: Lucas, Daniel, Mateus'}). ${primeiroNome} entra como AJUDANTE/AUXILIAR do profissional. Atuam juntos no Card. Estudante apresenta a escola e o conflito que viveu · profissional traz expertise técnica. 3 ações compartilhadas presentes + 3 futuras (1 do profissional · 1 do estudante · 1 conectada). Fechamento com 2 bilhetes curtos trocados entre os dois sobre as 4 missões · 900 a 2000 caracteres · linguagem para criança de 10 anos.]
 
 ═══════════════════════════════════════
 === FIM ===
@@ -2798,19 +4496,35 @@ Use o perfil PEI para guiar o jeito de protagonizar:
 REGRAS DURAS:
 - Escola sempre "E.E. Dr. Benedito Martins Barbosa - BMB"
 - NUNCA use "voluntário" (use "atuação solidária" ou "convidado(a) especialista")
+- v05.02 · M43 · NUNCA abrevie "Tec" ou "Rob". Escreva por extenso:
+  · Professor de Tecnologia = use "Professor Marcos (MAROBE)" como nome padrão
+  · Professor(a) de Robótica = para 6º ano use "Professor de Robótica";
+    para 7º ano em diante use uma professora de Robótica com nome próprio
+    (ex: Professora Camila de Robótica). Sempre por extenso, nunca "Tec/Rob".
 - Roda de conversa só no FECHAMENTO curto · NUNCA como ação principal
-- Toda ação que CONSTRÓI algo (regras · combinados · produtos) usa dinâmica lúdica NOMEADA
+- v05.02 · M45 · Toda dinâmica/atividade lúdica citada DEVE vir explicada,
+  não só nomeada. Para cada dinâmica, escreva de forma simples:
+  · COMO FUNCIONA (1-2 frases · o passo a passo básico que uma criança entende)
+  · O QUE OS PARTICIPANTES FAZEM (as ações principais)
+  · PARA QUE SERVE (o objetivo · o que melhora)
+  Exemplo: em vez de só "fizemos um Círculo Restaurativo", escreva
+  "fizemos uma roda de conversa onde cada um fala sua parte sem ser interrompido
+   (como funciona), todos escutam e propõem uma solução juntos (o que fazem),
+   para resolver a briga sem ninguém sair magoado (para que serve)".
 - Princípio "aprender se divertindo" sempre que possível
-- Profissional é PROTAGONISTA criativo · professores Tec/Rob são EXECUTORES parceiros
-- Cargos da gestão: Vice-Dir./Mediador (em algumas variações) · Coordenador Pedagógico (no fechamento)
-- Use repertório real de dinâmicas: Círculo Restaurativo · Aula Invertida · Storytelling · Hackathon · Cafezinho do Aluno · Dramatização · Gamificação · ABP · Design Thinking
-- Cada ação cita pelo menos 1 dos 3 eixos PEI (Aprendizagem · Convivência · Frequência)
-- IDEALMENTE cada texto toca nos 3 eixos PEI (não obrigatório os 3 em cada ação)
+- Profissional é PROTAGONISTA criativo · os professores de Tecnologia e Robótica
+  são parceiros que ajudam a executar
+- Use repertório real de dinâmicas (sempre explicando como funciona):
+  roda de conversa restaurativa · aula invertida · contação de histórias ·
+  maratona de ideias (hackathon) · cafezinho do aluno · teatro/dramatização ·
+  jogos com pontos (gamificação) · projeto em grupo · tempestade de ideias
+- Cada ação mostra em qual dos 3 caminhos ajuda (estar presente · conviver · aprender)
+  MAS sem usar a palavra "eixo" · descrever de forma natural
 
 RESTRIÇÃO NARRATIVA (importante):
 - NÃO use pronomes "ela" / "ele" / "dela" / "dele" / "delas" / "deles" no texto
 - Use o NOME PRÓPRIO (${primeiroNome}) quando precisar identificar
-- OU oculte o sujeito (frequente em PT-BR · "Conversou com a coordenadora")
+- OU oculte o sujeito (frequente em português · "Conversou com a coordenadora")
 - A FLEXÃO de verbos · adjetivos · particípios segue o gênero ${generoTxt}
 - Exemplo CERTO: "${primeiroNome} foi à escola. Conversou com a coordenadora. Está ${estado.genero === 'F' ? 'atenta' : 'atento'}."
 - Exemplo ERRADO: "${primeiroNome} foi à escola. ${estado.genero === 'F' ? 'Ela' : 'Ele'} conversou. ${estado.genero === 'F' ? 'Ela' : 'Ele'} está ${estado.genero === 'F' ? 'atenta' : 'atento'}."
@@ -2819,16 +4533,55 @@ LEMBRETE FINAL:
 - TUDO dentro de UM bloco com 3 crases
 - NADA fora do bloco
 - Termine com "=== FIM ===" dentro do bloco
-- Texto corrido · separadores === entre os 3 textos`;
+- Texto corrido · separadores === entre os 3 textos
+- 900 a 2000 caracteres por texto
+- Linguagem para criança de 10 anos (sem siglas · sem termos pedagógicos · sem abreviações)`;
 
   document.getElementById('promptGerado').textContent = prompt;
 }
 
 function copiarPrompt() {
   const texto = document.getElementById('promptGerado').textContent;
-  navigator.clipboard.writeText(texto).then(() => {
-    alert('Prompt copiado! Agora cole no Claude.ai.');
-  });
+  const btn = document.querySelector('[onclick="copiarPrompt()"]');
+
+  function sucesso() {
+    if (!btn) { return; }
+    const original = btn.innerHTML;
+    btn.innerHTML = '✓ Prompt copiado!';
+    btn.classList.add('btn-copiado');
+    setTimeout(() => {
+      btn.innerHTML = original;
+      btn.classList.remove('btn-copiado');
+    }, 2500);
+  }
+
+  function fallback() {
+    // método antigo · funciona em navegadores mobile que bloqueiam a API moderna
+    const ta = document.createElement('textarea');
+    ta.value = texto;
+    ta.style.position = 'fixed';
+    ta.style.top = '0';
+    ta.style.left = '0';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (ok) { sucesso(); }
+      else { alert('Não consegui copiar automaticamente. Toque e segure no texto do prompt para copiar manualmente.'); }
+    } catch (e) {
+      document.body.removeChild(ta);
+      alert('Não consegui copiar automaticamente. Toque e segure no texto do prompt para copiar manualmente.');
+    }
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(texto).then(sucesso).catch(fallback);
+  } else {
+    fallback();
+  }
 }
 
 // v04.00 · M7 · função trocarAba removida (Tela 7 dividida em Tela 7 + Tela 8)
@@ -2863,6 +4616,26 @@ function processarResposta() {
   estado.textosProcessados.t2 = m2[1].trim();
   estado.textosProcessados.t3 = m3[1].trim();
 
+  // v05.22 · CLD-075 · extrair TÍTULO e RESUMO (gerados pela IA) de cada texto
+  function extrairTituloResumo(corpo, idx) {
+    let titulo = '', resumo = '';
+    const mT = corpo.match(/^\s*T[ÍI]TULO:\s*(.+)$/im);
+    const mR = corpo.match(/^\s*RESUMO:\s*(.+)$/im);
+    if (mT) titulo = mT[1].trim();
+    if (mR) resumo = mR[1].trim();
+    // remove as linhas TÍTULO/RESUMO do corpo
+    const limpo = corpo
+      .replace(/^\s*T[ÍI]TULO:.*$/im, '')
+      .replace(/^\s*RESUMO:.*$/im, '')
+      .trim();
+    estado.textosProcessados['titulo'+idx] = titulo;
+    estado.textosProcessados['resumo'+idx] = resumo;
+    return limpo;
+  }
+  estado.textosProcessados.t1 = extrairTituloResumo(estado.textosProcessados.t1, 1);
+  estado.textosProcessados.t2 = extrairTituloResumo(estado.textosProcessados.t2, 2);
+  estado.textosProcessados.t3 = extrairTituloResumo(estado.textosProcessados.t3, 3);
+
   // Cabeçalho compartilhado · tenta extrair (entre o início e o primeiro TEXTO 1)
   const cabIdx = txt.indexOf('📘');
   if (cabIdx > 0) {
@@ -2872,6 +4645,7 @@ function processarResposta() {
   let cargosCompleto = estado.cargos.join(' + ');
   if (estado.gremioCargo) cargosCompleto += ` (Gremista: ${estado.gremioCargo})`;
   if (estado.formaturaCargo) cargosCompleto += ` (Comissão: ${estado.formaturaCargo})`;
+  if (estado.cienciaFuncao) cargosCompleto += ` (Ciências: ${estado.cienciaFuncao})`;
 
   document.getElementById('cabecalhoFinal').innerHTML = `
     <div class="cabecalho-compartilhado">
@@ -2887,12 +4661,36 @@ function processarResposta() {
     </div>
   `;
 
-  document.getElementById('conteudoTexto1').textContent = estado.textosProcessados.t1;
-  document.getElementById('conteudoTexto2').textContent = estado.textosProcessados.t2;
-  document.getElementById('conteudoTexto3').textContent = estado.textosProcessados.t3;
+  // v05.00 · M33 · renderizar textos com parágrafos numerados (T1·§1, T2·§1...)
+  document.getElementById('conteudoTexto1').innerHTML = numerarParagrafos(estado.textosProcessados.t1, 'T1');
+  document.getElementById('conteudoTexto2').innerHTML = numerarParagrafos(estado.textosProcessados.t2, 'T2');
+  document.getElementById('conteudoTexto3').innerHTML = numerarParagrafos(estado.textosProcessados.t3, 'T3');
   document.getElementById('textosProcessados').style.display = 'block';
 
+  // v05.22 · CLD-075 · preencher telas de pesquisa por texto (14/15/16)
+  for (let i = 1; i <= 3; i++) {
+    const tit = estado.textosProcessados['titulo'+i];
+    const res = estado.textosProcessados['resumo'+i];
+    const elTit = document.getElementById('tituloTexto'+i+'Pesq');
+    const elRes = document.getElementById('resumoTexto'+i+'Pesq');
+    const elLeitura = document.getElementById('leituraTexto'+i);
+    if (elTit && tit) elTit.textContent = '✨ ' + tit;
+    if (elRes && res) elRes.textContent = res;
+    if (elLeitura) elLeitura.innerHTML = numerarParagrafos(estado.textosProcessados['t'+i], 'T'+i);
+  }
+
   ativarAnimacaoTematica();
+}
+
+// v05.00 · M33 · numerar parágrafos (estudante referencia T1·§2 na Pesquisa final)
+function numerarParagrafos(texto, prefixo) {
+  if (!texto) return '';
+  const escapeHtml = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return texto.split(/\n\s*\n/).map((par, i) => {
+    const corpo = escapeHtml(par.trim());
+    if (!corpo) return '';
+    return `<p class="par-num"><span class="par-tag">${prefixo}·§${i+1}</span>${corpo}</p>`;
+  }).join('');
 }
 
 function ativarAnimacaoTematica() {
@@ -2922,8 +4720,109 @@ function copiarTudo() {
   const t2 = '📗 TEXTO 2 · COMO ESTUDANTE PROTAGONISTA\n' + estado.textosProcessados.t2;
   const t3 = '📕 TEXTO 3 · INTEGRADO · ESTUDANTE + PROFISSIONAL JUNTOS\n' + estado.textosProcessados.t3;
   const tudo = cab + '\n\n' + t1 + '\n\n' + t2 + '\n\n' + t3 + '\n\n=== FIM ===';
+  const btn = document.querySelector('[onclick="copiarTudo()"]');
+
+  function sucesso() {
+    if (!btn) return;
+    const original = btn.innerHTML;
+    btn.innerHTML = '✓ 3 textos copiados!';
+    btn.classList.add('btn-copiado');
+    setTimeout(() => { btn.innerHTML = original; btn.classList.remove('btn-copiado'); }, 2500);
+  }
+  function fallback() {
+    const ta = document.createElement('textarea');
+    ta.value = tudo; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { const ok = document.execCommand('copy'); document.body.removeChild(ta);
+      if (ok) sucesso(); else alert('Toque e segure no texto para copiar manualmente.'); }
+    catch(e){ document.body.removeChild(ta); alert('Toque e segure no texto para copiar manualmente.'); }
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(tudo).then(sucesso).catch(fallback);
+  } else { fallback(); }
+}
+
+// ════════════════════════════════════════════════════════
+// v05.00 · M31 · Auto-avaliação dos 7 objetivos (Tela 10)
+// ════════════════════════════════════════════════════════
+estado.autoAvalAlcancados = [];
+
+function inicializarAutoAval() {
+  document.querySelectorAll('.auto-aval-item').forEach(item => {
+    item.addEventListener('click', function() {
+      this.classList.toggle('alcancado');
+      const check = this.querySelector('.auto-aval-check');
+      check.textContent = this.classList.contains('alcancado') ? '✓' : '☐';
+      atualizarResumoAutoAval();
+    });
+  });
+}
+
+function atualizarResumoAutoAval() {
+  const alcancados = document.querySelectorAll('.auto-aval-item.alcancado').length;
+  const total = document.querySelectorAll('.auto-aval-item').length;
+  const resumo = document.getElementById('autoAvalResumo');
+  if (alcancados === 0) {
+    resumo.textContent = 'Marque os objetivos acima para ver o resumo aqui.';
+  } else if (alcancados === total) {
+    resumo.textContent = '🎉 Parabéns! Você alcançou TODOS os ' + total + ' objetivos!';
+  } else {
+    resumo.textContent = '📊 Você alcançou ' + alcancados + ' de ' + total + ' objetivos · continue praticando!';
+  }
+  estado.autoAvalAlcancados = Array.from(document.querySelectorAll('.auto-aval-item.alcancado'))
+    .map(i => i.dataset.obj);
+}
+
+// ════════════════════════════════════════════════════════
+// v05.00 · M32 · Pesquisa final · 3 perguntas (Tela 11)
+// ════════════════════════════════════════════════════════
+estado.pesquisa = { textoPreferido: '', trecho: '', duvida: '', t1Trecho:'', t1Duvida:'', t2Trecho:'', t2Duvida:'', t3Trecho:'', t3Duvida:'' };
+
+function selecionarPesqTexto(el) {
+  document.querySelectorAll('[data-pesq-texto]').forEach(c => c.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.pesquisa.textoPreferido = el.dataset.pesqTexto;
+}
+
+function finalizarPesquisa() {
+  // v05.22 · coletar respostas por texto (telas 14/15/16)
+  for (let i = 1; i <= 3; i++) {
+    const tr = document.getElementById('pesq'+i+'Trecho');
+    const dv = document.getElementById('pesq'+i+'Duvida');
+    estado.pesquisa['t'+i+'Trecho'] = tr ? tr.value.trim() : '';
+    estado.pesquisa['t'+i+'Duvida'] = dv ? dv.value.trim() : '';
+  }
+  estado.pesquisa.trecho = (document.getElementById('pesqTrecho').value || '').trim();
+  estado.pesquisa.duvida = (document.getElementById('pesqDuvida').value || '').trim();
+
+  if (!estado.pesquisa.textoPreferido) {
+    alert('Por favor, escolha qual texto você mais gostou (pergunta 1).');
+    return;
+  }
+  if (!estado.pesquisa.trecho) {
+    alert('Por favor, cole um trecho do texto que você mais gostou (pergunta 2).');
+    return;
+  }
+
+  const obj = estado.autoAvalAlcancados.join(',') || 'nenhum';
+  const tudo =
+    '═══ PESQUISA FINAL · FAÇA COMO EU FIZ ═══\n' +
+    'Aluno(a): ' + (estado.nome || '—') + '\n' +
+    'Turma: ' + (estado.turma || '—') + '\n' +
+    'Profissão admirada: ' + (estado.profissao || '—') + '\n' +
+    'Objetivos alcançados: ' + obj + ' de 7\n' +
+    '\n--- TEXTO 1 ---\nTrecho favorito: ' + (estado.pesquisa.t1Trecho || '—') + '\nDúvida: ' + (estado.pesquisa.t1Duvida || '(nenhuma)') +
+    '\n\n--- TEXTO 2 ---\nTrecho favorito: ' + (estado.pesquisa.t2Trecho || '—') + '\nDúvida: ' + (estado.pesquisa.t2Duvida || '(nenhuma)') +
+    '\n\n--- TEXTO 3 ---\nTrecho favorito: ' + (estado.pesquisa.t3Trecho || '—') + '\nDúvida: ' + (estado.pesquisa.t3Duvida || '(nenhuma)') +
+    '\n\n--- ESCOLHA FINAL ---\nTexto preferido: ' + estado.pesquisa.textoPreferido +
+    '\nTrecho favorito geral: ' + estado.pesquisa.trecho +
+    '\nDúvida geral: ' + (estado.pesquisa.duvida || '(sem dúvida)') +
+    '\n═══════════════════════════════════════════';
+
   navigator.clipboard.writeText(tudo).then(() => {
-    alert('Tudo copiado! Agora cole no Google Docs ou Word para salvar.');
+    alert('✅ Suas respostas foram copiadas!\n\nVocê pode colar no Google Docs · Word · ou enviar ao professor.');
+  }).catch(() => {
+    alert('✅ Respostas registradas! Continue para a entrega.');
   });
 }
 </script>
