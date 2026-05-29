@@ -3,8 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Faça como eu fiz · StartLab Alura · BMB · 6º ao 9º ano · v05.22</title>
+<title>Faça como eu fiz · StartLab Alura · BMB · 6º ao 9º ano · v06.05</title>
 <!--
+  v06.05 · LATERAIS SOBRE A BORDA BRANCO/LILÁS (CLD-019) · centro do emoji alinhado à borda externa do card (não dentro do branco, não no lilás)
+
+  v06.04 · LATERAIS NA FRENTE DO CARD (CLD-018) · z-index 20 · posicionadas fora dos 880px do card · opacidade maior · gap entre emojis
+
+  v06.03 · ACUMULADO M47 + AJUSTES (sobre v05.22 · CM-FACA-INTERP_003)
+  · v06.00 = M47 + 7 ajustes (CLD-008) · v06.01 = menu de salto rodapé (CLD-011)
+  · v06.02 = colunas laterais profissão (CLD-014) · v06.03 = tec+rob enxuto 💻🤖📱 (CLD-016)
+
+  v06.00 · M47 + 7 AJUSTES (sobre v05.22 · CM-FACA-INTERP_003 · CLD-008)
+  · M47 · Tela 3: dropdown <select> → CARDS visuais de profissão por área
+    (143 profissões · cada uma com emoji + linha objetiva (desc) + linha aspiracional (vida))
+  · ponto 1 · emoji da profissão acompanha o header a partir da Tela 4 (badge + hid-prof)
+  · ponto 1+ · colunas flutuantes laterais (padrão NAV.05): Telas 1-3 = Tec+Rob (💻🤖📱 padrão · conjunto ampliado só na área Tecnologia · substituem borboletas) · Tela 4+ = intercala profissão + área + tec + rob · borboletas voltam da Tela 4
+  · ponto 2 · faixa de identificação fixa "Nº · Nome · Turma" no topo de todas as telas (estilo NAV.05)
+  · ponto 3 · bolinhas de progresso clicáveis → salto direto a telas já visitadas
+  · ponto 3+ · menu suspenso "Ir para a tela..." no rodapé (ao lado do Voltar · só telas já visitadas · rastreado por telaMaxVisitada)
+  · ponto 4 · aviso opção P cita o 🔔 sininho à esquerda do nome (Sala do Futuro)
+  · ponto 5 · tipo de projeto pré-selecionado: Google Docs (era StartLab)
+  · ponto 6 · IA recomendada destacada: ChatGPT (Claude bloqueado na rede da escola)
+  · ponto 7 · linha de instrução entre "Copiar prompt" e os botões de IA
+  · ponto 8 · botão renomeado: "Avançar para trazer aqui a resposta da IA"
+  · estado.profissao segue STRING (com emoji) · referências downstream intactas
+
   v05.11 · PROFISSÃO ANTES DOS CARGOS (sobre v05.10 · CLD-063)
   Ordem alinhada à ordem dos textos (Texto 1=profissional · Texto 2=protagonista):
   1 Boas-vindas · 2 Nome+turma+nº · 3 PROFISSÃO (Projeto de Vida) ·
@@ -577,6 +600,37 @@ body {
    ──────────────────────────────────────────────────────────────── */
 .pagina-contador-global {
   margin-bottom: 18px;
+}
+/* v06.00 · ponto 2 · faixa de identificação fixa estilo NAV.05 (nº · nome · turma) */
+.header-identificacao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--branco);
+  border: 1px solid var(--roxo-medio);
+  border-radius: 14px;
+  padding: 8px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(107,75,156,0.12);
+}
+.header-identificacao .hid-aluno {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--cinza-texto);
+}
+.header-identificacao .hid-prof {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--roxo-conviva);
+  background: var(--roxo-claro);
+  padding: 4px 12px;
+  border-radius: 14px;
+}
+@media (max-width: 480px) {
+  .header-identificacao { padding: 7px 12px; }
+  .header-identificacao .hid-aluno { font-size: 13px; }
+  .header-identificacao .hid-prof { font-size: 12px; }
 }
 .pagina-contador {
   display: flex;
@@ -1288,6 +1342,160 @@ body {
   color: var(--cinza-texto);
   margin-top: 4px;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   COLUNAS LATERAIS · EMOJI DA PROFISSÃO + ÁREA · v06.00 (padrão NAV.05)
+   ──────────────────────────────────────────────────────────────── */
+.prof-deco-lateral {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 46px;
+  pointer-events: none;
+  user-select: none;
+  z-index: 20;                /* v06.04 · NA FRENTE do card (card = z-index 10) */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 14px;                  /* v06.04 · respiro um pouco maior entre os emojis */
+}
+/* v06.05 · centro do emoji exatamente sobre a borda branco/lilás (card = 880px → metade 440px) */
+.prof-deco-lateral.esq { left: calc(50% - 440px - 23px); }  /* -23 = metade da width 46px → centraliza na borda */
+.prof-deco-lateral.dir { right: calc(50% - 440px - 23px); }
+.prof-emoji-flut {
+  font-size: 28px;
+  opacity: 0.85;             /* v06.04 · mais visível, agora na frente */
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.22));
+  animation: profFlut 4s ease-in-out infinite;
+}
+.prof-deco-lateral.esq .prof-emoji-flut:nth-child(1) { animation-delay: 0s; }
+.prof-deco-lateral.esq .prof-emoji-flut:nth-child(2) { animation-delay: 1s; }
+.prof-deco-lateral.esq .prof-emoji-flut:nth-child(3) { animation-delay: 2s; }
+.prof-deco-lateral.esq .prof-emoji-flut:nth-child(4) { animation-delay: 3s; }
+.prof-deco-lateral.dir .prof-emoji-flut:nth-child(1) { animation-delay: 0.5s; }
+.prof-deco-lateral.dir .prof-emoji-flut:nth-child(2) { animation-delay: 1.5s; }
+.prof-deco-lateral.dir .prof-emoji-flut:nth-child(3) { animation-delay: 2.5s; }
+.prof-deco-lateral.dir .prof-emoji-flut:nth-child(4) { animation-delay: 3.5s; }
+@keyframes profFlut {
+  0%, 100% { transform: translateY(0) rotate(-4deg); opacity: 0.55; }
+  50%      { transform: translateY(-14px) rotate(4deg); opacity: 0.9; }
+}
+/* v06.05 · quando a janela é mais estreita que o card (880px), o card encosta nas bordas → emoji sobre a borda da tela */
+@media (max-width: 920px) {
+  .prof-deco-lateral.esq { left: -2px; }
+  .prof-deco-lateral.dir { right: -2px; }
+}
+@media (max-width: 800px) {
+  .prof-emoji-flut { font-size: 22px; }
+}
+/* telas bem pequenas · esconde para não poluir */
+@media (max-width: 420px) {
+  .prof-deco-lateral { display: none; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MENU DE SALTO NO RODAPÉ · v06.00 · ponto 3
+   ──────────────────────────────────────────────────────────────── */
+.menu-salto {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--roxo-conviva);
+  background: var(--roxo-claro);
+  border: 2px solid var(--roxo-medio);
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  max-width: 220px;
+}
+.menu-salto:hover { border-color: var(--roxo-conviva); }
+
+/* ════════════════════════════════════════════════════════════════
+   INSTRUÇÃO IA + IA RECOMENDADA · v06.00 (pontos 6 e 7)
+   ──────────────────────────────────────────────────────────────── */
+.instrucao-ia {
+  background: var(--roxo-claro);
+  border: 1px solid var(--roxo-medio);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--cinza-texto);
+  text-align: center;
+}
+.btn.ia-recomendada {
+  border: 2px solid var(--roxo-conviva);
+  box-shadow: 0 0 0 3px rgba(107,75,156,0.15);
+  font-weight: 800;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CARDS DE PROFISSÃO · v06.00 · M47 (substitui o select)
+   ──────────────────────────────────────────────────────────────── */
+.prof-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.prof-placeholder {
+  grid-column: 1 / -1;
+  padding: 18px;
+  text-align: center;
+  color: var(--cinza-texto);
+  background: var(--cinza-suave);
+  border: 2px dashed var(--roxo-medio);
+  border-radius: 14px;
+  font-size: 14px;
+}
+.prof-card {
+  background: var(--branco);
+  border: 2px solid var(--roxo-medio);
+  border-radius: 14px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(107, 75, 156, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.prof-card:hover {
+  background: var(--roxo-claro);
+  border-color: var(--roxo-conviva);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(107, 75, 156, 0.28);
+}
+.prof-card.selecionado {
+  background: linear-gradient(135deg, var(--roxo-escuro-1) 0%, var(--roxo-escuro-2) 100%);
+  border-color: var(--roxo-escuro-borda);
+  border-width: 3px;
+  box-shadow: 0 6px 22px rgba(74, 46, 120, 0.50), inset 0 1px 0 rgba(255,255,255,0.15);
+  transform: translateY(-1px);
+}
+.prof-card-nome {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--cinza-texto);
+  line-height: 1.25;
+}
+.prof-card-desc {
+  font-size: 12.5px;
+  color: var(--cinza-texto);
+  opacity: 0.85;
+  line-height: 1.35;
+}
+.prof-card-vida {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--roxo-conviva);
+  line-height: 1.35;
+}
+.prof-card.selecionado .prof-card-nome { color: var(--branco); }
+.prof-card.selecionado .prof-card-desc { color: rgba(255,255,255,0.92); opacity: 1; }
+.prof-card.selecionado .prof-card-vida { color: #ffe08a; }
 
 /* ════════════════════════════════════════════════════════════════
    TEMAS TRANSVERSAIS · lista vertical (v04.00 · M3)
@@ -2107,6 +2315,10 @@ body {
 <!-- Folhas caindo · geradas via JS -->
 <div class="folhas-container" id="folhasContainer"></div>
 
+<!-- v06.00 · colunas flutuantes laterais com emoji da PROFISSÃO + ÁREA (padrão NAV.05) · preenchidas via JS a partir da Tela 4 -->
+<div class="prof-deco-lateral esq" id="profDecoEsq"></div>
+<div class="prof-deco-lateral dir" id="profDecoDir"></div>
+
 <!-- 3 borboletas em alturas diferentes · nas laterais (v05.06) -->
 <div class="detalhe-borboleta" style="top: 18vh; left: 4vw; animation-delay: 0s;">🦋</div>
 <div class="detalhe-borboleta" style="top: 42vh; right: 4vw; left: auto; animation-delay: 7s;">🦋</div>
@@ -2131,6 +2343,11 @@ body {
 
   <!-- v05.00 · M10+M11 · Contador BMB+NAV05 GLOBAL · aparece em todas as telas exceto Tela 1 (boas-vindas) -->
   <div class="pagina-contador-global" id="contadorGlobal" style="display:none;">
+    <!-- v06.00 · ponto 2 · faixa de identificação fixa (nº · nome · turma) estilo NAV.05 -->
+    <div class="header-identificacao" id="headerIdentificacao" style="display:none;">
+      <span class="hid-aluno" id="hidAluno"></span>
+      <span class="hid-prof" id="hidProf" style="display:none;"></span>
+    </div>
     <div class="pagina-contador">
       <span class="badge-num">01</span>
       <span class="badge-info">Tela 1 de 18</span>
@@ -2279,6 +2496,7 @@ body {
 
     <div class="btn-grupo">
       <button class="btn btn-secondary" onclick="proximaTela(1)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(3)">Continuar ▶</button>
     </div>
   </section>
@@ -2298,10 +2516,10 @@ body {
     </div>
 
     <div class="campo">
-      <label for="selectProfissao">Profissão dentro da área escolhida</label>
-      <select id="selectProfissao" disabled>
-        <option value="">Selecione uma área primeiro</option>
-      </select>
+      <label>Profissão dentro da área escolhida</label>
+      <div class="prof-cards-grid" id="profCardsGrid">
+        <div class="prof-placeholder">👆 Escolha uma área acima para ver as profissões.</div>
+      </div>
       <div class="hint">Ou digite uma profissão que não esteja na lista no campo abaixo</div>
       <input type="text" id="profissaoOutra" placeholder="(Opcional) Outra profissão não listada" style="margin-top: 10px;">
     </div>
@@ -2318,6 +2536,7 @@ body {
 
     <div class="btn-grupo">
       <button class="btn btn-secondary" onclick="proximaTela(2)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(4)">Continuar ▶</button>
     </div>
   </section>
@@ -2382,6 +2601,7 @@ body {
 
     <div class="btn-grupo">
       <button class="btn btn-secondary" onclick="proximaTela(3)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(5)">Continuar ▶</button>
     </div>
   </section>
@@ -2425,6 +2645,7 @@ body {
 
     <div class="btn-grupo">
       <button class="btn btn-secondary" onclick="proximaTela(4)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(6)">Entendi · Continuar ▶</button>
     </div>
   </section>
@@ -2479,6 +2700,7 @@ body {
 
     <div class="btn-grupo">
       <button class="btn btn-secondary" onclick="proximaTela(5)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(7)">Continuar ▶</button>
     </div>
   </section>
@@ -2504,6 +2726,7 @@ body {
 
     <div class="btn-grupo">
       <button class="btn btn-secondary" onclick="proximaTela(6)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(8)">Continuar ▶</button>
     </div>
   </section>
@@ -2612,9 +2835,9 @@ body {
     <div class="bloco-etapa bloco-tipo">
       <span class="bloco-titulo">🛠️ Tipo de projeto · onde você está desenvolvendo? <span style="color:var(--vermelho-obrig);font-weight:900;">*</span></span>
       <div class="cards-grid">
-        <div class="card-opcao selecionado" data-projeto="StartLab" onclick="selecionarProjeto(this)"><span class="emoji">🚀</span>🎯 StartLab</div>
+        <div class="card-opcao" data-projeto="StartLab" onclick="selecionarProjeto(this)"><span class="emoji">🚀</span>StartLab</div>
         <div class="card-opcao" data-projeto="Canva" onclick="selecionarProjeto(this)"><span class="emoji">🎨</span>Canva</div>
-        <div class="card-opcao" data-projeto="Google Docs" onclick="selecionarProjeto(this)"><span class="emoji">📄</span>Google Docs</div>
+        <div class="card-opcao selecionado" data-projeto="Google Docs" onclick="selecionarProjeto(this)"><span class="emoji">📄</span>🎯 Google Docs</div>
         <div class="card-opcao" data-projeto="PowerPoint" onclick="selecionarProjeto(this)"><span class="emoji">📊</span>PowerPoint</div>
         <div class="card-opcao" data-projeto="Scratch" onclick="selecionarProjeto(this)"><span class="emoji">🐱</span>Scratch</div>
         <div class="card-opcao" data-projeto="Outro" onclick="selecionarProjeto(this)"><span class="emoji">✏️</span>Outro</div>
@@ -2624,6 +2847,7 @@ body {
 
     <div class="btn-grupo">
       <button class="btn btn-secondary" onclick="proximaTela(7)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(9)">Continuar ▶</button>
     </div>
   </section>
@@ -2663,6 +2887,7 @@ body {
 
     <div class="btn-grupo">
       <button class="btn btn-secondary" onclick="proximaTela(8)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(10)">Gerar resultado ▶</button>
     </div>
   </section>
@@ -2686,7 +2911,7 @@ body {
           <li>Cole o prompt na IA e envie</li>
           <li>Aguarde a resposta com os 3 textos em <strong>UM BLOCO copiável</strong></li>
           <li>Use o botão Copiar da própria IA</li>
-          <li>Volte aqui e clique em <strong>"Avançar para colar a resposta da IA"</strong> no fim desta página</li>
+          <li>Volte aqui e clique em <strong>"Avançar para trazer aqui a resposta da IA"</strong> no fim desta página</li>
         </ol>
       </div>
     </div>
@@ -2698,10 +2923,15 @@ body {
       <button class="btn btn-primary" onclick="copiarPrompt()" style="min-width:280px;">📋 Copiar prompt</button>
     </div>
 
-    <!-- Linha 2: botões de IAs principais -->
+    <!-- v06.00 · ponto 7 · linha de instrução entre Copiar e as IAs -->
+    <div class="instrucao-ia">
+      👉 Agora escolha uma IA abaixo para colar o prompt — ou <strong>confirme com o professor</strong> qual será a indicada para esta atividade.
+    </div>
+
+    <!-- Linha 2: botões de IAs principais · v06.00 · ponto 6 · ChatGPT recomendado -->
     <div class="btn-grupo" style="gap:8px;">
       <button class="btn btn-secondary" onclick="window.open('https://claude.ai', '_blank')">🤖 Claude.ai</button>
-      <button class="btn btn-secondary" onclick="window.open('https://chat.openai.com', '_blank')">🤖 ChatGPT</button>
+      <button class="btn btn-secondary ia-recomendada" onclick="window.open('https://chat.openai.com', '_blank')">🎯 🤖 ChatGPT</button>
     </div>
 
     <!-- v05.00 · M24 · 3 cards inline por temática (sem 'Outros ▾') -->
@@ -2745,7 +2975,8 @@ body {
 
     <div class="btn-grupo" style="margin-top: 28px;">
       <button class="btn btn-secondary" onclick="proximaTela(9)">◀ Voltar</button>
-      <button class="btn btn-success" onclick="proximaTela(11)">Avançar para colar a resposta da IA ▶</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
+      <button class="btn btn-success" onclick="proximaTela(11)">Avançar para trazer aqui a resposta da IA ▶</button>
     </div>
   </section>
 
@@ -2799,6 +3030,8 @@ body {
 
     <div class="btn-grupo" style="margin-top: 28px;">
       <button class="btn btn-secondary" onclick="proximaTela(10)">◀ Voltar ao prompt</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(12)">Avançar ▶</button>
     </div>
   </section>
@@ -2863,6 +3096,7 @@ body {
 
     <div class="btn-grupo" style="margin-top: 28px;">
       <button class="btn btn-secondary" onclick="proximaTela(11)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(13)">Já salvei · Continuar ▶</button>
     </div>
   </section>
@@ -2909,6 +3143,7 @@ body {
 
     <div class="btn-grupo" style="margin-top: 28px;">
       <button class="btn btn-secondary" onclick="proximaTela(12)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(14)">Avançar para a pesquisa ▶</button>
     </div>
   </section>
@@ -2933,6 +3168,7 @@ body {
     </div>
     <div class="btn-grupo" style="margin-top: 28px;">
       <button class="btn btn-secondary" onclick="proximaTela(13)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(15)">Continuar ▶</button>
     </div>
   </section>
@@ -2957,6 +3193,7 @@ body {
     </div>
     <div class="btn-grupo" style="margin-top: 28px;">
       <button class="btn btn-secondary" onclick="proximaTela(14)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(16)">Continuar ▶</button>
     </div>
   </section>
@@ -2981,6 +3218,7 @@ body {
     </div>
     <div class="btn-grupo" style="margin-top: 28px;">
       <button class="btn btn-secondary" onclick="proximaTela(15)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="proximaTela(17)">Continuar ▶</button>
     </div>
   </section>
@@ -3043,6 +3281,7 @@ body {
 
     <div class="btn-grupo" style="margin-top: 28px;">
       <button class="btn btn-secondary" onclick="proximaTela(16)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
       <button class="btn btn-success" onclick="finalizarPesquisa(); proximaTela(18);">✅ Finalizar e ir para entrega ▶</button>
     </div>
   </section>
@@ -3092,6 +3331,7 @@ body {
 
     <div class="btn-grupo" style="margin-top: 28px;">
       <button class="btn btn-secondary" onclick="proximaTela(17)">◀ Voltar</button>
+      <select class="menu-salto" onchange="saltarParaTela(this)" style="display:none;"></select>
     </div>
   </section>
 
@@ -3128,7 +3368,7 @@ const estado = {
   bimestre: '2B',
   nomeUnidade: '',
   nomeAula: '',
-  tipoProjeto: 'StartLab',
+  tipoProjeto: 'Google Docs',
   cardNumero: '',
   linkCard: '',
   conteudoCard: '',
@@ -3174,94 +3414,181 @@ const AREAS = [
 // ════════════════════════════════════════════════════════
 const PROFISSOES = {
   'saude-mental': [
-    '🧬 Neurocientista', '🧠 Psicopedagogo(a)', '🧠 Psicólogo(a)',
-    '👶 Psicólogo(a) infantil', '💊 Psiquiatra',
-    '💆 Terapeuta', '🛋️ Terapeuta ocupacional'
+    { nome: '🧬 Neurocientista', desc: 'Estuda o cérebro e como ele funciona.', vida: 'Para quem é curioso sobre a mente humana.' },
+    { nome: '🧠 Psicopedagogo(a)', desc: 'Ajuda alunos com dificuldades de aprendizagem.', vida: 'Para quem gosta de ensinar e entender pessoas.' },
+    { nome: '🧠 Psicólogo(a)', desc: 'Cuida da saúde emocional das pessoas.', vida: 'Para quem gosta de ouvir e ajudar os outros.' },
+    { nome: '👶 Psicólogo(a) infantil', desc: 'Cuida das emoções de crianças.', vida: 'Para quem ama crianças e tem paciência.' },
+    { nome: '💊 Psiquiatra', desc: 'Trata doenças da mente com remédios e terapia.', vida: 'Para quem quer cuidar da saúde mental.' },
+    { nome: '💆 Terapeuta', desc: 'Ajuda pessoas a lidarem com problemas e emoções.', vida: 'Para quem é bom em escutar e acolher.' },
+    { nome: '🛋️ Terapeuta ocupacional', desc: 'Ajuda pessoas a retomarem suas atividades do dia a dia.', vida: 'Para quem gosta de cuidar e reabilitar.' },
   ],
   'comportamento': [
-    '🤲 Assistente social', '👥 Conselheiro(a) tutelar',
-    '🌱 Educador(a) social', '✨ Coach (vida · carreira · performance)'
+    { nome: '🤲 Assistente social', desc: 'Apoia famílias e pessoas em dificuldade.', vida: 'Para quem quer transformar vidas e comunidades.' },
+    { nome: '👥 Conselheiro(a) tutelar', desc: 'Protege os direitos de crianças e adolescentes.', vida: 'Para quem defende quem mais precisa.' },
+    { nome: '🌱 Educador(a) social', desc: 'Ensina e orienta pessoas fora da escola.', vida: 'Para quem quer mudar a sociedade pela educação.' },
+    { nome: '✨ Coach (vida · carreira · performance)', desc: 'Orienta pessoas a alcançarem seus objetivos.', vida: 'Para quem gosta de motivar e inspirar.' },
   ],
   'saude-corpo': [
-    '💉 Cirurgião(ã) Plástico(a)', '🦷 Dentista', '🩺 Enfermeiro(a)',
-    '💊 Farmacêutico(a)', '🤸 Fisioterapeuta', '🏃‍♂️ Fisioterapeuta esportiva',
-    '👄 Fonoaudiólogo(a)', '👨‍⚕️ Médico(a)', '🔪 Médico(a) cirurgião(ã)',
-    '🧠 Médico(a) neurologista', '👶 Médico(a) pediatra', '🎗️ Médico(a) oncologista', '🥗 Nutricionista',
-    '👶 Pediatra', '📷 Radiologista', '🐾 Veterinário(a)', '🐬 Veterinário(a) Marinho(a)'
+    { nome: '💉 Cirurgião(ã) Plástico(a)', desc: 'Faz cirurgias que mudam ou reconstroem o corpo.', vida: 'Para quem une precisão e cuidado com pessoas.' },
+    { nome: '🦷 Dentista', desc: 'Cuida da saúde dos dentes e da boca.', vida: 'Para quem gosta de cuidar de pessoas e detalhes.' },
+    { nome: '🩺 Enfermeiro(a)', desc: 'Cuida e acompanha pacientes na saúde.', vida: 'Para quem tem vontade de cuidar e ajudar.' },
+    { nome: '💊 Farmacêutico(a)', desc: 'Prepara e orienta sobre o uso de remédios.', vida: 'Para quem gosta de ciência e saúde.' },
+    { nome: '🤸 Fisioterapeuta', desc: 'Recupera os movimentos do corpo.', vida: 'Para quem quer ajudar pessoas a se moverem melhor.' },
+    { nome: '🏃‍♂️ Fisioterapeuta esportiva', desc: 'Trata e previne lesões de atletas.', vida: 'Para quem une esporte e cuidado com o corpo.' },
+    { nome: '👄 Fonoaudiólogo(a)', desc: 'Cuida da fala, voz e audição.', vida: 'Para quem gosta de ajudar na comunicação.' },
+    { nome: '👨‍⚕️ Médico(a)', desc: 'Cuida da saúde e trata doenças.', vida: 'Para quem quer salvar e cuidar de vidas.' },
+    { nome: '🔪 Médico(a) cirurgião(ã)', desc: 'Faz cirurgias para tratar doenças.', vida: 'Para quem tem precisão e firmeza.' },
+    { nome: '🧠 Médico(a) neurologista', desc: 'Trata doenças do cérebro e dos nervos.', vida: 'Para quem é fascinado pelo corpo humano.' },
+    { nome: '👶 Médico(a) pediatra', desc: 'Cuida da saúde das crianças.', vida: 'Para quem ama crianças e cuidar delas.' },
+    { nome: '🎗️ Médico(a) oncologista', desc: 'Trata pacientes com câncer.', vida: 'Para quem quer dar esperança e cuidado.' },
+    { nome: '🥗 Nutricionista', desc: 'Orienta a alimentação saudável das pessoas.', vida: 'Para quem gosta de saúde e bem-estar.' },
+    { nome: '👶 Pediatra', desc: 'Cuida da saúde de bebês e crianças.', vida: 'Para quem tem carinho e paciência com crianças.' },
+    { nome: '📷 Radiologista', desc: 'Faz e analisa exames de imagem do corpo.', vida: 'Para quem gosta de tecnologia e diagnóstico.' },
+    { nome: '🐾 Veterinário(a)', desc: 'Cuida da saúde dos animais.', vida: 'Para quem ama os animais.' },
+    { nome: '🐬 Veterinário(a) Marinho(a)', desc: 'Cuida de animais do mar e oceanos.', vida: 'Para quem ama o mar e a vida marinha.' },
   ],
   'corpo-movimento': [
-    '🥇 Atleta paralímpico(a)', '🩰 Dançarino(a)', '🏋️ Educador(a) Físico(a)',
-    '🏀 Jogador(a) de Basquete', '⚽ Jogador(a) de Futebol', '🥅 Jogador(a) de Futsal',
-    '🏐 Jogador(a) de Vôlei', '🥊 Lutador(a)', '💪 Personal trainer',
-    '🏐 Profissional de Futevôlei', '🥋 Profissional de Jiu-jitsu', '⚽ Treinador(a) de Futebol'
+    { nome: '🥇 Atleta paralímpico(a)', desc: 'Compete em esportes de alto nível.', vida: 'Para quem transforma superação em vitória.' },
+    { nome: '🩰 Dançarino(a)', desc: 'Expressa arte e emoção pelo movimento.', vida: 'Para quem ama dançar e se expressar.' },
+    { nome: '🏋️ Educador(a) Físico(a)', desc: 'Ensina atividades físicas e esportes.', vida: 'Para quem gosta de esporte e de ensinar.' },
+    { nome: '🏀 Jogador(a) de Basquete', desc: 'Joga basquete profissional em times.', vida: 'Para quem vive a quadra e o esporte.' },
+    { nome: '⚽ Jogador(a) de Futebol', desc: 'Joga futebol profissional em times e competições.', vida: 'Para quem vive o esporte e a superação.' },
+    { nome: '🥅 Jogador(a) de Futsal', desc: 'Joga futsal profissional em quadra.', vida: 'Para quem ama velocidade e jogo de equipe.' },
+    { nome: '🏐 Jogador(a) de Vôlei', desc: 'Joga vôlei profissional em times.', vida: 'Para quem gosta de trabalho em equipe.' },
+    { nome: '🥊 Lutador(a)', desc: 'Compete em modalidades de luta.', vida: 'Para quem tem disciplina e força de vontade.' },
+    { nome: '💪 Personal trainer', desc: 'Treina pessoas para melhorar a saúde e o corpo.', vida: 'Para quem gosta de motivar e cuidar do físico.' },
+    { nome: '🏐 Profissional de Futevôlei', desc: 'Joga futevôlei na areia profissionalmente.', vida: 'Para quem ama praia, esporte e ritmo.' },
+    { nome: '🥋 Profissional de Jiu-jitsu', desc: 'Compete e ensina jiu-jitsu.', vida: 'Para quem busca disciplina e autocontrole.' },
+    { nome: '⚽ Treinador(a) de Futebol', desc: 'Comanda e prepara times de futebol.', vida: 'Para quem gosta de liderar e ensinar tática.' },
   ],
   'tecnologia': [
-    '🔐 Analista de segurança digital', '📈 Cientista de dados',
-    '💻 Desenvolvedor(a) de software', '🎨 Designer UX',
-    '💻 Engenheiro(a) de Computação', '🔌 Engenheiro(a) de Hardware',
-    '⚙️ Engenheiro(a) de Software', '🎮 Game Designer',
-    '💻 Profissional de TI', '💻 Programador(a)',
-    '🎮 Programador(a) de Games', '🔊 Técnico(a) de som automotivo'
+    { nome: '🔐 Analista de segurança digital', desc: 'Protege sistemas contra ataques e invasões.', vida: 'Para quem gosta de proteger e investigar.' },
+    { nome: '📈 Cientista de dados', desc: 'Analisa muitos dados para descobrir respostas.', vida: 'Para quem ama números e padrões.' },
+    { nome: '💻 Desenvolvedor(a) de software', desc: 'Cria sistemas e aplicativos.', vida: 'Para quem gosta de construir soluções.' },
+    { nome: '🎨 Designer UX', desc: 'Cria telas e apps fáceis de usar.', vida: 'Para quem une criatividade e tecnologia.' },
+    { nome: '💻 Engenheiro(a) de Computação', desc: 'Projeta computadores e sistemas.', vida: 'Para quem gosta de máquinas e lógica.' },
+    { nome: '🔌 Engenheiro(a) de Hardware', desc: 'Cria as partes físicas dos computadores.', vida: 'Para quem gosta de montar e inventar.' },
+    { nome: '⚙️ Engenheiro(a) de Software', desc: 'Planeja e constrói grandes sistemas.', vida: 'Para quem gosta de organizar e resolver problemas.' },
+    { nome: '🎮 Game Designer', desc: 'Cria a ideia e as regras dos jogos.', vida: 'Para quem ama games e criatividade.' },
+    { nome: '💻 Profissional de TI', desc: 'Mantém computadores e redes funcionando.', vida: 'Para quem gosta de tecnologia no dia a dia.' },
+    { nome: '💻 Programador(a)', desc: 'Cria programas e aplicativos com código.', vida: 'Para quem ama lógica e resolver problemas.' },
+    { nome: '🎮 Programador(a) de Games', desc: 'Programa o funcionamento dos jogos.', vida: 'Para quem quer transformar games em profissão.' },
+    { nome: '🔊 Técnico(a) de som automotivo', desc: 'Instala e ajusta som em carros.', vida: 'Para quem curte música e tecnologia.' },
+    { nome: '🎚️ Técnico(a) de som (áudio)', desc: 'Conserta e mantém equipamentos de som e caixas.', vida: 'Para quem ama som, música e mexer em eletrônica.' },
   ],
   'arte': [
-    '🎬 Animador(a)', '🎨 Artista Plástico(a)', '🖼️ Artista Visual',
-    '🎭 Ator/Atriz', '✏️ Cartunista', '🎼 Compositor(a)',
-    '🎨 Designer', '🖌️ Designer Gráfico(a)', '🎨 Diretor(a) de Arte',
-    '🎙️ Dublador(a)', '👗 Estilista', '🎸 Guitarrista',
-    '🖌️ Ilustrador(a)', '🎤 MC / Rapper', '👠 Modelo / Profissional de Moda',
-    '📝 Roteirista'
+    { nome: '🎬 Animador(a)', desc: 'Dá vida a desenhos e personagens.', vida: 'Para quem ama desenhar e criar histórias.' },
+    { nome: '🎨 Artista Plástico(a)', desc: 'Cria obras de arte com diversos materiais.', vida: 'Para quem se expressa pela arte.' },
+    { nome: '🖼️ Artista Visual', desc: 'Cria imagens, instalações e arte visual.', vida: 'Para quem enxerga o mundo de forma criativa.' },
+    { nome: '🎭 Ator/Atriz', desc: 'Interpreta personagens no teatro, cinema e TV.', vida: 'Para quem gosta de emocionar e contar histórias.' },
+    { nome: '✏️ Cartunista', desc: 'Desenha charges e tirinhas.', vida: 'Para quem une humor e desenho.' },
+    { nome: '🎼 Compositor(a)', desc: 'Cria músicas e melodias.', vida: 'Para quem vive a música.' },
+    { nome: '🎨 Designer', desc: 'Cria projetos visuais e produtos.', vida: 'Para quem gosta de criar e inovar.' },
+    { nome: '🖌️ Designer Gráfico(a)', desc: 'Cria logos, cartazes e materiais visuais.', vida: 'Para quem ama design e comunicação visual.' },
+    { nome: '🎨 Diretor(a) de Arte', desc: 'Comanda o visual de projetos e campanhas.', vida: 'Para quem gosta de liderar a criação.' },
+    { nome: '🎙️ Dublador(a)', desc: 'Dá voz a personagens de filmes e games.', vida: 'Para quem ama atuar com a voz.' },
+    { nome: '👗 Estilista', desc: 'Cria roupas e coleções de moda.', vida: 'Para quem ama moda e criatividade.' },
+    { nome: '🎸 Guitarrista', desc: 'Toca guitarra em bandas e shows.', vida: 'Para quem vive o rock e a música.' },
+    { nome: '🖌️ Ilustrador(a)', desc: 'Cria desenhos para livros, jogos e mídias.', vida: 'Para quem ama desenhar.' },
+    { nome: '🎤 MC / Rapper', desc: 'Compõe e canta rap.', vida: 'Para quem usa a voz para se expressar.' },
+    { nome: '👠 Modelo / Profissional de Moda', desc: 'Trabalha com moda, desfiles e fotos.', vida: 'Para quem gosta do universo da moda.' },
+    { nome: '📝 Roteirista', desc: 'Escreve histórias para filmes, séries e games.', vida: 'Para quem ama criar e contar histórias.' },
   ],
   'ciencias': [
-    '🌾 Agrônomo(a)', '🌌 Astrofísico(a)', '🔭 Astrônomo(a)',
-    '👨‍🚀 Astronauta', '🧬 Biólogo(a)', '🐠 Biólogo(a) Marinho(a)',
-    '⚛️ Físico(a)', '🪨 Geólogo(a)', '🦖 Paleontólogo(a)',
-    '🔬 Perito(a) Forense',
-    '⚗️ Químico(a)', '🚜 Técnico(a) Agropecuário(a)'
+    { nome: '🌾 Agrônomo(a)', desc: 'Estuda o cultivo de plantas e o solo.', vida: 'Para quem gosta da natureza e da ciência.' },
+    { nome: '🌌 Astrofísico(a)', desc: 'Estuda as estrelas e o universo.', vida: 'Para quem é fascinado pelo cosmos.' },
+    { nome: '🔭 Astrônomo(a)', desc: 'Observa e estuda planetas e galáxias.', vida: 'Para quem ama olhar o céu e descobrir.' },
+    { nome: '👨‍🚀 Astronauta', desc: 'Viaja e trabalha no espaço.', vida: 'Para quem sonha em explorar o universo.' },
+    { nome: '🧬 Biólogo(a)', desc: 'Estuda os seres vivos e a natureza.', vida: 'Para quem ama a vida e a ciência.' },
+    { nome: '🐠 Biólogo(a) Marinho(a)', desc: 'Estuda a vida nos mares e oceanos.', vida: 'Para quem ama o mar e os animais.' },
+    { nome: '⚛️ Físico(a)', desc: 'Estuda as leis da natureza e do universo.', vida: 'Para quem quer entender como tudo funciona.' },
+    { nome: '🪨 Geólogo(a)', desc: 'Estuda as rochas e a formação da Terra.', vida: 'Para quem é curioso sobre o planeta.' },
+    { nome: '🦖 Paleontólogo(a)', desc: 'Estuda fósseis e dinossauros.', vida: 'Para quem ama o passado da vida na Terra.' },
+    { nome: '🔬 Perito(a) Forense', desc: 'Investiga provas científicas de crimes.', vida: 'Para quem une ciência e investigação.' },
+    { nome: '⚗️ Químico(a)', desc: 'Estuda as substâncias e suas reações.', vida: 'Para quem gosta de experimentos e descobertas.' },
+    { nome: '🚜 Técnico(a) Agropecuário(a)', desc: 'Apoia a produção agrícola e animal.', vida: 'Para quem gosta do campo e da prática.' },
   ],
   'engenharia': [
-    '🏛️ Arquiteto(a)', '📐 Designer Industrial', '🌳 Engenheiro(a) Ambiental',
-    '🏗️ Engenheiro(a) Civil', '⚡ Engenheiro(a) Elétrico(a)',
-    '⚙️ Engenheiro(a) Mecânico(a)', '🏭 Engenheiro(a) de Produção', '🔨 Ferralheiro(a)'
+    { nome: '🏛️ Arquiteto(a)', desc: 'Projeta casas, prédios e espaços.', vida: 'Para quem une arte e construção.' },
+    { nome: '📐 Designer Industrial', desc: 'Cria o formato de objetos e produtos.', vida: 'Para quem gosta de inventar e desenhar.' },
+    { nome: '🌳 Engenheiro(a) Ambiental', desc: 'Cuida do meio ambiente com soluções técnicas.', vida: 'Para quem quer proteger a natureza.' },
+    { nome: '🏗️ Engenheiro(a) Civil', desc: 'Planeja e constrói obras e prédios.', vida: 'Para quem gosta de construir e calcular.' },
+    { nome: '⚡ Engenheiro(a) Elétrico(a)', desc: 'Projeta sistemas de energia elétrica.', vida: 'Para quem gosta de energia e tecnologia.' },
+    { nome: '⚙️ Engenheiro(a) Mecânico(a)', desc: 'Projeta máquinas e motores.', vida: 'Para quem ama máquinas e como elas funcionam.' },
+    { nome: '🏭 Engenheiro(a) de Produção', desc: 'Organiza fábricas e processos de trabalho.', vida: 'Para quem gosta de organizar e melhorar.' },
+    { nome: '🔨 Ferralheiro(a)', desc: 'Monta as estruturas de ferro das obras.', vida: 'Para quem gosta de trabalho prático e força.' },
   ],
   'direito': [
-    '⚖️ Advogado(a)', '⚖️ Advogado(a) Criminalista', '🛡️ Defensor(a) público(a)',
-    '⚖️ Juiz(a)', '⚖️ Juiz(a) Criminalista', '🤝 Mediador(a) jurídico(a)',
-    '⚖️ Promotor(a)'
+    { nome: '⚖️ Advogado(a)', desc: 'Defende os direitos das pessoas na Justiça.', vida: 'Para quem gosta de argumentar e defender.' },
+    { nome: '⚖️ Advogado(a) Criminalista', desc: 'Defende pessoas em casos criminais.', vida: 'Para quem gosta de justiça e debate.' },
+    { nome: '🛡️ Defensor(a) público(a)', desc: 'Defende quem não pode pagar advogado.', vida: 'Para quem luta pela justiça social.' },
+    { nome: '⚖️ Juiz(a)', desc: 'Julga e decide casos na Justiça.', vida: 'Para quem busca ser justo e imparcial.' },
+    { nome: '⚖️ Juiz(a) Criminalista', desc: 'Julga casos criminais.', vida: 'Para quem quer aplicar a justiça com firmeza.' },
+    { nome: '🤝 Mediador(a) jurídico(a)', desc: 'Ajuda pessoas a resolverem conflitos.', vida: 'Para quem gosta de criar acordos e paz.' },
+    { nome: '⚖️ Promotor(a)', desc: 'Defende a sociedade na Justiça.', vida: 'Para quem quer defender o que é certo.' },
   ],
   'seguranca': [
-    '🚒 Bombeiro(a)', '👮 Delegado(a)', '🔍 Detetive',
-    '👮 Guarda Municipal', '🔍 Investigador(a)', '🪖 Militar / Exército / Marinha',
-    '🕵️ Perito(a) Criminal',
-    '🔐 Perito(a) cibernético(a)', '👮 Policial (Civil/Militar)',
-    '🌳 Policial Ambiental', '🔐 Policial cibernético(a)'
+    { nome: '🚒 Bombeiro(a)', desc: 'Salva vidas e combate incêndios.', vida: 'Para quem é corajoso e quer ajudar.' },
+    { nome: '👮 Delegado(a)', desc: 'Comanda investigações na polícia.', vida: 'Para quem gosta de liderar e investigar.' },
+    { nome: '🔍 Detetive', desc: 'Investiga e desvenda casos.', vida: 'Para quem ama resolver mistérios.' },
+    { nome: '👮 Guarda Municipal', desc: 'Protege a cidade e seus moradores.', vida: 'Para quem quer cuidar da comunidade.' },
+    { nome: '🔍 Investigador(a)', desc: 'Busca pistas e provas em casos.', vida: 'Para quem é curioso e observador.' },
+    { nome: '🪖 Militar / Exército / Marinha', desc: 'Defende o país e a população.', vida: 'Para quem tem disciplina e amor à pátria.' },
+    { nome: '🕵️ Perito(a) Criminal', desc: 'Analisa cenas de crime com ciência.', vida: 'Para quem une investigação e ciência.' },
+    { nome: '🔐 Perito(a) cibernético(a)', desc: 'Investiga crimes digitais.', vida: 'Para quem gosta de tecnologia e investigação.' },
+    { nome: '👮 Policial (Civil/Militar)', desc: 'Mantém a ordem e protege as pessoas.', vida: 'Para quem quer servir e proteger.' },
+    { nome: '🌳 Policial Ambiental', desc: 'Protege a natureza e combate crimes ambientais.', vida: 'Para quem ama o meio ambiente.' },
+    { nome: '🔐 Policial cibernético(a)', desc: 'Combate crimes na internet.', vida: 'Para quem une tecnologia e segurança.' },
   ],
   'educacao': [
-    '✨ Coach educacional', '🤝 Mediador(a) escolar', '🌟 Orientador(a) educacional',
-    '📚 Pedagogo(a)', '👨‍🏫 Professor(a)', '🎨 Professor(a) de Artes',
-    '🌍 Professor(a) de Geografia'
+    { nome: '✨ Coach educacional', desc: 'Orienta estudantes em seus objetivos.', vida: 'Para quem gosta de motivar e ensinar.' },
+    { nome: '🤝 Mediador(a) escolar', desc: 'Ajuda a resolver conflitos na escola.', vida: 'Para quem gosta de promover a paz.' },
+    { nome: '🌟 Orientador(a) educacional', desc: 'Acompanha o desenvolvimento dos alunos.', vida: 'Para quem quer guiar jovens.' },
+    { nome: '📚 Pedagogo(a)', desc: 'Planeja e organiza o ensino.', vida: 'Para quem ama educar e transformar.' },
+    { nome: '👨‍🏫 Professor(a)', desc: 'Ensina e forma novas gerações.', vida: 'Para quem quer transformar vidas pelo saber.' },
+    { nome: '🎨 Professor(a) de Artes', desc: 'Ensina arte e criatividade.', vida: 'Para quem ama arte e ensinar.' },
+    { nome: '🌍 Professor(a) de Geografia', desc: 'Ensina sobre o mundo e os lugares.', vida: 'Para quem ama mapas e o planeta.' },
   ],
   'transporte': [
-    '🚛 Caminhoneiro(a)', '✈️ Piloto de Avião', '🚌 Motorista de Ônibus',
-    '📦 Profissional de Logística', '🔧 Mecânico(a) automotivo'
+    { nome: '🚛 Caminhoneiro(a)', desc: 'Transporta cargas por longas distâncias.', vida: 'Para quem gosta da estrada e da liberdade.' },
+    { nome: '✈️ Piloto de Avião', desc: 'Pilota aviões com passageiros e cargas.', vida: 'Para quem sonha em voar.' },
+    { nome: '🚌 Motorista de Ônibus', desc: 'Transporta pessoas pela cidade.', vida: 'Para quem gosta de dirigir e ajudar.' },
+    { nome: '📦 Profissional de Logística', desc: 'Organiza o transporte e a entrega de produtos.', vida: 'Para quem gosta de planejar e organizar.' },
+    { nome: '🔧 Mecânico(a) automotivo', desc: 'Conserta e mantém veículos.', vida: 'Para quem ama carros e mecânica.' },
   ],
   'gastronomia': [
-    '👨‍🍳 Chef de Cozinha', '🧁 Confeiteiro(a)', '👨‍🍳 Cozinheiro(a)',
-    '📝 Crítico(a) gastronômico(a)', '🥖 Padeiro(a)', '🍷 Sommelier'
+    { nome: '👨‍🍳 Chef de Cozinha', desc: 'Cria pratos e comanda a cozinha de um restaurante.', vida: 'Para quem ama cozinhar e criar sabores.' },
+    { nome: '🧁 Confeiteiro(a)', desc: 'Faz doces, bolos e sobremesas.', vida: 'Para quem ama doces e criatividade.' },
+    { nome: '👨‍🍳 Cozinheiro(a)', desc: 'Prepara pratos e refeições.', vida: 'Para quem gosta de cozinhar.' },
+    { nome: '📝 Crítico(a) gastronômico(a)', desc: 'Avalia restaurantes e pratos.', vida: 'Para quem ama comida e escrever.' },
+    { nome: '🥖 Padeiro(a)', desc: 'Faz pães e produtos de padaria.', vida: 'Para quem gosta de criar com as mãos.' },
+    { nome: '🍷 Sommelier', desc: 'Conhece e recomenda vinhos.', vida: 'Para quem aprecia sabores e detalhes.' },
   ],
   'empreend-tradicional': [
-    '🌾 Agricultor(a)', '👔 Administrador(a)', '💪 Dono(a) de academia',
-    '💼 Empreendedor(a)', '🍴 Empreendedor(a) Alimentício(a)',
-    '🛹 Empreendedor(a) de Skate', '💼 Empresário(a)'
+    { nome: '🌾 Agricultor(a)', desc: 'Cultiva alimentos no campo.', vida: 'Para quem ama a terra e o trabalho.' },
+    { nome: '👔 Administrador(a)', desc: 'Organiza e gerencia empresas.', vida: 'Para quem gosta de liderar e planejar.' },
+    { nome: '💪 Dono(a) de academia', desc: 'Comanda um espaço de treino e saúde.', vida: 'Para quem une esporte e negócios.' },
+    { nome: '💼 Empreendedor(a)', desc: 'Cria e comanda o próprio negócio.', vida: 'Para quem tem ideias e iniciativa.' },
+    { nome: '🍴 Empreendedor(a) Alimentício(a)', desc: 'Cria negócios de comida.', vida: 'Para quem ama gastronomia e negócios.' },
+    { nome: '🛹 Empreendedor(a) de Skate', desc: 'Cria negócios ligados ao skate.', vida: 'Para quem vive a cultura do skate.' },
+    { nome: '💼 Empresário(a)', desc: 'Dirige uma ou mais empresas.', vida: 'Para quem sonha grande e lidera.' },
   ],
   'empreend-digital': [
-    '📱 Criador(a) de Conteúdo', '🤖 Empresário(a) de Robótica',
-    '📱 Influenciador(a) Digital', '📱 Marketing Digital',
-    '🛒 Mercado Digital / Vendas Online', '📹 Streamer / Youtuber'
+    { nome: '📱 Criador(a) de Conteúdo', desc: 'Cria vídeos, posts e conteúdo online.', vida: 'Para quem ama criar e se comunicar.' },
+    { nome: '🤖 Empresário(a) de Robótica', desc: 'Comanda negócios de robôs e tecnologia.', vida: 'Para quem une robótica e empreender.' },
+    { nome: '📱 Influenciador(a) Digital', desc: 'Inspira pessoas pelas redes sociais.', vida: 'Para quem gosta de se comunicar e influenciar.' },
+    { nome: '📱 Marketing Digital', desc: 'Divulga marcas e produtos na internet.', vida: 'Para quem é criativo e estratégico.' },
+    { nome: '🛒 Mercado Digital / Vendas Online', desc: 'Vende produtos pela internet.', vida: 'Para quem gosta de negócios e tecnologia.' },
+    { nome: '📹 Streamer / Youtuber', desc: 'Produz vídeos e transmissões online.', vida: 'Para quem quer transformar conteúdo em carreira.' },
   ],
   'outros-servicos': [
-    '🧹 Auxiliar de limpeza', '💈 Barbeiro(a)', '👁️ Designer de cílios',
-    '💅 Esteticista', '💅 Manicure', '🏪 Trabalhador(a) de Mercado'
-  ]
+    { nome: '🧹 Auxiliar de limpeza', desc: 'Mantém os ambientes limpos e organizados.', vida: 'Para quem valoriza o cuidado e a ordem.' },
+    { nome: '💈 Barbeiro(a)', desc: 'Corta cabelo e faz barba.', vida: 'Para quem gosta de estilo e cuidar das pessoas.' },
+    { nome: '👁️ Designer de cílios', desc: 'Faz aplicação e design de cílios.', vida: 'Para quem gosta de beleza e detalhes.' },
+    { nome: '💅 Esteticista', desc: 'Cuida da beleza e bem-estar da pele.', vida: 'Para quem ama cuidar das pessoas.' },
+    { nome: '💅 Manicure', desc: 'Cuida das unhas das mãos e pés.', vida: 'Para quem gosta de beleza e capricho.' },
+    { nome: '🏪 Trabalhador(a) de Mercado', desc: 'Atende e organiza um mercado.', vida: 'Para quem gosta de contato com pessoas.' },
+  ],
 };
 
 // ════════════════════════════════════════════════════════
@@ -3666,6 +3993,7 @@ document.addEventListener('DOMContentLoaded', function() {
   renderizarTemas();
   gerarFolhas();
   inicializarAutoAval();  // v05.00 · M31
+  atualizarDecoProfissao(1);  // v06.00 · colunas laterais tec+rob já na Tela 1
 
   // Listener do campo nome · detecção em tempo real
   const inputNome = document.getElementById('nomeCompleto');
@@ -3764,7 +4092,7 @@ function renderizarTemas() {
             <span class="tema-nome">${t.nome}</span>
             <div class="aviso-sala-futuro">
               <span class="aviso-titulo">📢 Atenção · verifique antes de digitar</span>
-              Veja se há <strong>notificação no Sala do Futuro</strong> com a temática ou ação da semana. Se houver, copie a informação assim:
+              Veja se há <strong>notificação no Sala do Futuro</strong> com a temática ou ação da semana. A notificação fica no <strong>🔔 sininho, à esquerda do seu nome</strong>. Se houver, copie a informação assim:
               <ul style="margin:8px 0 4px 18px; padding:0; font-size:14px; line-height:1.7;">
                 <li>Selecionar o texto: <strong>Ctrl + A</strong></li>
                 <li>Copiar: <strong>Ctrl + C</strong></li>
@@ -3894,8 +4222,10 @@ function proximaTela(numero) {
 }
 
 // v05.00 · M10+M11 · contador BMB+NAV05 atualizado por tela (global · esconde na Tela 1)
+let telaMaxVisitada = 1; // v06.00 · ponto 3 · maior tela já alcançada (base do salto seguro)
 function atualizarContadorPagina(numero) {
   const TOTAL_TELAS = 18;
+  if (numero > telaMaxVisitada) telaMaxVisitada = numero;
   const contadorGlobal = document.getElementById('contadorGlobal');
   if (contadorGlobal) {
     contadorGlobal.style.display = (numero === 1) ? 'none' : 'block';
@@ -3911,17 +4241,59 @@ function atualizarContadorPagina(numero) {
   document.querySelectorAll('.barra-fill-faca').forEach(b => {
     b.style.width = ((numero / TOTAL_TELAS) * 100).toFixed(1) + '%';
   });
-  // Bolinhas
+  // Bolinhas · v06.00 · ponto 3 · clicáveis para salto direto a telas já visitadas
   document.querySelectorAll('.barra-marcadores-faca').forEach(grupo => {
     grupo.querySelectorAll('.barra-marcador-faca').forEach((m, idx) => {
       const passo = idx + 1;
       m.classList.remove('passou', 'atual');
       if (passo < numero) m.classList.add('passou');
       if (passo === numero) m.classList.add('atual');
+      // salto só para telas já visitadas · evita pular validações à frente
+      const liberado = (passo <= telaMaxVisitada);
+      m.style.cursor = liberado ? 'pointer' : 'default';
+      m.title = 'Ir para a Tela ' + passo;
+      m.onclick = liberado ? function() { proximaTela(passo); } : null;
     });
   });
 
-  // v05.06 · indicador de profissão · aparece a partir da Tela 6 (depois de escolher na Tela 5)
+  // v06.00 · menu suspenso "Ir para a tela..." no rodapé · só telas já visitadas
+  atualizarMenusSalto(numero);
+
+  // v06.00 · colunas laterais com emoji da profissão + área (a partir da Tela 4)
+  atualizarDecoProfissao(numero);
+
+  // v06.00 · ponto 2 · faixa de identificação fixa (nº · nome · turma) no topo de TODAS as telas
+  const headerId = document.getElementById('headerIdentificacao');
+  const hidAluno = document.getElementById('hidAluno');
+  if (headerId && hidAluno) {
+    const nome = (estado.nome || '').trim();
+    const primeiro = nome ? nome.split(' ')[0] : '';
+    const turma = (estado.turma || '').trim();
+    const numChamada = (estado.numeroChamada || '').toString().trim();
+    if (primeiro && numero >= 2) {
+      let txt = '';
+      if (numChamada) txt += 'Nº ' + numChamada + ' · ';
+      txt += primeiro;
+      if (turma) txt += ' · Turma ' + turma;
+      hidAluno.textContent = txt;
+      headerId.style.display = 'flex';
+    } else {
+      headerId.style.display = 'none';
+    }
+  }
+
+  // v06.00 · ponto 1 · emoji da profissão escolhida acompanha o header a partir da Tela 4
+  const hidProf = document.getElementById('hidProf');
+  if (hidProf) {
+    if (estado.profissao && numero >= 4) {
+      hidProf.textContent = estado.profissao;
+      hidProf.style.display = 'inline-flex';
+    } else {
+      hidProf.style.display = 'none';
+    }
+  }
+
+  // v05.06 · indicador de profissão · aparece a partir da Tela 4 (depois de escolher na Tela 3)
   const badgeProf = document.getElementById('badgeProfissao');
   if (badgeProf) {
     if (estado.profissao && numero >= 4) {
@@ -3931,6 +4303,88 @@ function atualizarContadorPagina(numero) {
       badgeProf.style.display = 'none';
     }
   }
+}
+
+// v06.00 · ponto 3 · rótulos curtos das telas para o menu "Ir para a tela..."
+const ROTULOS_TELA = {
+  1: 'Boas-vindas', 2: 'Nome e turma', 3: 'Profissão', 4: 'Cargos',
+  5: 'Os 3 caminhos', 6: 'Eixos', 7: 'Tema', 8: 'Aula e unidade',
+  9: 'Card e conteúdo', 10: 'Prompt gerado', 11: 'Colar resposta',
+  12: 'Salvar no Docs', 13: 'Autoavaliação', 14: 'Pesquisa · Texto 1',
+  15: 'Pesquisa · Texto 2', 16: 'Pesquisa · Texto 3', 17: 'Preferido', 18: 'Entrega'
+};
+
+// v06.00 · ponto 3 · popula os menus de salto do rodapé (só telas já visitadas)
+function atualizarMenusSalto(numeroAtual) {
+  document.querySelectorAll('.menu-salto').forEach(sel => {
+    let opts = '<option value="">↩ Ir para a tela...</option>';
+    for (let t = 2; t <= telaMaxVisitada; t++) {
+      if (t === numeroAtual) continue; // não oferece a própria tela
+      opts += `<option value="${t}">${t}. ${ROTULOS_TELA[t] || ('Tela ' + t)}</option>`;
+    }
+    sel.innerHTML = opts;
+    sel.value = '';
+    // só mostra o menu se houver para onde voltar (>= 1 tela visitada além desta)
+    sel.style.display = (telaMaxVisitada >= 3) ? 'inline-block' : 'none';
+  });
+}
+
+// v06.00 · handler do menu de salto
+function saltarParaTela(sel) {
+  const t = parseInt(sel.value, 10);
+  if (t) proximaTela(t);
+}
+
+// v06.00 · extrai o 1º emoji de uma string (profissão ou área)
+function extrairEmoji(txt) {
+  if (!txt) return '';
+  // pega o primeiro grupo de emoji no início da string
+  const m = txt.match(/^(\p{Extended_Pictographic}(\u200d\p{Extended_Pictographic})*[\uFE0F\u20E3]*)/u);
+  return m ? m[1] : '';
+}
+
+// v06.00 · emojis de Tec+Rob · padrão enxuto (computador · robô · celular)
+const EMOJIS_TEC_ROB = ['💻', '🤖', '📱'];
+// conjunto ampliado · usado só quando a área escolhida é Tecnologia
+const EMOJIS_TEC_ROB_AMPLO = ['💻', '🤖', '📱', '⚙️', '🔧', '🔌', '🦾', '⚡'];
+
+// v06.00 · preenche as colunas laterais
+//  · Telas 1-3: emojis de tecnologia + robótica (no lugar das borboletas)
+//  · Tela 4+:   intercala profissão + área + tec + rob
+function atualizarDecoProfissao(numero) {
+  const esq = document.getElementById('profDecoEsq');
+  const dir = document.getElementById('profDecoDir');
+  if (!esq || !dir) return;
+
+  // conjunto tec/rob: ampliado só se a área for Tecnologia
+  const tecRob = (estado.area === 'tecnologia') ? EMOJIS_TEC_ROB_AMPLO : EMOJIS_TEC_ROB;
+
+  let seq;
+  if (numero >= 4 && extrairEmoji(estado.profissao)) {
+    const emojiProf = extrairEmoji(estado.profissao);
+    const areaObj = AREAS.find(a => a.id === estado.area);
+    const emojiArea = areaObj ? areaObj.emoji : emojiProf;
+    // intercala: profissão · área · tec · rob
+    seq = [emojiProf, emojiArea, tecRob[0], tecRob[1],
+           emojiProf, emojiArea, tecRob[2 % tecRob.length], tecRob[1]];
+  } else {
+    // Telas 1-3 (ou sem profissão): só tecnologia + robótica
+    seq = [];
+    for (let i = 0; i < 8; i++) seq.push(tecRob[i % tecRob.length]);
+  }
+
+  const span = e => `<span class="prof-emoji-flut">${e}</span>`;
+  // coluna direita usa a sequência deslocada (visual menos espelhado)
+  const seqDir = seq.slice(2).concat(seq.slice(0, 2));
+  esq.innerHTML = seq.map(span).join('');
+  dir.innerHTML = seqDir.map(span).join('');
+  esq.style.display = 'flex';
+  dir.style.display = 'flex';
+
+  // v06.00 · borboletas saem das Telas 1-3 (substituídas por tec+rob); voltam da 4+
+  document.querySelectorAll('.detalhe-borboleta').forEach(b => {
+    b.style.display = (numero <= 3) ? 'none' : '';
+  });
 }
 
 // ════════════════════════════════════════════════════════
@@ -4261,16 +4715,33 @@ function selecionarEixo(el) {
 }
 
 function selecionarArea(el) {
-  if (avisarSeRedundante('area', el,
-    'Este card é só de seleção · não abre nada.\n\nVocê já escolheu a área · agora basta escolher a profissão no menu abaixo.')) return;
+  // v06.00 · M47 · ao escolher a área, renderiza CARDS de profissão (não mais select)
   document.querySelectorAll('#areasGrid .area-card').forEach(c => c.classList.remove('selecionado'));
   el.classList.add('selecionado');
   estado.area = el.dataset.area;
-  const select = document.getElementById('selectProfissao');
-  select.innerHTML = '<option value="">Selecione...</option>' +
-    PROFISSOES[estado.area].map(p => `<option value="${p}">${p}</option>`).join('');
-  select.disabled = false;
-  select.onchange = function() { estado.profissao = this.value; };
+  estado.profissao = '';            // reset ao trocar de área
+  renderizarProfissoes(estado.area);
+}
+
+function renderizarProfissoes(areaId) {
+  const grid = document.getElementById('profCardsGrid');
+  const lista = PROFISSOES[areaId] || [];
+  grid.innerHTML = lista.map((p, i) => `
+    <div class="prof-card" data-prof="${p.nome.replace(/"/g, '&quot;')}" onclick="selecionarProfissao(this)">
+      <div class="prof-card-nome">${p.nome}</div>
+      <div class="prof-card-desc">${p.desc}</div>
+      <div class="prof-card-vida">${p.vida}</div>
+    </div>
+  `).join('');
+}
+
+function selecionarProfissao(el) {
+  document.querySelectorAll('#profCardsGrid .prof-card').forEach(c => c.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  estado.profissao = el.dataset.prof;
+  // se havia texto em "outra profissão", limpa para não conflitar
+  const outra = document.getElementById('profissaoOutra');
+  if (outra && outra.value.trim()) outra.value = '';
 }
 
 function selecionarAnos(el) {
